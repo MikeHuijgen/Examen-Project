@@ -1,6 +1,7 @@
 public enum SideType
 {
     Left,
-    Up,
-    Right
+    Down,
+    Right,
+    none
 }
