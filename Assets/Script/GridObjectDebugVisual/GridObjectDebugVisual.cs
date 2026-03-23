@@ -1,15 +1,15 @@
 using TMPro;
 using UnityEngine;
 
-public class GridTileVisual : MonoBehaviour
+public class GridObjectDebugVisual : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI debugText;
-    private GridTileData _gridTileData;
-    public void Initialize(GridTileData gridTileData)
+    private GridObject _gridTileData;
+    public void Initialize(GridObject gridTileData)
     {
         _gridTileData = gridTileData;
         debugText.text = _gridTileData.GetGridTilePosition.ToString();
     }
 
-    public GridTileData GetGridTileData => _gridTileData;
+    public GridObject GetGridTileData => _gridTileData;
 }

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class GridTileHoldet : MonoBehaviour
+public class GridObjectHolder : MonoBehaviour
 {
     [SerializeField] private GridLayoutGroup gridLayoutGroup;
 

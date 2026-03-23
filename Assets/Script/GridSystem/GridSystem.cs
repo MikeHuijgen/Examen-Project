@@ -12,10 +12,10 @@ public class GridSystem : MonoBehaviour
     [SerializeField] private int gridCellWidth = 100;
     [SerializeField] private int gridCellHeight = 100;
     [SerializeField] private Transform gridTileVisualHolder;
-    [SerializeField] private GridTileVisual gridTileVisualPrefab;
+    [SerializeField] private GridObjectDebugVisual gridTileVisualPrefab;
     [SerializeField] private RectTransform gridRectTransform;
 
-    private GridTileData [,] gridTilesArray;
+    private GridObject [,] gridTilesArray;
 
     private void Awake()
     {
@@ -32,19 +32,24 @@ public class GridSystem : MonoBehaviour
 
     private void GenerateGrid()
     {
-        gridTilesArray = new GridTileData[width, height];
+        gridTilesArray = new GridObject[width, height];
 
         for (var x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
                 var newGridPosition = new GridPosition(x, y);
-                var gridTileData = new GridTileData(newGridPosition);
+                var gridTileData = new GridObject(newGridPosition);
                 gridTilesArray[x, y] = gridTileData;
                 var newGridTileVisual = Instantiate(gridTileVisualPrefab, gridTileVisualHolder);
                 newGridTileVisual.Initialize(gridTileData);
             }
         }
+    }
+
+    public void CreateDebugTileVisuals()
+    {
+        
     }
 
     private Vector3 GetWorldPosition(int x, int y) =>  new Vector3(x, y, 0);
