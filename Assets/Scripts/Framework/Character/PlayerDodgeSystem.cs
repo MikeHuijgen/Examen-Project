@@ -2,19 +2,21 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class Dodge : CharacterComponent
+public class PlayerDodgeSystem : MonoBehaviour
 {
     [SerializeField] private float dodgeDuration;
     [SerializeField] private float cooldownDuration;
     [SerializeField] private int startDodgeAmount;
     [SerializeField] private int maxDodgeAmount;
 
-    private float _currentDodges;
+    private bool _isDodging;
+    private SideType _currentDodgeSide;
+    private float _currentDodgeAmount;
     private bool _canDodge;
 
     private void Start()
     {
-        _currentDodges = startDodgeAmount;
+        _currentDodgeAmount = startDodgeAmount;
         _canDodge = true;
     }
 
@@ -31,27 +33,25 @@ public class Dodge : CharacterComponent
     private void DoDodge(SideType dodgeSide)
     {
         if (!_canDodge) return;
-        
-        Debug.Log("Character Dodging");
 
         StartCoroutine(DodgeCoroutine(dodgeSide));
     }
     
     private IEnumerator DodgeCoroutine(SideType dodgeSide)
     {
-        _currentDodges--;
-        _canDodge = false;
-        character_data.IsDodging = true;
-        character_data.CurrentDodgeSide = dodgeSide;
+        _currentDodgeAmount--;
+        _canDodge = false; 
+        _isDodging = true;
+        _currentDodgeSide = dodgeSide;
 
         yield return new WaitForSeconds(dodgeDuration);
         
-        character_data.IsDodging = false;
-        character_data.CurrentDodgeSide = SideType.none;
+        _isDodging = false;
+        _currentDodgeSide = SideType.None;
 
         yield return new WaitForSeconds(cooldownDuration);
 
-        if (_currentDodges > 0)
+        if (_currentDodgeAmount > 0)
             _canDodge = true;
     }
 }

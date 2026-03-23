@@ -45,7 +45,6 @@ public class CharacterInput : MonoBehaviour
 
     private void OnDodgeInputDetected(SideType dodgeSide)
     {
-        Debug.Log($"Debug Dodge input: {dodgeSide}");
         OnDodgeInput?.Invoke(dodgeSide);
     }
 }
