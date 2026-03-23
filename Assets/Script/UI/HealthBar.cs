@@ -4,34 +4,19 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HealthBar : HealthSystem
+public class HealthBar : MonoBehaviour 
 {
     [SerializeField] private Slider _hPSlider;
     [SerializeField] private TextMeshProUGUI _SliderTextHP;
-    [SerializeField] private int _dammage;
-   
-    [SerializeField] private bool _attack;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+
+    public void SetSliderMaxValue(int maxhealth)
     {
-        _hPSlider.maxValue = _maxHP;
-        _hPSlider.value = _currentHP;
+        _hPSlider.maxValue = maxhealth;
     }
 
-    // Update is called once per frame
-    void Update()
+     public void UpdateHealthUI(int currentHealth)
     {
-        if (_attack)
-        {
-            UpdateHealth();
-        }
-    }
-
-    void UpdateHealth()
-    {
-        _currentHP = _currentHP - _dammage;
-        _SliderTextHP.text = (_currentHP).ToString();
-        _hPSlider.value = _currentHP;
-        _attack = false;
+        _SliderTextHP.text = (currentHealth).ToString();
+        _hPSlider.value = currentHealth;
     }
 }

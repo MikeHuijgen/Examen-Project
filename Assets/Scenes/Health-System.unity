@@ -331,6 +331,7 @@ GameObject:
   m_Component:
   - component: {fileID: 450921114}
   - component: {fileID: 450921115}
+  - component: {fileID: 450921116}
   m_Layer: 5
   m_Name: Slider Enemy
   m_TagString: Untagged
@@ -412,6 +413,20 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &450921116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 450921113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a0eb58a4b4576440ba457cc4828ca14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
+  _hPSlider: {fileID: 450921115}
+  _SliderTextHP: {fileID: 1089942447}
 --- !u!1 &461550676
 GameObject:
   m_ObjectHideFlags: 0
@@ -1479,6 +1494,67 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1753086614}
   m_CullTransparentMesh: 1
+--- !u!1 &1823231204
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1823231206}
+  - component: {fileID: 1823231205}
+  m_Layer: 0
+  m_Name: Player
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1823231205
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1823231204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b075d26a40a6c694a8a4ecf47f9c03f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthComponent
+  OnDeath:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1823231205}
+        m_TargetAssemblyTypeName: HealthComponent, Assembly-CSharp
+        m_MethodName: PrintText
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  maxHP: 12
+  healthBar: {fileID: 2023545501}
+--- !u!4 &1823231206
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1823231204}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 469.37262, y: 130.41441, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1929396432
 GameObject:
   m_ObjectHideFlags: 0
@@ -1488,48 +1564,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1929396435}
-  - component: {fileID: 1929396434}
-  - component: {fileID: 1929396433}
   - component: {fileID: 1929396436}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1929396433
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1929396432}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a0eb58a4b4576440ba457cc4828ca14, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  _currentHP: 70
-  _maxHP: 80
-  _hPSlider: {fileID: 2023545500}
-  _SliderTextHP: {fileID: 1325025196}
-  _dammage: 5
-  _attack: 0
---- !u!114 &1929396434
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1929396432}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e82e3b52394a5a04f915a52ceb849d20, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
-  _currentHP: 0
-  _maxHP: 0
 --- !u!4 &1929396435
 Transform:
   m_ObjectHideFlags: 0
@@ -1554,15 +1596,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 1929396432}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a0eb58a4b4576440ba457cc4828ca14, type: 3}
+  m_Script: {fileID: 11500000, guid: b075d26a40a6c694a8a4ecf47f9c03f4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
-  _currentHP: 50
-  _maxHP: 50
-  _hPSlider: {fileID: 450921115}
-  _SliderTextHP: {fileID: 1089942447}
-  _dammage: 10
-  _attack: 0
+  m_EditorClassIdentifier: Assembly-CSharp::HealthComponent
+  OnDeath:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1929396436}
+        m_TargetAssemblyTypeName: HealthComponent, Assembly-CSharp
+        m_MethodName: PrintText
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  maxHP: 10
+  healthBar: {fileID: 450921116}
 --- !u!1 &2023545498
 GameObject:
   m_ObjectHideFlags: 0
@@ -1573,6 +1626,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2023545499}
   - component: {fileID: 2023545500}
+  - component: {fileID: 2023545501}
   m_Layer: 5
   m_Name: Slider Player
   m_TagString: Untagged
@@ -1654,6 +1708,20 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &2023545501
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2023545498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a0eb58a4b4576440ba457cc4828ca14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthBar
+  _hPSlider: {fileID: 2023545500}
+  _SliderTextHP: {fileID: 1325025196}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -1663,3 +1731,4 @@ SceneRoots:
   - {fileID: 1328455359}
   - {fileID: 1072537507}
   - {fileID: 1929396435}
+  - {fileID: 1823231206}
