@@ -2,9 +2,9 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class TemporaryCharacterInput : MonoBehaviour
+public class CharacterInput : MonoBehaviour
 {
-    public static TemporaryCharacterInput Instance;
+    public static CharacterInput Instance;
 
     [SerializeField] private PlayerInput playerInput;
     

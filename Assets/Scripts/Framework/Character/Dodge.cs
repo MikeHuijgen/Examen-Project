@@ -20,19 +20,12 @@ public class Dodge : CharacterComponent
 
     private void OnEnable()
     {
-        StartCoroutine(DelayedEnable());
-    }
-    
-    private IEnumerator DelayedEnable()
-    {
-        yield return null; // wait one frame
-
-        TemporaryCharacterInput.Instance.OnDodgeInput += DoDodge;
+        CharacterInput.Instance.OnDodgeInput += DoDodge;
     }
     
     private void OnDisable()
     {
-        TemporaryCharacterInput.Instance.OnDodgeInput -= DoDodge;
+        CharacterInput.Instance.OnDodgeInput -= DoDodge;
     }
 
     private void DoDodge(SideType dodgeSide)

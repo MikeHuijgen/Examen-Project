@@ -4,6 +4,6 @@ public class CharacterData : MonoBehaviour
 {
     [SerializeField] private CharacterType characterType;
 
-    public bool IsDodging;
-    public SideType CurrentDodgeSide;
+    [HideInInspector] public bool IsDodging;
+    [HideInInspector] public SideType CurrentDodgeSide;
 }

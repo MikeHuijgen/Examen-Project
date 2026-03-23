@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3259757235030990342}
   - component: {fileID: 7516692803326543239}
-  - component: {fileID: 5092151072150141590}
+  - component: {fileID: 3387945590579004108}
   m_Layer: 0
   m_Name: BaseCharacter
   m_TagString: Untagged
@@ -48,8 +48,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CharacterData
   characterType: 0
   IsDodging: 0
-  DodgeSideValue: 0
---- !u!114 &5092151072150141590
+  CurrentDodgeSide: 0
+--- !u!114 &3387945590579004108
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -58,9 +58,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 4973012409423327181}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afb8c9cf42c3a534cb269b6a8212dfab, type: 3}
+  m_Script: {fileID: 11500000, guid: de273fdaa79468d4ab6a8b2fe5ed9f60, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Dodge
+  m_EditorClassIdentifier: Assembly-CSharp::Attack
 --- !u!1 &6074300908761152318
 GameObject:
   m_ObjectHideFlags: 0
