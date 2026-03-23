@@ -19,6 +19,5 @@ public class GridObjectHolder : MonoBehaviour
     private void OnNewGeneratedGrid(Vector2 gridCellSize)
     {
         gridLayoutGroup.cellSize = gridCellSize;
-        print(gridLayoutGroup.cellSize);
     }
 }
