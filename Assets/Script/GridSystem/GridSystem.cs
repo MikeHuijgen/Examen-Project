@@ -5,7 +5,6 @@ public class GridSystem : MonoBehaviour
 {
     [SerializeField] private int width;
     [SerializeField] private int height;
-    [SerializeField] private int TileSize = 1;
     [SerializeField] private Transform gridTileVisualHolder;
     [SerializeField] private GridTileVisual gridTileVisualPrefab;
 
@@ -33,5 +32,5 @@ public class GridSystem : MonoBehaviour
         }
     }
 
-    private Vector3 GetWorldPosition(int x, int y) =>  new Vector3(x, y, 0) * TileSize;
+    private Vector3 GetWorldPosition(int x, int y) =>  new Vector3(x, y, 0);
 }
