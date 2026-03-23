@@ -25,10 +25,7 @@ public class GridSystem : MonoBehaviour
         GenerateGrid();
     }
 
-    private void Start()
-    {
-        OnNewGeneratedGrid?.Invoke(new Vector2(gridCellWidth, gridCellHeight));
-    }
+    private void Start() => OnNewGeneratedGrid?.Invoke(new Vector2(gridCellWidth, gridCellHeight));
 
     private void GenerateGrid()
     {
@@ -57,7 +54,7 @@ public class GridSystem : MonoBehaviour
         }      
     }
 
-    private Vector3 GetWorldPosition(int x, int y) =>  new Vector3(x, y, 0);
+    public Vector3 GetWorldPosition(GridPosition gridPosition) =>  new Vector3(gridPosition.X, gridPosition.Y, 0);
 
     public GridPosition GetWorldToGridPosition(Vector2 worldPosition)
     {   
@@ -67,5 +64,10 @@ public class GridSystem : MonoBehaviour
         int gridY = Mathf.FloorToInt(localPos.y / gridCellHeight);
 
         return new GridPosition(gridX, gridY);
+    }
+
+    private bool IsValidGridPosition(GridPosition gridPosition)
+    {
+        return gridPosition.X >= 0 && gridPosition.Y >= 0 && gridPosition.X < width && gridPosition.Y < height;
     }
 }
