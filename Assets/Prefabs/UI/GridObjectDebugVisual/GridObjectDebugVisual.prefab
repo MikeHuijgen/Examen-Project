@@ -223,7 +223,7 @@ GameObject:
   - component: {fileID: 157017584124344043}
   - component: {fileID: 5472091287612878839}
   m_Layer: 5
-  m_Name: GridTileDebugVisual
+  m_Name: GridObjectDebugVisual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class GridSystem : MonoBehaviour
@@ -11,11 +12,10 @@ public class GridSystem : MonoBehaviour
     [SerializeField] private int height;
     [SerializeField] private int gridCellWidth = 100;
     [SerializeField] private int gridCellHeight = 100;
-    [SerializeField] private Transform gridTileVisualHolder;
-    [SerializeField] private GridObjectDebugVisual gridTileVisualPrefab;
+    [SerializeField] private Transform gridObjectVisualHolder;
     [SerializeField] private RectTransform gridRectTransform;
 
-    private GridObject [,] gridTilesArray;
+    private GridObject [,] gridObjectArray;
 
     private void Awake()
     {
@@ -32,24 +32,29 @@ public class GridSystem : MonoBehaviour
 
     private void GenerateGrid()
     {
-        gridTilesArray = new GridObject[width, height];
+        gridObjectArray = new GridObject[width, height];
 
         for (var x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
                 var newGridPosition = new GridPosition(x, y);
-                var gridTileData = new GridObject(newGridPosition);
-                gridTilesArray[x, y] = gridTileData;
-                var newGridTileVisual = Instantiate(gridTileVisualPrefab, gridTileVisualHolder);
-                newGridTileVisual.Initialize(gridTileData);
+                var newGridObject = new GridObject(newGridPosition);
+                gridObjectArray[x, y] = newGridObject;
             }
         }
     }
 
-    public void CreateDebugTileVisuals()
+    public void CreateDebugTileVisuals(GridObjectDebugVisual gridObjectDebugVisualPrefab)
     {
-        
+        for (var x = 0; x < width; x++)
+        {
+            for (int y = 0; y < height; y++)
+            {
+                var newGridTileVisual = Instantiate(gridObjectDebugVisualPrefab, gridObjectVisualHolder);
+                newGridTileVisual.Initialize(gridObjectArray[x, y]);  
+            }
+        }      
     }
 
     private Vector3 GetWorldPosition(int x, int y) =>  new Vector3(x, y, 0);
