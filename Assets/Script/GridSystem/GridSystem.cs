@@ -6,6 +6,10 @@ public class GridSystem : MonoBehaviour
     [SerializeField] private int width;
     [SerializeField] private int height;
     [SerializeField] private int TileSize = 1;
+    [SerializeField] private Transform gridTileVisualHolder;
+    [SerializeField] private GridTileVisual gridTileVisualPrefab;
+
+    private GridTileData [,] gridTilesArray;
 
     private void Awake()
     {
@@ -14,11 +18,17 @@ public class GridSystem : MonoBehaviour
 
     private void GenerateGrid()
     {
+        gridTilesArray = new GridTileData[width, height];
+
         for (var x = 0; x < width; x++)
         {
             for (int y = 0; y < height; y++)
             {
-                Debug.DrawLine(GetWorldPosition(x,y), GetWorldPosition(x,y) + Vector3.right  * .2f, Color.white, 1000);
+                var newGridPosition = new GridPosition(x, y);
+                var gridTileData = new GridTileData(newGridPosition);
+                gridTilesArray[x, y] = gridTileData;
+                var newGridTileVisual = Instantiate(gridTileVisualPrefab, gridTileVisualHolder);
+                newGridTileVisual.Initialize(gridTileData);
             }
         }
     }

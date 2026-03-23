@@ -1,8 +1,8 @@
-public struct GridTile
+public struct GridTileData
 {
     private GridPosition _gridPosition;
 
-    public GridTile(GridPosition gridPosition)
+    public GridTileData(GridPosition gridPosition)
     {
         _gridPosition = gridPosition;
     }
