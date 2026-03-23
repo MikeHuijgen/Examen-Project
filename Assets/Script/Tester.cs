@@ -7,6 +7,6 @@ public class Tester : MonoBehaviour
 
     void Start()
     {
-        GridSystem.Instance.CreateDebugTileVisuals(gridObjectDebugVisual);
+        GridSystem.Instance.CreateDebugObjectVisuals(gridObjectDebugVisual);
     }
 }

@@ -42,7 +42,7 @@ public class GridSystem : MonoBehaviour
         }
     }
 
-    public void CreateDebugTileVisuals(GridObjectDebugVisual gridObjectDebugVisualPrefab)
+    public void CreateDebugObjectVisuals(GridObjectDebugVisual gridObjectDebugVisualPrefab)
     {
         for (var x = 0; x < width; x++)
         {
@@ -66,7 +66,7 @@ public class GridSystem : MonoBehaviour
         return new GridPosition(gridX, gridY);
     }
 
-    private bool IsValidGridPosition(GridPosition gridPosition)
+    public bool IsValidGridPosition(GridPosition gridPosition)
     {
         return gridPosition.X >= 0 && gridPosition.Y >= 0 && gridPosition.X < width && gridPosition.Y < height;
     }

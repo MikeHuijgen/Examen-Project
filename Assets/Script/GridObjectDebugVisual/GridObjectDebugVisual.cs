@@ -3,13 +3,15 @@ using UnityEngine;
 
 public class GridObjectDebugVisual : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI debugText;
-    private GridObject _gridTileData;
-    public void Initialize(GridObject gridTileData)
+    [SerializeField] private TextMeshProUGUI debugTextGridPosition;
+    [SerializeField] private TextMeshProUGUI debugTextGridObject;
+    private GridObject _gridObject;
+    public void Initialize(GridObject gridObject)
     {
-        _gridTileData = gridTileData;
-        debugText.text = _gridTileData.GetGridTilePosition.ToString();
+        _gridObject = gridObject;
+        debugTextGridPosition.text = _gridObject.GetGridTilePosition.ToString();
+        debugTextGridObject.text = _gridObject.GetGridTilePosition.Y.ToString();
     }
 
-    public GridObject GetGridTileData => _gridTileData;
+    public GridObject GetGridObject => _gridObject;
 }
