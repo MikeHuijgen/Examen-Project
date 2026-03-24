@@ -35,12 +35,18 @@ public class LevelGrid : MonoBehaviour
 
     private void OnNewInputEnded(Vector2 beginInputPosition, Vector2 endInputPosition)
     {
-        var beginGridPosition = _gridSystem.GetWorldToGridPosition(beginInputPosition);
-        var endGridPosition = _gridSystem.GetWorldToGridPosition(endInputPosition);
+        var beginGridPosition = _gridSystem.GetWorldPositionToGridPosition(beginInputPosition);
+        var endGridPosition = _gridSystem.GetWorldPositionToGridPosition(endInputPosition);
 
         if (!_gridSystem.IsValidGridPosition(beginGridPosition) || !_gridSystem.IsValidGridPosition(endGridPosition)) return;
         if (beginGridPosition == endGridPosition) return;
 
-        print($"Has 2 valid grid positions: ({beginGridPosition}) and ({endGridPosition})" );
+        var gridObjectA = _gridSystem.GetGridObjectByGridPosition(beginGridPosition);
+        var gridObjectB = _gridSystem.GetGridObjectByGridPosition(endGridPosition);
+
+        _gridSystem.SwapGridObjects(gridObjectA, gridObjectB);
+
+        print($"Before swap: A: {beginGridPosition}, B: {endGridPosition}");
+        print($"After swap:  A: {gridObjectA.GetGridPosition}, B: {gridObjectB.GetGridPosition}");
     }
 }

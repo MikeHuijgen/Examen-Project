@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -7,13 +8,30 @@ public class GridObjectDebugVisual : MonoBehaviour
     [SerializeField] private TextMeshProUGUI debugTextGridPosition;
     [SerializeField] private TextMeshProUGUI debugTextGridObject;
     private GridObject _gridObject;
-    public void Initialize(GridObject gridObject, int width, int height)
+
+    private Func<GridPosition, Vector3> _gridToWorldFunc;
+
+    private static int counter;
+    public void Initialize(GridObject gridObject, int width, int height, Func<GridPosition, Vector3> gridToWorldFunc)
     {
         _gridObject = gridObject;
-        debugTextGridPosition.text = _gridObject.GetGridTilePosition.ToString();
-        debugTextGridObject.text = _gridObject.GetGridTilePosition.Y.ToString();
+        _gridObject.PositionChangedCallback(UpdateRectPosition);
         rectTransform.sizeDelta = new Vector2(width, height);
+        _gridToWorldFunc = gridToWorldFunc;
+        UpdateText();
+    }
+
+    public void UpdateRectPosition(GridPosition gridPosition)
+    {
+        rectTransform.anchoredPosition = _gridToWorldFunc(gridPosition);
     }
 
     public GridObject GetGridObject => _gridObject;
+
+    private void UpdateText()
+    {
+        debugTextGridPosition.text = _gridObject.GetGridPosition.ToString();
+        debugTextGridObject.text = counter.ToString();
+        counter++;         
+    }
 }
