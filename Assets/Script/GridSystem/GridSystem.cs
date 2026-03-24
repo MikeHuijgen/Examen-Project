@@ -1,39 +1,34 @@
 using System;
-using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-public class GridSystem : MonoBehaviour
+public class GridSystem
 {
-    public static GridSystem Instance;
-    public event Action<Vector2> OnNewGeneratedGrid;
-
-    [SerializeField] private int width;
-    [SerializeField] private int height;
-    [SerializeField] private int gridCellWidth = 100;
-    [SerializeField] private int gridCellHeight = 100;
-    [SerializeField] private Transform gridObjectVisualHolder;
-    [SerializeField] private RectTransform gridRectTransform;
+    public static event Action<Transform> OnNewGridObjectCreated;
+    private int _width;
+    private int _height;
+    private int _cellWidth;
+    private int _cellHeight;
+    private RectTransform _gridRectTransform;
 
     private GridObject [,] gridObjectArray;
 
-    private void Awake()
+    public GridSystem(int width, int height, int cellWidth, int cellHeight, RectTransform gridRectTransform)
     {
-        if (Instance != null) Destroy(gameObject);
-
-        Instance = this;
-        GenerateGrid();
+        _width = width;
+        _height = height;
+        _cellWidth = cellWidth;
+        _cellHeight = cellHeight;
+        _gridRectTransform = gridRectTransform;
     }
 
-    private void Start() => OnNewGeneratedGrid?.Invoke(new Vector2(gridCellWidth, gridCellHeight));
-
-    private void GenerateGrid()
+    public void GenerateGrid()
     {
-        gridObjectArray = new GridObject[width, height];
+        gridObjectArray = new GridObject[_width, _height];
 
-        for (var x = 0; x < width; x++)
+        for (var x = 0; x < _width; x++)
         {
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < _height; y++)
             {
                 var newGridPosition = new GridPosition(x, y);
                 var newGridObject = new GridObject(newGridPosition);
@@ -44,12 +39,13 @@ public class GridSystem : MonoBehaviour
 
     public void CreateDebugObjectVisuals(GridObjectDebugVisual gridObjectDebugVisualPrefab)
     {
-        for (var x = 0; x < width; x++)
+        for (var x = 0; x < _width; x++)
         {
-            for (int y = 0; y < height; y++)
+            for (int y = 0; y < _height; y++)
             {
-                var newGridTileVisual = Instantiate(gridObjectDebugVisualPrefab, gridObjectVisualHolder);
-                newGridTileVisual.Initialize(gridObjectArray[x, y]);  
+                var newGridObjectVisual = GameObject.Instantiate(gridObjectDebugVisualPrefab);
+                newGridObjectVisual.Initialize(gridObjectArray[x, y]);  
+                OnNewGridObjectCreated?.Invoke(newGridObjectVisual.transform);
             }
         }      
     }
@@ -58,16 +54,13 @@ public class GridSystem : MonoBehaviour
 
     public GridPosition GetWorldToGridPosition(Vector2 worldPosition)
     {   
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(gridRectTransform, worldPosition, null, out var localPos);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(_gridRectTransform, worldPosition, null, out var localPos);
 
-        int gridX = Mathf.FloorToInt(localPos.x / gridCellWidth);
-        int gridY = Mathf.FloorToInt(localPos.y / gridCellHeight);
+        int gridX = Mathf.FloorToInt(localPos.x / _cellWidth);
+        int gridY = Mathf.FloorToInt(localPos.y / _cellHeight);
 
         return new GridPosition(gridX, gridY);
     }
 
-    public bool IsValidGridPosition(GridPosition gridPosition)
-    {
-        return gridPosition.X >= 0 && gridPosition.Y >= 0 && gridPosition.X < width && gridPosition.Y < height;
-    }
+    public bool IsValidGridPosition(GridPosition gridPosition) => gridPosition.X >= 0 && gridPosition.Y >= 0 && gridPosition.X < _width && gridPosition.Y < _height; 
 }

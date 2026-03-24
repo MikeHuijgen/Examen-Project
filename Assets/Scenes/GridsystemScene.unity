@@ -629,6 +629,7 @@ GameObject:
   - component: {fileID: 1293866196}
   - component: {fileID: 1293866195}
   - component: {fileID: 1293866197}
+  - component: {fileID: 1293866198}
   m_Layer: 0
   m_Name: GridSystem
   m_TagString: Untagged
@@ -652,8 +653,7 @@ MonoBehaviour:
   height: 8
   gridCellWidth: 100
   gridCellHeight: 100
-  gridTileVisualHolder: {fileID: 1211573434}
-  gridTileVisualPrefab: {fileID: 5472091287612878839, guid: 1acc3aecdb8173843bededdfa2bf75ec, type: 3}
+  gridObjectVisualHolder: {fileID: 1211573434}
   gridRectTransform: {fileID: 1995131187}
 --- !u!4 &1293866196
 Transform:
@@ -683,6 +683,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FingerInputTester
   gridSystem: {fileID: 1293866195}
+--- !u!114 &1293866198
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1293866194}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef4f5c249aec135478b4ef55c25618fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Tester
+  gridObjectDebugVisual: {fileID: 5472091287612878839, guid: 1acc3aecdb8173843bededdfa2bf75ec, type: 3}
 --- !u!224 &1995131187 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6933990580499422406, guid: 11d973cef8c0412418ad62f517518fa5, type: 3}
