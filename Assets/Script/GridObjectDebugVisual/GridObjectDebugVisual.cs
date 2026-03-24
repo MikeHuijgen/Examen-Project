@@ -24,13 +24,20 @@ public class GridObjectDebugVisual : MonoBehaviour
     public void UpdateRectPosition(GridPosition gridPosition)
     {
         rectTransform.anchoredPosition = _gridToWorldFunc(gridPosition);
+        debugTextGridPosition.text =     
+        "x = " + _gridObject.GetGridPosition.X + "\n" +
+        "y = " + _gridObject.GetGridPosition.Y;
+
     }
 
     public GridObject GetGridObject => _gridObject;
 
     private void UpdateText()
     {
-        debugTextGridPosition.text = _gridObject.GetGridPosition.ToString();
+        debugTextGridPosition.text =         
+        "x = " + _gridObject.GetGridPosition.X + "\n" +
+        "y = " + _gridObject.GetGridPosition.Y;
+        
         debugTextGridObject.text = counter.ToString();
         counter++;         
     }

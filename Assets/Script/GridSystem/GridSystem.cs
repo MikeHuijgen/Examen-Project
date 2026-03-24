@@ -1,5 +1,6 @@
 using System;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GridSystem
@@ -13,17 +14,19 @@ public class GridSystem
 
     private GridObject [,] _gridObjectArray;
 
-    public GridSystem(int width, int height, int cellWidth, int cellHeight, RectTransform gridRectTransform)
+    public GridSystem(int width, int height, int cellWidth, int cellHeight)
     {
         _width = width;
         _height = height;
         _cellWidth = cellWidth;
         _cellHeight = cellHeight;
-        _gridRectTransform = gridRectTransform;
     }
+
+    public void SetRectTransform(RectTransform rect)  {_gridRectTransform = rect;         Debug.Log("RectSet");}
 
     public void GenerateGrid()
     {
+        Debug.Log("GridGenerate");
         _gridObjectArray = new GridObject[_width, _height];
 
         for (var x = 0; x < _width; x++)

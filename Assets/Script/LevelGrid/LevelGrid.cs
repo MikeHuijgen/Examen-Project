@@ -7,13 +7,13 @@ public class LevelGrid : MonoBehaviour
     [SerializeField] private int gridHeight = 8;
     [SerializeField] private int gridCellWidth = 100;
     [SerializeField] private int gridCellHeight = 100;
-    [SerializeField] private RectTransform gridRectTransform;
     [SerializeField] private GridObjectDebugVisual gridObjectDebugVisual;
     private GridSystem _gridSystem;
 
     private void Awake()
     {
-        _gridSystem = new GridSystem(gridWidth, gridHeight, gridCellWidth, gridCellHeight, gridRectTransform);
+        _gridSystem = new GridSystem(gridWidth, gridHeight, gridCellWidth, gridCellHeight);
+        GridObjectUIRoot.OnGridRectReady += rect => _gridSystem.SetRectTransform(rect);
     }
 
     void OnEnable()
@@ -24,7 +24,8 @@ public class LevelGrid : MonoBehaviour
 
     void OnDisable()
     {
-        FingerInputTester.OnNewInputEnded -= OnNewInputEnded;        
+        FingerInputTester.OnNewInputEnded -= OnNewInputEnded;  
+        GridObjectUIRoot.OnGridRectReady -= rect => _gridSystem.SetRectTransform(rect);      
     }
 
     private void Start()
@@ -45,8 +46,5 @@ public class LevelGrid : MonoBehaviour
         var gridObjectB = _gridSystem.GetGridObjectByGridPosition(endGridPosition);
 
         _gridSystem.SwapGridObjects(gridObjectA, gridObjectB);
-
-        print($"Before swap: A: {beginGridPosition}, B: {endGridPosition}");
-        print($"After swap:  A: {gridObjectA.GetGridPosition}, B: {gridObjectB.GetGridPosition}");
     }
 }
