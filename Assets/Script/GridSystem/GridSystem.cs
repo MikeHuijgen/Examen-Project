@@ -49,7 +49,7 @@ public class GridSystem
 
                 OnNewGridObjectCreated?.Invoke(newGridObjectVisual.transform);
 
-                RectTransform rect = newGridObjectVisual.GetComponent<RectTransform>();
+                var rect = newGridObjectVisual.GetComponent<RectTransform>();
                 rect.anchoredPosition = GetWorldPosition(new GridPosition(x, y));
             }
         }      
@@ -57,14 +57,14 @@ public class GridSystem
 
     public Vector3 GetWorldPosition(GridPosition gridPosition)
     {
-        float gridWidthPx = _width * _cellWidth;
-        float gridHeightPx = _height * _cellHeight;
+        var gridWidthPx = _width * _cellWidth;
+        var gridHeightPx = _height * _cellHeight;
 
-        float offsetX = -gridWidthPx / 2f;
-        float offsetY = -gridHeightPx / 2f;
+        var offsetX = -gridWidthPx / 2f;
+        var offsetY = -gridHeightPx / 2f;
 
-        float x = offsetX + gridPosition.X * _cellWidth + _cellWidth * 0.5f;
-        float y = offsetY + gridPosition.Y * _cellHeight + _cellHeight * 0.5f;
+        var x = offsetX + gridPosition.X * _cellWidth + _cellWidth * 0.5f;
+        var y = offsetY + gridPosition.Y * _cellHeight + _cellHeight * 0.5f;
 
         return new Vector3(x, y, 0);
     }
@@ -79,14 +79,14 @@ public class GridSystem
             out var localPos
         );
 
-        float gridWidthPx = _width * _cellWidth;
-        float gridHeightPx = _height * _cellHeight;
+        var gridWidthPx = _width * _cellWidth;
+        var gridHeightPx = _height * _cellHeight;
 
-        float offsetX = -gridWidthPx / 2f;
-        float offsetY = -gridHeightPx / 2f;
+        var offsetX = -gridWidthPx / 2f;
+        var offsetY = -gridHeightPx / 2f;
 
-        float x = (localPos.x - offsetX) / _cellWidth;
-        float y = (localPos.y - offsetY) / _cellHeight;
+        var x = (localPos.x - offsetX) / _cellWidth;
+        var y = (localPos.y - offsetY) / _cellHeight;
 
         return new GridPosition(Mathf.FloorToInt(x), Mathf.FloorToInt(y));
     }

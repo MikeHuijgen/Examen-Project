@@ -39,6 +39,7 @@ public class LevelGrid : MonoBehaviour
         var endGridPosition = _gridSystem.GetWorldToGridPosition(endInputPosition);
 
         if (!_gridSystem.IsValidGridPosition(beginGridPosition) || !_gridSystem.IsValidGridPosition(endGridPosition)) return;
+        if (beginGridPosition == endGridPosition) return;
 
         print($"Has 2 valid grid positions: ({beginGridPosition}) and ({endGridPosition})" );
     }
