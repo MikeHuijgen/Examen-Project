@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class LevelGrid : MonoBehaviour
@@ -15,9 +16,30 @@ public class LevelGrid : MonoBehaviour
         _gridSystem = new GridSystem(gridWidth, gridHeight, gridCellWidth, gridCellHeight, gridRectTransform);
     }
 
+    void OnEnable()
+    {
+        FingerInputTester.OnNewInputEnded += OnNewInputEnded;
+    }
+
+
+    void OnDisable()
+    {
+        FingerInputTester.OnNewInputEnded -= OnNewInputEnded;        
+    }
+
     private void Start()
     {
         _gridSystem.GenerateGrid();
         _gridSystem.CreateDebugObjectVisuals(gridObjectDebugVisual);                
+    }
+
+    private void OnNewInputEnded(Vector2 beginInputPosition, Vector2 endInputPosition)
+    {
+        var beginGridPosition = _gridSystem.GetWorldToGridPosition(beginInputPosition);
+        var endGridPosition = _gridSystem.GetWorldToGridPosition(endInputPosition);
+
+        if (!_gridSystem.IsValidGridPosition(beginGridPosition) || !_gridSystem.IsValidGridPosition(endGridPosition)) return;
+
+        print($"Has 2 valid grid positions: ({beginGridPosition}) and ({endGridPosition})" );
     }
 }

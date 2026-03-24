@@ -4,8 +4,8 @@ using UnityEngine.InputSystem.EnhancedTouch;
 using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 public class FingerInputTester : MonoBehaviour
-{
-    public GridSystem gridSystem;
+{   
+    public static event Action<Vector2, Vector2> OnNewInputEnded;
     private Vector2 _startDownFingerPosition;
 
     private void OnEnable() 
@@ -31,16 +31,9 @@ public class FingerInputTester : MonoBehaviour
 
     private void OnFingerUp(Finger finger)
     {
-        // hier nog toevoegen dat hij wel echt UI moet aanraken en anders mag hij niet dit doen zelfde als bij down en bij preof proeve project
-        // var endDownFingerPosition = finger.screenPosition;
-        // var lastDownFinger = _startDownFingerPosition;
-        // _startDownFingerPosition = Vector2.zero;
-
-        // var startDownFingerGridPosition = gridSystem.GetWorldToGridPosition(lastDownFinger);
-        // var endDownFingerGridPosition = gridSystem.GetWorldToGridPosition(endDownFingerPosition);
-
-        // if (!gridSystem.IsValidGridPosition(startDownFingerGridPosition) || !gridSystem.IsValidGridPosition(endDownFingerGridPosition)) return;
-        // print("Test");
-
+        var endInputPosition = finger.screenPosition;
+        var beginInputPosition = _startDownFingerPosition;
+        _startDownFingerPosition = Vector2.zero;
+        OnNewInputEnded?.Invoke(beginInputPosition, endInputPosition);
     }
 }

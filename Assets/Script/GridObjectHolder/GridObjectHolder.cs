@@ -3,7 +3,6 @@ using UnityEngine.UI;
 
 public class GridObjectHolder : MonoBehaviour
 {
-    [SerializeField] private GridLayoutGroup gridLayoutGroup;
 
     private void OnEnable()
     {
@@ -19,8 +18,6 @@ public class GridObjectHolder : MonoBehaviour
     private void OnNewGridObjectCreated(Transform gridObjectVisual)
     {
         gridObjectVisual.SetParent(transform, false);
-        
-    }
 
-    private void OnNewGeneratedGrid(Vector2 gridCellSize) => gridLayoutGroup.cellSize = gridCellSize;
+    }
 }
