@@ -22,7 +22,7 @@ public class GridSystem
         _cellHeight = cellHeight;
     }
 
-    public void SetRectTransform(RectTransform rect)  {_gridRectTransform = rect;         Debug.Log("RectSet");}
+    public void SetRectTransform(RectTransform rect)  => _gridRectTransform = rect;
 
     public void GenerateGrid()
     {
