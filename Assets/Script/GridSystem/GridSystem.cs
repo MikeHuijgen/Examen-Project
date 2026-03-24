@@ -26,7 +26,6 @@ public class GridSystem
 
     public void GenerateGrid()
     {
-        Debug.Log("GridGenerate");
         _gridObjectArray = new GridObject[_width, _height];
 
         for (var x = 0; x < _width; x++)
