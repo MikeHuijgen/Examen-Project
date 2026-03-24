@@ -657,11 +657,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!224 &1211573434 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8294905916479744754, guid: 11d973cef8c0412418ad62f517518fa5, type: 3}
-  m_PrefabInstance: {fileID: 7370983639623391649}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1995131187 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6933990580499422406, guid: 11d973cef8c0412418ad62f517518fa5, type: 3}
@@ -675,10 +670,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5713675024628666864, guid: 1f7fe2694c2683a41988f34fe97e3730, type: 3}
-      propertyPath: gridRectTransform
-      value: 
-      objectReference: {fileID: 1211573434}
     - target: {fileID: 6636569109232428911, guid: 1f7fe2694c2683a41988f34fe97e3730, type: 3}
       propertyPath: m_Name
       value: LevelGrid
@@ -738,7 +729,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2593437117396138336, guid: 11d973cef8c0412418ad62f517518fa5, type: 3}
       propertyPath: m_Name
-      value: GridUI
+      value: LevelgridUI
       objectReference: {fileID: 0}
     - target: {fileID: 6933990580499422406, guid: 11d973cef8c0412418ad62f517518fa5, type: 3}
       propertyPath: m_Pivot.x

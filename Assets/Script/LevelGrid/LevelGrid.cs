@@ -3,16 +3,12 @@ using UnityEngine;
 
 public class LevelGrid : MonoBehaviour
 {
-    [SerializeField] private int gridWidth = 8;
-    [SerializeField] private int gridHeight = 8;
-    [SerializeField] private int gridCellWidth = 100;
-    [SerializeField] private int gridCellHeight = 100;
-    [SerializeField] private GridObjectDebugVisual gridObjectDebugVisual;
+    [SerializeField] private LevelGridData levelGridData;
     private GridSystem _gridSystem;
 
     private void Awake()
     {
-        _gridSystem = new GridSystem(gridWidth, gridHeight, gridCellWidth, gridCellHeight);
+        _gridSystem = new GridSystem(levelGridData.GridWidth, levelGridData.GridHeight, levelGridData.GridCellWidth, levelGridData.GridCellHeight);
         GridObjectUIRoot.OnGridRectReady += rect => _gridSystem.SetRectTransform(rect);
     }
 
@@ -31,7 +27,7 @@ public class LevelGrid : MonoBehaviour
     private void Start()
     {
         _gridSystem.GenerateGrid();
-        _gridSystem.CreateDebugObjectVisuals(gridObjectDebugVisual);                
+        _gridSystem.CreateDebugObjectVisuals(levelGridData.GridObjectDebugVisual);                
     }
 
     private void OnNewInputEnded(Vector2 beginInputPosition, Vector2 endInputPosition)
