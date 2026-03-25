@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3faf1ea49f766b7459a8770784533b3d, type: 3}
   m_Name: BasicLevelData
   m_EditorClassIdentifier: Assembly-CSharp::LevelGridData
-  GridWidth: 3
-  GridHeight: 3
+  GridWidth: 7
+  GridHeight: 7
   GridCellWidth: 100
   GridCellHeight: 100
   GridObjectDebugVisual: {fileID: 5472091287612878839, guid: 1acc3aecdb8173843bededdfa2bf75ec, type: 3}

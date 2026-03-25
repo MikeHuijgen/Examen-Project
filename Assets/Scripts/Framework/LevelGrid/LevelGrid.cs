@@ -5,7 +5,7 @@ using UnityEngine;
 public class LevelGrid : MonoBehaviour
 {
     [SerializeField] private LevelGridData levelGridData;
-    [SerializeField] private GridObjectVisual gridObjectVisual;
+    [SerializeField] private List<GridObjectVisual> gridObjectVisuals = new List<GridObjectVisual>();
     private GridSystem _gridSystem;
 
     private void Awake()
@@ -29,8 +29,9 @@ public class LevelGrid : MonoBehaviour
     private void Start()
     {
         _gridSystem.GenerateGrid();
-        _gridSystem.CreateGridObjectVisualUIs(levelGridData.GridObjectDebugVisual);   
-        _gridSystem.CreateGridObjectVisuals(gridObjectVisual);             
+        _gridSystem.CreateGridObjectVisualUIs(levelGridData.GridObjectDebugVisual);  
+
+        _gridSystem.CreateGridObjectVisuals(gridObjectVisuals);         
     }
 
     private void OnNewInputEnded(Vector2 beginInputPosition, Vector2 endInputPosition)

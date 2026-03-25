@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -61,14 +62,15 @@ public class GridSystem
         }      
     }
 
-    public void CreateGridObjectVisuals(GridObjectVisual gridObjectVisualPrefab)
+    public void CreateGridObjectVisuals(List<GridObjectVisual> gridObjectVisualPrefabs)
     {
         for (var x = 0; x < _width; x++)
         {
             for (int y = 0; y < _height; y++)
             {
                 var gridObjectVisualUI = _gridObjectArray[x,y].GetGridObjectVisualUI;
-                var newGridObjectVisual = GameObject.Instantiate(gridObjectVisualPrefab);
+                var randomGridVisual = gridObjectVisualPrefabs[UnityEngine.Random.Range(0, gridObjectVisualPrefabs.Count)];
+                var newGridObjectVisual = GameObject.Instantiate(randomGridVisual);
                 newGridObjectVisual.Initialize(_gridObjectArray[x,y], gridObjectVisualUI.GetRectToWorldTransform);
 
                 _gridObjectArray[x,y].SetGridObjectVisual(newGridObjectVisual);
