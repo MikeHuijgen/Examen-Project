@@ -19,6 +19,7 @@ public class CharacterInput : MonoBehaviour
     public static event Action<Vector2, Vector2> OnNewInputEnded;
     private Vector2 _startGridFingerPosition;
     private Vector2 _lastGridFingerPosition;
+    private bool _canReadFingerUpInput = true;
     
     private void Awake()
     {
@@ -40,22 +41,26 @@ public class CharacterInput : MonoBehaviour
         playerInput.actions["DodgeLeft"].performed += _dodgeLeftHandler;
         playerInput.actions["DodgeRight"].performed += _dodgeRightHandler;
         playerInput.actions["DodgeDown"].performed += _dodgeDownHandler;
+        GridSystem.OnSwappedGridObjects += OnSwappedGridObjects;
 
         EnhancedTouchSupport.Enable();
         Touch.onFingerDown += OnFingerDown;
         Touch.onFingerUp += OnFingerUp;
     }
-    
+
     private void OnDisable()
     {
         playerInput.actions["DodgeLeft"].performed -= _dodgeLeftHandler;
         playerInput.actions["DodgeRight"].performed -= _dodgeRightHandler;
         playerInput.actions["DodgeDown"].performed -= _dodgeDownHandler;
+        GridSystem.OnSwappedGridObjects += OnSwappedGridObjects;
 
         EnhancedTouchSupport.Disable();  
         Touch.onFingerDown -= OnFingerDown;      
         Touch.onFingerUp -= OnFingerUp; 
     }
+
+    private void OnSwappedGridObjects() => _canReadFingerUpInput = true;
 
     private void OnDodgeInputDetected(SideType dodgeSide)
     {
@@ -64,13 +69,14 @@ public class CharacterInput : MonoBehaviour
 
     private void OnFingerDown(Finger finger)
     {
-        if (_startGridFingerPosition != Vector2.zero) return;
-        if (_lastGridFingerPosition != Vector2.zero)
+        if (_lastGridFingerPosition != Vector2.zero && _lastGridFingerPosition != finger.screenPosition)
         {
             OnNewInputEnded?.Invoke(_lastGridFingerPosition, finger.screenPosition);
+            _canReadFingerUpInput = false;
             _lastGridFingerPosition = Vector2.zero;            
             return;
         }
+
         _startGridFingerPosition = finger.screenPosition;
     }
 
@@ -86,7 +92,10 @@ public class CharacterInput : MonoBehaviour
             return;
         }
 
+        if (!_canReadFingerUpInput) return;
+
         _startGridFingerPosition = Vector2.zero;
         OnNewInputEnded?.Invoke(beginInputPosition, endInputPosition);
+        _canReadFingerUpInput = false;
     }
 }
