@@ -7,51 +7,51 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour 
 {
-    [SerializeField] private Slider _hPSlider;
-    [SerializeField] private Slider _delaySlider;
-    [SerializeField] private Gradient _gradient;
-    [SerializeField] private TextMeshProUGUI _SliderTextHP;
+    [SerializeField] private Slider hPSlider;
+    [SerializeField] private Slider delaySlider;
+    [SerializeField] private Gradient gradient;
+    [SerializeField] private TextMeshProUGUI sliderTextHP;
     [SerializeField] private Image fill;
     
-    [SerializeField] private float _delaySpeed;
+    [SerializeField] private float delaySpeed;
     
-    [SerializeField] private float _delayTimer;
+    [SerializeField] private float delayTimer;
 
     private float _currentDelayTime;
 
     private void Start()
     {
-        _currentDelayTime = _delayTimer;
+        _currentDelayTime = delayTimer;
     }
 
     private void Update()
     {
-        if (_hPSlider.value == _delaySlider.value)return;
+        if (hPSlider.value == delaySlider.value)return;
         _currentDelayTime -= Time.deltaTime;
         if (_currentDelayTime > 0) return;
-        if (_delaySlider.value > _hPSlider.value)
+        if (delaySlider.value > hPSlider.value)
         {
-            _delaySlider.value -= Time.deltaTime * _delaySpeed;
+            delaySlider.value -= Time.deltaTime * delaySpeed;
         }
         else
         {
-            _delaySlider.value = _hPSlider.value;
-            _currentDelayTime = _delayTimer;
+            delaySlider.value = hPSlider.value;
+            _currentDelayTime = delayTimer;
         }
     }
     public void SetSliderMaxValue(int maxhealth)
     {
-        _hPSlider.maxValue = maxhealth;
-        _delaySlider.maxValue = maxhealth;
-        _delaySlider.value = _hPSlider.value;
-        fill.color = _gradient.Evaluate(1f);
+        hPSlider.maxValue = maxhealth;
+        delaySlider.maxValue = maxhealth;
+        delaySlider.value = hPSlider.value;
+        fill.color = gradient.Evaluate(1f);
     }
 
      public void UpdateHealthUI(int currentHealth)
     {
-        _SliderTextHP.text = (currentHealth).ToString();
-        _hPSlider.value = currentHealth;
-        _currentDelayTime = _delayTimer; 
-        fill.color = _gradient.Evaluate(_hPSlider.normalizedValue);
+        sliderTextHP.text = (currentHealth).ToString();
+        hPSlider.value = currentHealth;
+        _currentDelayTime = delayTimer; 
+        fill.color = gradient.Evaluate(hPSlider.normalizedValue);
     }
 }

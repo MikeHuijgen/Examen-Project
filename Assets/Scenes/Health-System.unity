@@ -579,8 +579,23 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnTakeDamage:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1823231205}
+        m_TargetAssemblyTypeName: HealthComponent, Assembly-CSharp
+        m_MethodName: PrintText
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   maxHP: 12
-  healthBar: {fileID: 0}
+  healthBar: {fileID: 450921116}
 --- !u!4 &1823231206
 Transform:
   m_ObjectHideFlags: 0
@@ -656,6 +671,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  OnTakeDamage:
+    m_PersistentCalls:
+      m_Calls: []
   maxHP: 10
   healthBar: {fileID: 450921116}
 --- !u!1001 &231763112101605448
@@ -740,11 +758,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8834291186765550252, guid: 0ff1a0e90268e8d4eb805ea6d764b1f4, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 184
+      value: 185
       objectReference: {fileID: 0}
     - target: {fileID: 8834291186765550252, guid: 0ff1a0e90268e8d4eb805ea6d764b1f4, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -169.55649
+      value: -170
       objectReference: {fileID: 0}
     - target: {fileID: 8834291186765550252, guid: 0ff1a0e90268e8d4eb805ea6d764b1f4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

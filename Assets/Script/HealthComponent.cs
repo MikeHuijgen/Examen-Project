@@ -4,7 +4,8 @@ using UnityEngine.Events;
 
 public class HealthComponent : MonoBehaviour
 {
-    public UnityEvent OnDeath = new UnityEvent();   
+    public UnityEvent OnDeath = new UnityEvent();
+    public UnityEvent OnTakeDamage = new UnityEvent();
     [SerializeField] private int maxHP;
 
     [SerializeField] private HealthBar healthBar;
@@ -12,7 +13,6 @@ public class HealthComponent : MonoBehaviour
     private int _currentHP;
 
     private float _currentTime;
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Awake()
     {
         _currentTime = 2f;
@@ -30,6 +30,7 @@ public class HealthComponent : MonoBehaviour
         if (_currentHP == 0) return;
 
         _currentHP -= damage;
+        OnTakeDamage?.Invoke();
         healthBar.UpdateHealthUI(_currentHP);
 
         if (_currentHP > 0) return;
@@ -46,9 +47,5 @@ public class HealthComponent : MonoBehaviour
             TakeDamage(1);
             _currentTime = 2f;
         }
-    }
-    public void PrintText()
-    {
-        Debug.Log("i AM DEATH" + gameObject.name);
     }
 }
