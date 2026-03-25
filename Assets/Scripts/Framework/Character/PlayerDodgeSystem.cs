@@ -73,4 +73,9 @@ public class PlayerDodgeSystem : MonoBehaviour
     {
         return (_isDodging, _currentDodgeSide);
     }
+
+    public void AddDodge(float dodgeAmount)
+    {
+        _currentDodgeAmount += dodgeAmount;
+    }
 }
