@@ -12,6 +12,7 @@ public class GridObject
     }
 
     public GridPosition GetGridPosition => _gridPosition;
+    public GridObjectDebugVisual GridObjectDebug => _gridObjectDebugVisual;
     public void SetGridPosition(GridPosition gridPosition)
     {
         _gridPosition = gridPosition; 

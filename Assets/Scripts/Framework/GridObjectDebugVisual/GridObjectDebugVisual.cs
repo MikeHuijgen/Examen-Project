@@ -31,6 +31,7 @@ public class GridObjectDebugVisual : MonoBehaviour
     }
 
     public GridObject GetGridObject => _gridObject;
+    public Vector3 GetRectToWorldTransform => rectTransform.transform.position;
 
     private void UpdateText()
     {

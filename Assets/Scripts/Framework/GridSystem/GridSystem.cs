@@ -22,7 +22,7 @@ public class GridSystem
         _cellHeight = cellHeight;
     }
 
-    public void SetRectTransform(RectTransform rect)  => _gridRectTransform = rect;
+    public void SetRectTransform(RectTransform rect) => _gridRectTransform = rect;
 
     public void GenerateGrid()
     {
@@ -93,6 +93,19 @@ public class GridSystem
         var y = (localPos.y - offsetY) / _cellHeight;
 
         return new GridPosition(Mathf.FloorToInt(x), Mathf.FloorToInt(y));
+    }
+
+    public void Test(GameObject cube)
+    {
+        for (var x = 0; x < _width; x++)
+        {
+            for (int y = 0; y < _height; y++)
+            {
+                var gridObjectVisual = _gridObjectArray[x,y].GridObjectDebug;
+                var position = gridObjectVisual.GetRectToWorldTransform;
+                GameObject.Instantiate(cube, position, cube.transform.rotation);
+            }
+        }   
     }
 
     public bool IsValidGridPosition(GridPosition gridPosition) => gridPosition.X >= 0 && gridPosition.Y >= 0 && gridPosition.X < _width && gridPosition.Y < _height; 

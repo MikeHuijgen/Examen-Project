@@ -4,6 +4,7 @@ using UnityEngine;
 public class LevelGrid : MonoBehaviour
 {
     [SerializeField] private LevelGridData levelGridData;
+    public GameObject cube;
     private GridSystem _gridSystem;
 
     private void Awake()
@@ -27,7 +28,8 @@ public class LevelGrid : MonoBehaviour
     private void Start()
     {
         _gridSystem.GenerateGrid();
-        _gridSystem.CreateDebugObjectVisuals(levelGridData.GridObjectDebugVisual);                
+        _gridSystem.CreateDebugObjectVisuals(levelGridData.GridObjectDebugVisual);   
+        _gridSystem.Test(cube);             
     }
 
     private void OnNewInputEnded(Vector2 beginInputPosition, Vector2 endInputPosition)
