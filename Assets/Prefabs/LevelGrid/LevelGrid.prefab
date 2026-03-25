@@ -45,7 +45,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelGrid
   levelGridData: {fileID: 11400000, guid: da93712b4c00a884db11c382cad2ddb1, type: 2}
-  gridObjectVisuals:
-  - {fileID: 3607441784381934679, guid: 124ee7686152962418124c2949098302, type: 3}
-  - {fileID: 3607441784381934679, guid: 3f87e07ba14233042bbb10e3440cd183, type: 3}
-  - {fileID: 3607441784381934679, guid: 5a9b702b216f6074eaf8d386d8e7cf41, type: 3}
+  gridObjectVisuals: []
