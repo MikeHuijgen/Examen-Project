@@ -61,6 +61,21 @@ public class GridSystem
         }      
     }
 
+    public void CreateGridObjectVisuals(GridObjectVisual gridObjectVisualPrefab)
+    {
+        for (var x = 0; x < _width; x++)
+        {
+            for (int y = 0; y < _height; y++)
+            {
+                var gridObjectVisualUI = _gridObjectArray[x,y].GetGridObjectVisualUI;
+                var newGridObjectVisual = GameObject.Instantiate(gridObjectVisualPrefab);
+                newGridObjectVisual.Initialize(_gridObjectArray[x,y], gridObjectVisualUI.GetRectToWorldTransform);
+
+                _gridObjectArray[x,y].SetGridObjectVisual(newGridObjectVisual);
+            }
+        }   
+    }
+
     public Vector3 GetGridPositionToWorldPosition(GridPosition gridPosition)
     {
         var gridWidthPx = _width * _cellWidth;
@@ -96,20 +111,6 @@ public class GridSystem
 
         return new GridPosition(Mathf.FloorToInt(x), Mathf.FloorToInt(y));
     }
-
-    public void Test(GameObject cube)
-    {
-        for (var x = 0; x < _width; x++)
-        {
-            for (int y = 0; y < _height; y++)
-            {
-                var gridObjectVisual = _gridObjectArray[x,y].GetGridObjectVisualUI;
-                var position = gridObjectVisual.GetRectToWorldTransform;
-                GameObject.Instantiate(cube, position, cube.transform.rotation);
-            }
-        }   
-    }
-
 
     public void SwapGridObjects(GridObject gridObjectA, GridObject gridObjectB)
     {

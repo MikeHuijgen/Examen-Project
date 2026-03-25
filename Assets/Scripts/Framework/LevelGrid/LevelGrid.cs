@@ -1,10 +1,11 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class LevelGrid : MonoBehaviour
 {
     [SerializeField] private LevelGridData levelGridData;
-    public GameObject cube;
+    [SerializeField] private GridObjectVisual gridObjectVisual;
     private GridSystem _gridSystem;
 
     private void Awake()
@@ -29,7 +30,7 @@ public class LevelGrid : MonoBehaviour
     {
         _gridSystem.GenerateGrid();
         _gridSystem.CreateGridObjectVisualUIs(levelGridData.GridObjectDebugVisual);   
-        _gridSystem.Test(cube);             
+        _gridSystem.CreateGridObjectVisuals(gridObjectVisual);             
     }
 
     private void OnNewInputEnded(Vector2 beginInputPosition, Vector2 endInputPosition)
