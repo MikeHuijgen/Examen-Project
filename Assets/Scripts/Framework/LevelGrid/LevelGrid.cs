@@ -16,13 +16,13 @@ public class LevelGrid : MonoBehaviour
 
     void OnEnable()
     {
-        FingerInputTester.OnNewInputEnded += OnNewInputEnded;
+        CharacterInput.OnNewInputEnded += OnNewInputEnded;
     }
 
 
     void OnDisable()
     {
-        FingerInputTester.OnNewInputEnded -= OnNewInputEnded;  
+        CharacterInput.OnNewInputEnded -= OnNewInputEnded;  
         GridObjectUIRoot.OnGridRectReady -= rect => _gridSystem.SetRectTransform(rect);      
     }
 
