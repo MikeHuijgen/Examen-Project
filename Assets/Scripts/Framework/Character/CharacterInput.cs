@@ -17,7 +17,8 @@ public class CharacterInput : MonoBehaviour
     private Action<InputAction.CallbackContext> _dodgeDownHandler;
 
     public static event Action<Vector2, Vector2> OnNewInputEnded;
-    private Vector2 _startPositionGridFinger;
+    private Vector2 _startGridFingerPosition;
+    private Vector2 _lastGridFingerPosition;
     
     private void Awake()
     {
@@ -63,15 +64,29 @@ public class CharacterInput : MonoBehaviour
 
     private void OnFingerDown(Finger finger)
     {
-        if (_startPositionGridFinger != Vector2.zero) return;
-        _startPositionGridFinger = finger.screenPosition;
+        if (_startGridFingerPosition != Vector2.zero) return;
+        if (_lastGridFingerPosition != Vector2.zero)
+        {
+            OnNewInputEnded?.Invoke(_lastGridFingerPosition, finger.screenPosition);
+            _lastGridFingerPosition = Vector2.zero;            
+            return;
+        }
+        _startGridFingerPosition = finger.screenPosition;
     }
 
     private void OnFingerUp(Finger finger)
     {
         var endInputPosition = finger.screenPosition;
-        var beginInputPosition = _startPositionGridFinger;
-        _startPositionGridFinger = Vector2.zero;
+        var beginInputPosition = _startGridFingerPosition;
+
+        if (beginInputPosition == endInputPosition) 
+        {
+            _lastGridFingerPosition = beginInputPosition;
+            _startGridFingerPosition = Vector2.zero;
+            return;
+        }
+
+        _startGridFingerPosition = Vector2.zero;
         OnNewInputEnded?.Invoke(beginInputPosition, endInputPosition);
     }
 }
