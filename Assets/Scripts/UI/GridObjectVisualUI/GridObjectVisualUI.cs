@@ -2,7 +2,7 @@ using System;
 using TMPro;
 using UnityEngine;
 
-public class GridObjectDebugVisual : MonoBehaviour
+public class GridObjectVisualUI : MonoBehaviour
 {
     [SerializeField] private RectTransform rectTransform;
     [SerializeField] private TextMeshProUGUI debugTextGridPosition;

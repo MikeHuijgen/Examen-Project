@@ -28,7 +28,7 @@ public class LevelGrid : MonoBehaviour
     private void Start()
     {
         _gridSystem.GenerateGrid();
-        _gridSystem.CreateDebugObjectVisuals(levelGridData.GridObjectDebugVisual);   
+        _gridSystem.CreateGridObjectVisualUIs(levelGridData.GridObjectDebugVisual);   
         _gridSystem.Test(cube);             
     }
 

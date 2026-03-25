@@ -7,5 +7,5 @@ public class LevelGridData : ScriptableObject
     public int GridHeight = 7;
     public int GridCellWidth = 100;
     public int GridCellHeight = 100;
-    public GridObjectDebugVisual GridObjectDebugVisual;
+    public GridObjectVisualUI GridObjectDebugVisual;
 }

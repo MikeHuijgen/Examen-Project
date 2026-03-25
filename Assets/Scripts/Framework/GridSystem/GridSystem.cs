@@ -23,6 +23,8 @@ public class GridSystem
     }
 
     public void SetRectTransform(RectTransform rect) => _gridRectTransform = rect;
+    public bool IsValidGridPosition(GridPosition gridPosition) => gridPosition.X >= 0 && gridPosition.Y >= 0 && gridPosition.X < _width && gridPosition.Y < _height; 
+    public GridObject GetGridObjectByGridPosition(GridPosition gridPosition) => IsValidGridPosition(gridPosition) ? _gridObjectArray[gridPosition.X, gridPosition.Y] : null;
 
     public void GenerateGrid()
     {
@@ -39,21 +41,21 @@ public class GridSystem
         }
     }
 
-    public void CreateDebugObjectVisuals(GridObjectDebugVisual gridObjectDebugVisualPrefab)
+    public void CreateGridObjectVisualUIs(GridObjectVisualUI gridObjectVisualUI)
     {
         for (var x = 0; x < _width; x++)
         {
             for (int y = 0; y < _height; y++)
             {
-                var newGridObjectVisual = GameObject.Instantiate(gridObjectDebugVisualPrefab);
+                var newGridObjectVisualUI = GameObject.Instantiate(gridObjectVisualUI);
 
-                newGridObjectVisual.Initialize(_gridObjectArray[x, y], _cellWidth, _cellHeight, GetGridPositionToWorldPosition);
+                newGridObjectVisualUI.Initialize(_gridObjectArray[x, y], _cellWidth, _cellHeight, GetGridPositionToWorldPosition);
 
-                _gridObjectArray[x,y].SetVisual(newGridObjectVisual);
+                _gridObjectArray[x,y].SetGridObjectVisualUI(newGridObjectVisualUI);
 
-                OnNewGridObjectCreated?.Invoke(newGridObjectVisual.transform);
+                OnNewGridObjectCreated?.Invoke(newGridObjectVisualUI.transform);
 
-                var rect = newGridObjectVisual.GetComponent<RectTransform>();
+                var rect = newGridObjectVisualUI.GetComponent<RectTransform>();
                 rect.anchoredPosition = GetGridPositionToWorldPosition(new GridPosition(x, y));
             }
         }      
@@ -101,16 +103,13 @@ public class GridSystem
         {
             for (int y = 0; y < _height; y++)
             {
-                var gridObjectVisual = _gridObjectArray[x,y].GridObjectDebug;
+                var gridObjectVisual = _gridObjectArray[x,y].GetGridObjectVisualUI;
                 var position = gridObjectVisual.GetRectToWorldTransform;
                 GameObject.Instantiate(cube, position, cube.transform.rotation);
             }
         }   
     }
 
-    public bool IsValidGridPosition(GridPosition gridPosition) => gridPosition.X >= 0 && gridPosition.Y >= 0 && gridPosition.X < _width && gridPosition.Y < _height; 
-
-    public GridObject GetGridObjectByGridPosition(GridPosition gridPosition) => IsValidGridPosition(gridPosition) ? _gridObjectArray[gridPosition.X, gridPosition.Y] : null;
 
     public void SwapGridObjects(GridObject gridObjectA, GridObject gridObjectB)
     {
