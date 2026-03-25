@@ -79,7 +79,7 @@ public class GridSystem
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             _gridRectTransform,
             worldPosition,
-            null,
+            CameraHolder.Match3Camera,
             out var localPos
         );
 
