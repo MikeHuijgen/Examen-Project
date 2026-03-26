@@ -8,9 +8,9 @@ using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 public class CharacterInput : MonoBehaviour
 {
     public static CharacterInput Instance;
+    public event Action<SideType> OnDodgeInput;
     private Action<GridPosition, GridPosition> _onRequestGridObjectSwap;
     private Func<Vector2, GridPosition?> _isValidGridPosition;
-    public event Action<SideType> OnDodgeInput;
     private Action<InputAction.CallbackContext> _dodgeLeftHandler;
     private Action<InputAction.CallbackContext> _dodgeRightHandler;
     private Action<InputAction.CallbackContext> _dodgeDownHandler;
