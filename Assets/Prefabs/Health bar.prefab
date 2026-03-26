@@ -213,8 +213,8 @@ MonoBehaviour:
     m_NumAlphaKeys: 3
   sliderTextHealth: {fileID: 7536335620761743610}
   fill: {fileID: 6644011447396610171}
-  delaySpeed: 0
-  delayTimer: 0
+  delaySpeed: 1
+  delayTimer: 2
 --- !u!1 &5684069469467483863
 GameObject:
   m_ObjectHideFlags: 0
