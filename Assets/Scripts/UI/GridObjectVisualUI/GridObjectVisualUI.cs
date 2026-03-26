@@ -1,12 +1,14 @@
 using System;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GridObjectVisualUI : MonoBehaviour
 {
     [SerializeField] private RectTransform rectTransform;
     [SerializeField] private TextMeshProUGUI debugTextGridPosition;
     [SerializeField] private TextMeshProUGUI debugTextGridObject;
+    [SerializeField] private Outline gridVisualOutline;
     private GridObject _gridObject;
 
     private Func<GridPosition, Vector3> _gridToWorldFunc;
@@ -31,8 +33,6 @@ public class GridObjectVisualUI : MonoBehaviour
 
     }
 
-    public GridObject GetGridObject => _gridObject;
-    public Vector3 GetRectToWorldTransform() => rectTransform.transform.position;
 
     private void UpdateText()
     {
@@ -42,5 +42,31 @@ public class GridObjectVisualUI : MonoBehaviour
         
         debugTextGridObject.text = counter.ToString();
         counter++;         
+    }
+
+    private void OnEnable()
+    {
+        CharacterInput.Instance.OnGridPositionSelected += OnGridObjectVisualUISelected;
+        CharacterInput.Instance.OnGridPositionDeselected += OnGridObjectVisualUIDeselected;
+    }
+
+    private void OnDisable()
+    {
+        CharacterInput.Instance.OnGridPositionSelected -= OnGridObjectVisualUISelected;   
+        CharacterInput.Instance.OnGridPositionDeselected -= OnGridObjectVisualUIDeselected;     
+    }
+
+    public GridObject GetGridObject => _gridObject;
+    public Vector3 GetRectToWorldTransform() => rectTransform.transform.position;
+
+    private void OnGridObjectVisualUISelected(GridPosition gridPosition)
+    {
+        if (_gridObject.GetGridPosition != gridPosition) return;
+        gridVisualOutline.effectColor = Color.limeGreen;
+    }
+    private void OnGridObjectVisualUIDeselected(GridPosition gridPosition)
+    {
+        if (_gridObject.GetGridPosition != gridPosition) return;
+        gridVisualOutline.effectColor = Color.black;
     }
 }

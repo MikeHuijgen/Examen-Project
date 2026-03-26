@@ -9,6 +9,8 @@ public class CharacterInput : MonoBehaviour
 {
     public static CharacterInput Instance;
     public event Action<SideType> OnDodgeInput;
+    public event Action<GridPosition> OnGridPositionSelected;
+    public event Action<GridPosition> OnGridPositionDeselected;
     private Action<GridPosition, GridPosition> _onRequestGridObjectSwap;
     private Func<Vector2, GridPosition?> _isValidGridPosition;
     private Action<InputAction.CallbackContext> _dodgeLeftHandler;
@@ -72,6 +74,7 @@ public class CharacterInput : MonoBehaviour
 
         if(_lastGridPositionCache != null) return;
         _lastGridPositionCache = gridPosition;
+        OnGridPositionSelected?.Invoke(_lastGridPositionCache.Value);
     }
 
     private void OnFingerUp(Finger finger)
@@ -81,6 +84,7 @@ public class CharacterInput : MonoBehaviour
 
         if(gridPosition == null)
         {
+            OnGridPositionDeselected?.Invoke(_lastGridPositionCache.Value);
             _lastGridPositionCache = null;
             return;
         }       
@@ -89,6 +93,7 @@ public class CharacterInput : MonoBehaviour
 
         var fromGridPosition = _beginTouchGridPosition == gridPosition ? _lastGridPositionCache.Value : _beginTouchGridPosition.Value;
 
+        OnGridPositionDeselected?.Invoke(_lastGridPositionCache.Value);
         _onRequestGridObjectSwap(fromGridPosition, gridPosition.Value);
 
         _lastGridPositionCache = null;
