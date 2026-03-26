@@ -7,10 +7,10 @@ using UnityEngine.UI;
 
 public class HealthBar : MonoBehaviour 
 {
-    [SerializeField] private Slider hPSlider;
+    [SerializeField] private Slider healthSlider;
     [SerializeField] private Slider delaySlider;
     [SerializeField] private Gradient gradient;
-    [SerializeField] private TextMeshProUGUI sliderTextHP;
+    [SerializeField] private TextMeshProUGUI sliderTextHealth;
     [SerializeField] private Image fill;
     
     [SerializeField] private float delaySpeed;
@@ -26,32 +26,32 @@ public class HealthBar : MonoBehaviour
 
     private void Update()
     {
-        if (hPSlider.value == delaySlider.value)return;
+        if (healthSlider.value == delaySlider.value)return;
         _currentDelayTime -= Time.deltaTime;
         if (_currentDelayTime > 0) return;
-        if (delaySlider.value > hPSlider.value)
+        if (delaySlider.value > healthSlider.value)
         {
             delaySlider.value -= Time.deltaTime * delaySpeed;
         }
         else
         {
-            delaySlider.value = hPSlider.value;
+            delaySlider.value = healthSlider.value;
             _currentDelayTime = delayTimer;
         }
     }
     public void SetSliderMaxValue(int maxhealth)
     {
-        hPSlider.maxValue = maxhealth;
+        healthSlider.maxValue = maxhealth;
         delaySlider.maxValue = maxhealth;
-        delaySlider.value = hPSlider.value;
+        delaySlider.value = healthSlider.value;
         fill.color = gradient.Evaluate(1f);
     }
 
      public void UpdateHealthUI(int currentHealth)
     {
-        sliderTextHP.text = (currentHealth).ToString();
-        hPSlider.value = currentHealth;
+        sliderTextHealth.text = (currentHealth).ToString();
+        healthSlider.value = currentHealth;
         _currentDelayTime = delayTimer; 
-        fill.color = gradient.Evaluate(hPSlider.normalizedValue);
+        fill.color = gradient.Evaluate(healthSlider.normalizedValue);
     }
 }
