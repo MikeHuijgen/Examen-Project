@@ -8,6 +8,7 @@ public class GridSystem
 {
     public static event Action<Transform> OnNewGridObjectCreated;
     public static event Action OnSwappedGridObjects;
+
     private int _width;
     private int _height;
     private int _cellWidth;

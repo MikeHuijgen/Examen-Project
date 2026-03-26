@@ -14,15 +14,8 @@ public class LevelGrid : MonoBehaviour
         GridObjectUIRoot.OnGridRectReady += rect => _gridSystem.SetRectTransform(rect);
     }
 
-    void OnEnable()
-    {
-        CharacterInput.OnNewInputEnded += OnNewInputEnded;
-    }
-
-
     void OnDisable()
     {
-        CharacterInput.OnNewInputEnded -= OnNewInputEnded;  
         GridObjectUIRoot.OnGridRectReady -= rect => _gridSystem.SetRectTransform(rect);      
     }
 
@@ -31,26 +24,30 @@ public class LevelGrid : MonoBehaviour
         _gridSystem.GenerateGrid();
         _gridSystem.CreateGridObjectVisualUIs(levelGridData.GridObjectDebugVisual);  
 
-        _gridSystem.CreateGridObjectVisuals(gridObjectVisuals);         
+        _gridSystem.CreateGridObjectVisuals(gridObjectVisuals);     
+
+        CharacterInput.Instance.SetOnRequestGridObjectSwapCallback(OnRequestGridObjectSwap);
+        CharacterInput.Instance.SetIsValidGridPositionCallback(IsValidGridPosition);   
     }
 
-    private void OnNewInputEnded(Vector2 beginInputPosition, Vector2 endInputPosition)
+    private void OnRequestGridObjectSwap(GridPosition beginGridPosition, GridPosition endGridPosition)
     {
-        var beginGridPosition = _gridSystem.GetWorldPositionToGridPosition(beginInputPosition);
-        var endGridPosition = _gridSystem.GetWorldPositionToGridPosition(endInputPosition);
-
-        if (!_gridSystem.IsValidGridPosition(beginGridPosition) || !_gridSystem.IsValidGridPosition(endGridPosition)) return;
-        if (beginGridPosition == endGridPosition) return;
-
         var dx = Mathf.Abs(beginGridPosition.X - endGridPosition.X);
         var dy = Mathf.Abs(beginGridPosition.Y - endGridPosition.Y);
 
         if (dx > 1 || dy > 1 || (dx == 0 && dy == 0)) return;
 
-
         var gridObjectA = _gridSystem.GetGridObjectByGridPosition(beginGridPosition);
         var gridObjectB = _gridSystem.GetGridObjectByGridPosition(endGridPosition);
 
-        _gridSystem.SwapGridObjects(gridObjectA, gridObjectB);
+        _gridSystem.SwapGridObjects(gridObjectA, gridObjectB);        
+    }
+
+    private GridPosition? IsValidGridPosition(Vector2 worldPosition)
+    {
+        var gridPosition = _gridSystem.GetWorldPositionToGridPosition(worldPosition);
+        var isValidGridPosition = _gridSystem.IsValidGridPosition(gridPosition);
+
+        return isValidGridPosition ? gridPosition : null;
     }
 }

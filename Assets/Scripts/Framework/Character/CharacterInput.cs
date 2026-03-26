@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
@@ -7,19 +8,17 @@ using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 public class CharacterInput : MonoBehaviour
 {
     public static CharacterInput Instance;
-
-    [SerializeField] private PlayerInput playerInput;
-    
+    private Action<GridPosition, GridPosition> _onRequestGridObjectSwap;
+    private Func<Vector2, GridPosition?> _isValidGridPosition;
     public event Action<SideType> OnDodgeInput;
-    
     private Action<InputAction.CallbackContext> _dodgeLeftHandler;
     private Action<InputAction.CallbackContext> _dodgeRightHandler;
     private Action<InputAction.CallbackContext> _dodgeDownHandler;
 
-    public static event Action<Vector2, Vector2> OnNewInputEnded;
-    private Vector2 _startGridFingerPosition;
-    private Vector2 _lastGridFingerPosition;
-    private bool _canReadFingerUpInput = true;
+    [SerializeField] private PlayerInput playerInput;
+
+    private GridPosition? _lastGridPositionCache;
+    private GridPosition? _beginTouchGridPosition;
     
     private void Awake()
     {
@@ -41,7 +40,6 @@ public class CharacterInput : MonoBehaviour
         playerInput.actions["DodgeLeft"].performed += _dodgeLeftHandler;
         playerInput.actions["DodgeRight"].performed += _dodgeRightHandler;
         playerInput.actions["DodgeDown"].performed += _dodgeDownHandler;
-        GridSystem.OnSwappedGridObjects += OnSwappedGridObjects;
 
         EnhancedTouchSupport.Enable();
         Touch.onFingerDown += OnFingerDown;
@@ -53,14 +51,11 @@ public class CharacterInput : MonoBehaviour
         playerInput.actions["DodgeLeft"].performed -= _dodgeLeftHandler;
         playerInput.actions["DodgeRight"].performed -= _dodgeRightHandler;
         playerInput.actions["DodgeDown"].performed -= _dodgeDownHandler;
-        GridSystem.OnSwappedGridObjects += OnSwappedGridObjects;
 
         EnhancedTouchSupport.Disable();  
         Touch.onFingerDown -= OnFingerDown;      
         Touch.onFingerUp -= OnFingerUp; 
     }
-
-    private void OnSwappedGridObjects() => _canReadFingerUpInput = true;
 
     private void OnDodgeInputDetected(SideType dodgeSide)
     {
@@ -69,33 +64,36 @@ public class CharacterInput : MonoBehaviour
 
     private void OnFingerDown(Finger finger)
     {
-        if (_lastGridFingerPosition != Vector2.zero && _lastGridFingerPosition != finger.screenPosition)
-        {
-            OnNewInputEnded?.Invoke(_lastGridFingerPosition, finger.screenPosition);
-            _canReadFingerUpInput = false;
-            _lastGridFingerPosition = Vector2.zero;            
-            return;
-        }
+        if (_isValidGridPosition == null) return;
+        var gridPosition = _isValidGridPosition(finger.screenPosition);
+        if(gridPosition == null) return;
+        
+        _beginTouchGridPosition = gridPosition;
 
-        _startGridFingerPosition = finger.screenPosition;
+        if(_lastGridPositionCache != null) return;
+        _lastGridPositionCache = gridPosition;
     }
 
     private void OnFingerUp(Finger finger)
     {
-        var endInputPosition = finger.screenPosition;
-        var beginInputPosition = _startGridFingerPosition;
+        if (_isValidGridPosition == null) return;
+        var gridPosition = _isValidGridPosition(finger.screenPosition);
 
-        if (beginInputPosition == endInputPosition) 
+        if(gridPosition == null)
         {
-            _lastGridFingerPosition = beginInputPosition;
-            _startGridFingerPosition = Vector2.zero;
+            _lastGridPositionCache = null;
             return;
-        }
+        }       
 
-        if (!_canReadFingerUpInput) return;
+        if(gridPosition == _lastGridPositionCache && _beginTouchGridPosition == _lastGridPositionCache) return;
 
-        _startGridFingerPosition = Vector2.zero;
-        OnNewInputEnded?.Invoke(beginInputPosition, endInputPosition);
-        _canReadFingerUpInput = false;
+        var fromGridPosition = _beginTouchGridPosition == gridPosition ? _lastGridPositionCache.Value : _beginTouchGridPosition.Value;
+
+        _onRequestGridObjectSwap(fromGridPosition, gridPosition.Value);
+
+        _lastGridPositionCache = null;
     }
+
+    public void SetOnRequestGridObjectSwapCallback(Action<GridPosition, GridPosition> callback) => _onRequestGridObjectSwap = callback;
+    public void SetIsValidGridPositionCallback(Func<Vector2, GridPosition?> callback) => _isValidGridPosition = callback;
 }
