@@ -19,10 +19,7 @@ public class HealthBar : MonoBehaviour
 
     private float _currentDelayTime;
 
-    private void Start()
-    {
-        _currentDelayTime = delayTimer;
-    }
+    private void Start() => _currentDelayTime = delayTimer;
 
     private void Update()
     {
