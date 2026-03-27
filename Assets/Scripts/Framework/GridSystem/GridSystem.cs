@@ -144,7 +144,7 @@ public class GridSystem
 
             if (dx >= 1 && dy >= 1) return null;
 
-            if ((dx > 1 && dy <= 1) || (dx <= 1 && dy > 1))
+            if ((dx >= 1 && dy < 1) || (dx < 1 && dy >= 1))
             {
                 if (rawX > startGridPos.X)  
                     gridXValue++;
