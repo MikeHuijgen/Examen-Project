@@ -13,16 +13,18 @@ public class GridSystem
     private int _height;
     private int _cellWidth;
     private int _cellHeight;
+    private float _swapTolerance;
     private RectTransform _gridRectTransform;
 
     private GridObject [,] _gridObjectArray;
 
-    public GridSystem(int width, int height, int cellWidth, int cellHeight)
+    public GridSystem(int width, int height, int cellWidth, int cellHeight, float swapTolerance)
     {
         _width = width;
         _height = height;
         _cellWidth = cellWidth;
         _cellHeight = cellHeight;
+        _swapTolerance = swapTolerance;
     }
 
     public void SetRectTransform(RectTransform rect) => _gridRectTransform = rect;
@@ -95,7 +97,7 @@ public class GridSystem
     }
 
 
-    public GridPosition GetWorldPositionToGridPosition(Vector2 worldPosition)
+    public GridPosition GetWorldPositionToGridPosition(Vector2 worldPosition, bool useTolerance, GridPosition? gridPosition = null)
     {
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             _gridRectTransform,
@@ -110,10 +112,28 @@ public class GridSystem
         var offsetX = -gridWidthPx / 2f;
         var offsetY = -gridHeightPx / 2f;
 
-        var x = (localPos.x - offsetX) / _cellWidth;
-        var y = (localPos.y - offsetY) / _cellHeight;
+        var rawX = (localPos.x - offsetX) / _cellWidth;
+        var rawY = (localPos.y - offsetY) / _cellHeight;
 
-        return new GridPosition(Mathf.FloorToInt(x), Mathf.FloorToInt(y));
+        var floorX = Mathf.FloorToInt(rawX);
+        var floorY = Mathf.FloorToInt(rawY);
+
+        if (gridPosition == null && !useTolerance) return new GridPosition(floorX, floorY);
+
+        var restX = rawX - floorX;
+        var restY = rawY - floorY;
+
+        if (restX > 1 - _swapTolerance)
+        {
+            floorX-=1;
+        }
+        else
+        {
+            floorX+=1;
+        }
+
+
+        return new GridPosition(floorX, floorY);
     }
 
     public void SwapGridObjects(GridObject gridObjectA, GridObject gridObjectB)

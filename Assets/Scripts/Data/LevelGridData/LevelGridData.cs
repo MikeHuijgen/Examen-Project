@@ -7,5 +7,6 @@ public class LevelGridData : ScriptableObject
     public int GridHeight = 7;
     public int GridCellWidth = 100;
     public int GridCellHeight = 100;
+    [Range(0, 1) ]public float swapTolerance = .4f;
     public GridObjectVisualUI GridObjectDebugVisual;
 }

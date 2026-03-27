@@ -59,12 +59,12 @@ public class GridObjectVisualUI : MonoBehaviour
     public GridObject GetGridObject => _gridObject;
     public Vector3 GetRectToWorldTransform() => rectTransform.transform.position;
 
-    private void OnGridObjectVisualUISelected(GridPosition gridPosition)
+    private void OnGridObjectVisualUISelected(GridPosition? gridPosition)
     {
         if (_gridObject.GetGridPosition != gridPosition) return;
         gridVisualOutline.effectColor = Color.limeGreen;
     }
-    private void OnGridObjectVisualUIDeselected(GridPosition gridPosition)
+    private void OnGridObjectVisualUIDeselected(GridPosition? gridPosition)
     {
         if (_gridObject.GetGridPosition != gridPosition) return;
         gridVisualOutline.effectColor = Color.black;

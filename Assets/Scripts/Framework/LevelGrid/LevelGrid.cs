@@ -10,7 +10,12 @@ public class LevelGrid : MonoBehaviour
 
     private void Awake()
     {
-        _gridSystem = new GridSystem(levelGridData.GridWidth, levelGridData.GridHeight, levelGridData.GridCellWidth, levelGridData.GridCellHeight);
+        _gridSystem = new GridSystem(
+            levelGridData.GridWidth, 
+            levelGridData.GridHeight, 
+            levelGridData.GridCellWidth, 
+            levelGridData.GridCellHeight,
+            levelGridData.swapTolerance);
         GridObjectUIRoot.OnGridRectReady += rect => _gridSystem.SetRectTransform(rect);
     }
 
@@ -43,9 +48,9 @@ public class LevelGrid : MonoBehaviour
         _gridSystem.SwapGridObjects(gridObjectA, gridObjectB);        
     }
 
-    private GridPosition? IsValidGridPosition(Vector2 worldPosition)
+    private GridPosition? IsValidGridPosition(Vector2 worldPosition, bool useTolerance, GridPosition? startGridPosition = null)
     {
-        var gridPosition = _gridSystem.GetWorldPositionToGridPosition(worldPosition);
+        var gridPosition = _gridSystem.GetWorldPositionToGridPosition(worldPosition, useTolerance, startGridPosition);
         var isValidGridPosition = _gridSystem.IsValidGridPosition(gridPosition);
 
         return isValidGridPosition ? gridPosition : null;
