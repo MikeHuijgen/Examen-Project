@@ -51,7 +51,8 @@ public class LevelGrid : MonoBehaviour
     private GridPosition? IsValidGridPosition(Vector2 worldPosition, bool useTolerance, GridPosition? startGridPosition = null)
     {
         var gridPosition = _gridSystem.GetWorldPositionToGridPosition(worldPosition, useTolerance, startGridPosition);
-        var isValidGridPosition = _gridSystem.IsValidGridPosition(gridPosition);
+        if (gridPosition == null) return null;
+        var isValidGridPosition = _gridSystem.IsValidGridPosition(gridPosition.Value);
 
         return isValidGridPosition ? gridPosition : null;
     }

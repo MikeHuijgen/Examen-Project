@@ -17,7 +17,7 @@ public class GridSystem
     private float _swapTolerance;
     private RectTransform _gridRectTransform;
 
-    private GridObject [,] _gridObjectArray;
+    private GridObject[,] _gridObjectArray;
 
     public GridSystem(int width, int height, int cellWidth, int cellHeight, float swapTolerance)
     {
@@ -29,7 +29,7 @@ public class GridSystem
     }
 
     public void SetRectTransform(RectTransform rect) => _gridRectTransform = rect;
-    public bool IsValidGridPosition(GridPosition gridPosition) => gridPosition.X >= 0 && gridPosition.Y >= 0 && gridPosition.X < _width && gridPosition.Y < _height; 
+    public bool IsValidGridPosition(GridPosition gridPosition) => gridPosition.X >= 0 && gridPosition.Y >= 0 && gridPosition.X < _width && gridPosition.Y < _height;
     public GridObject GetGridObjectByGridPosition(GridPosition gridPosition) => IsValidGridPosition(gridPosition) ? _gridObjectArray[gridPosition.X, gridPosition.Y] : null;
 
     public void GenerateGrid()
@@ -57,14 +57,14 @@ public class GridSystem
 
                 newGridObjectVisualUI.Initialize(_gridObjectArray[x, y], _cellWidth, _cellHeight, GetGridPositionToWorldPosition);
 
-                _gridObjectArray[x,y].SetGridObjectVisualUI(newGridObjectVisualUI);
+                _gridObjectArray[x, y].SetGridObjectVisualUI(newGridObjectVisualUI);
 
                 OnNewGridObjectCreated?.Invoke(newGridObjectVisualUI.transform);
 
                 var rect = newGridObjectVisualUI.GetComponent<RectTransform>();
                 rect.anchoredPosition = GetGridPositionToWorldPosition(new GridPosition(x, y));
             }
-        }      
+        }
     }
 
     public void CreateGridObjectVisuals(List<GridObjectVisual> gridObjectVisualPrefabs)
@@ -73,14 +73,14 @@ public class GridSystem
         {
             for (int y = 0; y < _height; y++)
             {
-                var gridObjectVisualUI = _gridObjectArray[x,y].GetGridObjectVisualUI;
+                var gridObjectVisualUI = _gridObjectArray[x, y].GetGridObjectVisualUI;
                 var randomGridVisual = gridObjectVisualPrefabs[UnityEngine.Random.Range(0, gridObjectVisualPrefabs.Count)];
                 var newGridObjectVisual = GameObject.Instantiate(randomGridVisual);
-                newGridObjectVisual.Initialize(_gridObjectArray[x,y], gridObjectVisualUI.GetRectToWorldTransform);
+                newGridObjectVisual.Initialize(_gridObjectArray[x, y], gridObjectVisualUI.GetRectToWorldTransform);
 
-                _gridObjectArray[x,y].SetGridObjectVisual(newGridObjectVisual);
+                _gridObjectArray[x, y].SetGridObjectVisual(newGridObjectVisual);
             }
-        }   
+        }
     }
 
     public Vector3 GetGridPositionToWorldPosition(GridPosition gridPosition)
@@ -98,7 +98,7 @@ public class GridSystem
     }
 
 
-    public GridPosition GetWorldPositionToGridPosition(Vector2 worldPosition, bool useTolerance, GridPosition? gridPosition = null)
+    public GridPosition? GetWorldPositionToGridPosition(Vector2 worldPosition, bool useTolerance, GridPosition? gridPosition = null)
     {
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             _gridRectTransform,
@@ -118,15 +118,13 @@ public class GridSystem
 
         var gridX = Mathf.FloorToInt(rawX);
         var gridY = Mathf.FloorToInt(rawY);
+        
 
-        if (useTolerance || gridPosition != null)
+        if (gridPosition != null)
         {
             var startGridPos = gridPosition.Value;
-
-            var dx = Mathf.Abs(gridX - startGridPos.X);
-            var dy = Mathf.Abs(gridY - startGridPos.Y);
-
-            if (dx <= 1f && dy <= 1f) return new GridPosition(gridX, gridY);
+            var gridXValue = startGridPos.X;
+            var gridYValue = startGridPos.Y;
 
             var deltaX = rawX - startGridPos.X;
             var deltaY = rawY - startGridPos.Y;
@@ -138,24 +136,30 @@ public class GridSystem
             else
             {
                 rawX = startGridPos.X;
+            }   
+
+            var dx = Mathf.Abs(gridX - startGridPos.X);
+            var dy = Mathf.Abs(gridY - startGridPos.Y);
+
+
+            if (dx >= 1 && dy >= 1) return null;
+
+            if ((dx > 1 && dy <= 1) || (dx <= 1 && dy > 1))
+            {
+                if (rawX > startGridPos.X)  
+                    gridXValue++;
+                else if (rawX < startGridPos.X)
+                    gridXValue--;
+
+                if (rawY > startGridPos.Y)
+                    gridYValue++;
+                else if (rawY < startGridPos.Y)
+                    gridYValue--;                
             }
 
-            if (rawX > startGridPos.X)  
-                rawX -= _swapTolerance;
-            else if (rawX < startGridPos.X)
-                rawX += _swapTolerance;
-            
-            if (rawY > startGridPos.Y)
-                rawY -= _swapTolerance;
-            else if (rawY < startGridPos.Y)
-                rawY += _swapTolerance;
-
-            
-            gridX = Mathf.FloorToInt(rawX);
-            gridY = Mathf.FloorToInt(rawY);
-
+            return new GridPosition(gridXValue, gridYValue);
         }
-        
+
         return new GridPosition(gridX, gridY);
     }
 

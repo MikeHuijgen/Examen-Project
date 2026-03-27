@@ -86,37 +86,22 @@ public class CharacterInput : MonoBehaviour
     {
         if (_isValidGridPositionCallback == null) return;
         
-        _endTouchGridPosition = _isValidGridPositionCallback(finger.screenPosition, false, null);
-        bool useLastGridPositionCache;
+        _endTouchGridPosition = _isValidGridPositionCallback(finger.screenPosition, false, _lastGridPositionCache);
+        
+        if(_beginTouchGridPosition == _endTouchGridPosition) return;
 
-        if(_endTouchGridPosition == _lastGridPositionCache && _lastGridPositionCache == _beginTouchGridPosition) return;
+        if (_lastGridPositionCache == null) return;
 
-        if (_beginTouchGridPosition == _endTouchGridPosition || _lastGridPositionCache == _beginTouchGridPosition)
+        if (_endTouchGridPosition == null)
         {
-            _endTouchGridPosition = _isValidGridPositionCallback(finger.screenPosition, true, _lastGridPositionCache);
-            useLastGridPositionCache = true;
+            OnGridPositionDeselected?.Invoke(_lastGridPositionCache);   
+            _lastGridPositionCache = null;   
+            return;      
         }
-        else
-        {
-            _endTouchGridPosition = _isValidGridPositionCallback(finger.screenPosition, true, _beginTouchGridPosition);
-            useLastGridPositionCache = false;
-        }
-
-
-        if(_endTouchGridPosition == null)
-        {
-            OnGridPositionDeselected?.Invoke(_lastGridPositionCache);
-            _lastGridPositionCache = null;
-            return;
-        }     
 
         OnGridPositionDeselected?.Invoke(_lastGridPositionCache);
 
-        if(useLastGridPositionCache)
-            _onRequestGridObjectSwap(_lastGridPositionCache.Value, _endTouchGridPosition.Value);
-        else
-            _onRequestGridObjectSwap(_beginTouchGridPosition.Value, _endTouchGridPosition.Value);
-
+        _onRequestGridObjectSwap(_lastGridPositionCache.Value, _endTouchGridPosition.Value);
 
         _lastGridPositionCache = null;
     }

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelGridData
   GridWidth: 7
   GridHeight: 7
-  GridCellWidth: 100
-  GridCellHeight: 100
+  GridCellWidth: 110
+  GridCellHeight: 110
+  swapTolerance: 0.4
   GridObjectDebugVisual: {fileID: 5472091287612878839, guid: 1acc3aecdb8173843bededdfa2bf75ec, type: 3}
