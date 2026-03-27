@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using NUnit.Framework.Constraints;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -115,25 +116,47 @@ public class GridSystem
         var rawX = (localPos.x - offsetX) / _cellWidth;
         var rawY = (localPos.y - offsetY) / _cellHeight;
 
-        var floorX = Mathf.FloorToInt(rawX);
-        var floorY = Mathf.FloorToInt(rawY);
+        var gridX = Mathf.FloorToInt(rawX);
+        var gridY = Mathf.FloorToInt(rawY);
 
-        if (gridPosition == null && !useTolerance) return new GridPosition(floorX, floorY);
-
-        var restX = rawX - floorX;
-        var restY = rawY - floorY;
-
-        if (restX > 1 - _swapTolerance)
+        if (useTolerance || gridPosition != null)
         {
-            floorX-=1;
-        }
-        else
-        {
-            floorX+=1;
-        }
+            var startGridPos = gridPosition.Value;
 
+            var dx = Mathf.Abs(gridX - startGridPos.X);
+            var dy = Mathf.Abs(gridY - startGridPos.Y);
 
-        return new GridPosition(floorX, floorY);
+            if (dx <= 1f && dy <= 1f) return new GridPosition(gridX, gridY);
+
+            var deltaX = rawX - startGridPos.X;
+            var deltaY = rawY - startGridPos.Y;
+
+            if (Mathf.Abs(deltaX) > Mathf.Abs(deltaY))
+            {
+                rawY = startGridPos.Y;
+            }
+            else
+            {
+                rawX = startGridPos.X;
+            }
+
+            if (rawX > startGridPos.X)  
+                rawX -= _swapTolerance;
+            else if (rawX < startGridPos.X)
+                rawX += _swapTolerance;
+            
+            if (rawY > startGridPos.Y)
+                rawY -= _swapTolerance;
+            else if (rawY < startGridPos.Y)
+                rawY += _swapTolerance;
+
+            
+            gridX = Mathf.FloorToInt(rawX);
+            gridY = Mathf.FloorToInt(rawY);
+
+        }
+        
+        return new GridPosition(gridX, gridY);
     }
 
     public void SwapGridObjects(GridObject gridObjectA, GridObject gridObjectB)

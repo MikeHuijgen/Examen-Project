@@ -21,6 +21,7 @@ public class CharacterInput : MonoBehaviour
 
     private GridPosition? _lastGridPositionCache;
     private GridPosition? _beginTouchGridPosition;
+    private GridPosition? _endTouchGridPosition;
     
     private void Awake()
     {
@@ -84,21 +85,38 @@ public class CharacterInput : MonoBehaviour
     private void OnFingerUp(Finger finger)
     {
         if (_isValidGridPositionCallback == null) return;
-        var gridPosition = _isValidGridPositionCallback(finger.screenPosition, true, null);
+        
+        _endTouchGridPosition = _isValidGridPositionCallback(finger.screenPosition, false, null);
+        bool useLastGridPositionCache;
 
-        if(gridPosition == null)
+        if(_endTouchGridPosition == _lastGridPositionCache && _lastGridPositionCache == _beginTouchGridPosition) return;
+
+        if (_beginTouchGridPosition == _endTouchGridPosition || _lastGridPositionCache == _beginTouchGridPosition)
+        {
+            _endTouchGridPosition = _isValidGridPositionCallback(finger.screenPosition, true, _lastGridPositionCache);
+            useLastGridPositionCache = true;
+        }
+        else
+        {
+            _endTouchGridPosition = _isValidGridPositionCallback(finger.screenPosition, true, _beginTouchGridPosition);
+            useLastGridPositionCache = false;
+        }
+
+
+        if(_endTouchGridPosition == null)
         {
             OnGridPositionDeselected?.Invoke(_lastGridPositionCache);
             _lastGridPositionCache = null;
             return;
-        }       
-
-        if(gridPosition == _lastGridPositionCache && _beginTouchGridPosition == _lastGridPositionCache || _beginTouchGridPosition == null) return;
-
-        var fromGridPosition = _beginTouchGridPosition == gridPosition ? _lastGridPositionCache.Value : _beginTouchGridPosition.Value;
+        }     
 
         OnGridPositionDeselected?.Invoke(_lastGridPositionCache);
-        _onRequestGridObjectSwap(fromGridPosition, gridPosition.Value);
+
+        if(useLastGridPositionCache)
+            _onRequestGridObjectSwap(_lastGridPositionCache.Value, _endTouchGridPosition.Value);
+        else
+            _onRequestGridObjectSwap(_beginTouchGridPosition.Value, _endTouchGridPosition.Value);
+
 
         _lastGridPositionCache = null;
     }
