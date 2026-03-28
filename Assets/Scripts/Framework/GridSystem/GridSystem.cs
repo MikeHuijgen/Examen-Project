@@ -55,14 +55,14 @@ public class GridSystem
             {
                 var newGridObjectVisualUI = GameObject.Instantiate(gridObjectVisualUI);
 
-                newGridObjectVisualUI.Initialize(_gridObjectArray[x, y], _cellWidth, _cellHeight, GridPositionToWorldPosition);
+                newGridObjectVisualUI.Initialize(_gridObjectArray[x, y], _cellWidth, _cellHeight, ConvertGridPositionToWorldPosition);
 
                 _gridObjectArray[x, y].SetGridObjectVisualUI(newGridObjectVisualUI);
 
                 OnNewGridObjectCreated?.Invoke(newGridObjectVisualUI.transform);
 
                 var rect = newGridObjectVisualUI.GetComponent<RectTransform>();
-                rect.anchoredPosition = GridPositionToWorldPosition(new GridPosition(x, y));
+                rect.anchoredPosition = ConvertGridPositionToWorldPosition(new GridPosition(x, y));
             }
         }
     }
@@ -83,7 +83,7 @@ public class GridSystem
         }
     }
 
-    public Vector3 GridPositionToWorldPosition(GridPosition gridPosition)
+    public Vector3 ConvertGridPositionToWorldPosition(GridPosition gridPosition)
     {
         var gridWidthPx = _width * _cellWidth;
         var gridHeightPx = _height * _cellHeight;
@@ -98,7 +98,7 @@ public class GridSystem
     }
 
 
-    public GridPosition WorldPositionToGridPosition(Vector2 worldPosition)
+    public GridPosition ConvertWorldPositionToGridPosition(Vector2 worldPosition)
     {
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             _gridRectTransform,

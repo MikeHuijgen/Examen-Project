@@ -7,6 +7,10 @@ public class LevelGrid : MonoBehaviour
     [SerializeField] private LevelGridData levelGridData;
     [SerializeField] private List<GridObjectVisual> gridObjectVisuals = new List<GridObjectVisual>();
     private GridSystem _gridSystem;
+    private GridPosition? _beginTouchGridPosition;
+    private GridPosition? _currentSelectedGridPosition;
+    private GridPosition? _endSelectedGridPosition;
+
 
     private void Awake()
     {
@@ -31,15 +35,33 @@ public class LevelGrid : MonoBehaviour
 
         _gridSystem.CreateGridObjectVisuals(gridObjectVisuals);     
 
-        CharacterInput.Instance.OnNewFingerInput += OnNewFingerInput;
+        CharacterInput.Instance.OnNewFingerDownInput += OnNewFingerDownInput;
+        CharacterInput.Instance.OnNewFingerUpInput += OnNewFingerUpInput;
     }
 
-    private void OnNewFingerInput(Vector2 fingerPosition)
+    private void OnNewFingerDownInput(Vector2 fingerPosition)
     {
-        var newGridPosition = _gridSystem.WorldPositionToGridPosition(fingerPosition);
+        var newGridPosition = _gridSystem.ConvertWorldPositionToGridPosition(fingerPosition);
         if (!_gridSystem.IsValidGridPosition(newGridPosition)) return;
 
-        
+        _beginTouchGridPosition = newGridPosition;
+
+        if (_currentSelectedGridPosition != null) return;
+        _currentSelectedGridPosition = newGridPosition;
+    }
+
+    private void OnNewFingerUpInput(Vector2 fingerPosition)
+    {
+        var newGridPosition = _gridSystem.ConvertWorldPositionToGridPosition(fingerPosition);
+        if (!_gridSystem.IsValidGridPosition(newGridPosition)) {_currentSelectedGridPosition = null; return;}
+
+        _endSelectedGridPosition = newGridPosition;
+
+        if (_beginTouchGridPosition == _endSelectedGridPosition && _endSelectedGridPosition == _currentSelectedGridPosition) return;
+
+        print("Made a move");
+
+        _currentSelectedGridPosition = null;
     }
 
     private void OnRequestGridObjectSwap(GridPosition beginGridPosition, GridPosition endGridPosition)

@@ -8,14 +8,16 @@ using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 public class CharacterInput : MonoBehaviour
 {
     public static CharacterInput Instance;
-    public event Action<Vector2> OnNewFingerInput;
+    public event Action<Vector2> OnNewFingerDownInput;
+    public event Action<Vector2> OnNewFingerUpInput;
     public event Action<SideType> OnDodgeInput;
+    private Func<Vector2, bool, GridPosition?, GridPosition?> _isValidGridPositionCallback;
     private Action<InputAction.CallbackContext> _dodgeLeftHandler;
     private Action<InputAction.CallbackContext> _dodgeRightHandler;
     private Action<InputAction.CallbackContext> _dodgeDownHandler;
 
     [SerializeField] private PlayerInput playerInput;
-
+    
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -58,6 +60,49 @@ public class CharacterInput : MonoBehaviour
         OnDodgeInput?.Invoke(dodgeSide);
     }
 
-    private void OnFingerDown(Finger finger) => OnNewFingerInput?.Invoke(finger.screenPosition);
-    private void OnFingerUp(Finger finger) => OnNewFingerInput?.Invoke(finger.screenPosition);
+    private void OnFingerDown(Finger finger)
+    {
+        OnNewFingerDownInput?.Invoke(finger.screenPosition);
+        // if (_isValidGridPositionCallback == null) return;
+        // var gridPosition = _isValidGridPositionCallback(finger.screenPosition, false, null);
+        // if(gridPosition == null) 
+        // {
+        //     _beginTouchGridPosition = null;
+        //     return;
+        // }
+        
+        // _beginTouchGridPosition = gridPosition;
+
+        // if(_lastGridPositionCache != null) return;
+        // _lastGridPositionCache = gridPosition;
+        // OnGridPositionSelected?.Invoke(_lastGridPositionCache.Value);
+    }
+
+    private void OnFingerUp(Finger finger)
+    {
+        OnNewFingerUpInput?.Invoke(finger.screenPosition);
+        // if (_isValidGridPositionCallback == null) return;
+        
+        // if (_beginTouchGridPosition == _lastGridPositionCache)
+        //     _endTouchGridPosition = _isValidGridPositionCallback(finger.screenPosition, false, _lastGridPositionCache);
+        // else
+        //     _endTouchGridPosition = _isValidGridPositionCallback(finger.screenPosition, true, _lastGridPositionCache);            
+        
+        // if(_beginTouchGridPosition == _endTouchGridPosition) return;
+
+        // if (_lastGridPositionCache == null) return;
+
+        // if (_endTouchGridPosition == null)
+        // {
+        //     OnGridPositionDeselected?.Invoke(_lastGridPositionCache);   
+        //     _lastGridPositionCache = null;   
+        //     return;      
+        // }
+
+        // OnGridPositionDeselected?.Invoke(_lastGridPositionCache);
+
+        // _onRequestGridObjectSwap(_lastGridPositionCache.Value, _endTouchGridPosition.Value);
+
+        // _lastGridPositionCache = null;
+    }
 }
