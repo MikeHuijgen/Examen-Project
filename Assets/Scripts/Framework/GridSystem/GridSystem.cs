@@ -55,14 +55,14 @@ public class GridSystem
             {
                 var newGridObjectVisualUI = GameObject.Instantiate(gridObjectVisualUI);
 
-                newGridObjectVisualUI.Initialize(_gridObjectArray[x, y], _cellWidth, _cellHeight, GetGridPositionToWorldPosition);
+                newGridObjectVisualUI.Initialize(_gridObjectArray[x, y], _cellWidth, _cellHeight, GridPositionToWorldPosition);
 
                 _gridObjectArray[x, y].SetGridObjectVisualUI(newGridObjectVisualUI);
 
                 OnNewGridObjectCreated?.Invoke(newGridObjectVisualUI.transform);
 
                 var rect = newGridObjectVisualUI.GetComponent<RectTransform>();
-                rect.anchoredPosition = GetGridPositionToWorldPosition(new GridPosition(x, y));
+                rect.anchoredPosition = GridPositionToWorldPosition(new GridPosition(x, y));
             }
         }
     }
@@ -83,7 +83,7 @@ public class GridSystem
         }
     }
 
-    public Vector3 GetGridPositionToWorldPosition(GridPosition gridPosition)
+    public Vector3 GridPositionToWorldPosition(GridPosition gridPosition)
     {
         var gridWidthPx = _width * _cellWidth;
         var gridHeightPx = _height * _cellHeight;
@@ -98,7 +98,7 @@ public class GridSystem
     }
 
 
-    public GridPosition? GetWorldPositionToGridPosition(Vector2 worldPosition, bool hasCLicked, GridPosition? gridPosition = null)
+    public GridPosition WorldPositionToGridPosition(Vector2 worldPosition)
     {
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             _gridRectTransform,
@@ -120,66 +120,66 @@ public class GridSystem
         var gridY = Mathf.FloorToInt(rawY);
         
 
-        if (gridPosition != null)
-        {
-            var startGridPos = gridPosition.Value;
-            var gridXValue = startGridPos.X;
-            var gridYValue = startGridPos.Y;
+        // if (gridPosition != null)
+        // {
+        //     var startGridPos = gridPosition.Value;
+        //     var gridXValue = startGridPos.X;
+        //     var gridYValue = startGridPos.Y;
 
-            var deltaX = rawX - startGridPos.X;
-            var deltaY = rawY - startGridPos.Y;
+        //     var deltaX = rawX - startGridPos.X;
+        //     var deltaY = rawY - startGridPos.Y;
 
-            if (Mathf.Abs(deltaX) > Mathf.Abs(deltaY))
-            {
-                rawY = startGridPos.Y;
-            }
-            else
-            {
-                rawX = startGridPos.X;
-            }   
+        //     if (Mathf.Abs(deltaX) > Mathf.Abs(deltaY))
+        //     {
+        //         rawY = startGridPos.Y;
+        //     }
+        //     else
+        //     {
+        //         rawX = startGridPos.X;
+        //     }   
 
-            var directionX = Mathf.Abs(gridX - startGridPos.X);
-            var directionY = Mathf.Abs(gridY - startGridPos.Y);
+        //     var directionX = Mathf.Abs(gridX - startGridPos.X);
+        //     var directionY = Mathf.Abs(gridY - startGridPos.Y);
 
 
-            if (directionX >= 1 && directionY >= 1) return null;
+        //     if (directionX >= 1 && directionY >= 1) return null;
 
-            if (directionX >= 1 && directionY < 1 || directionX < 1 && directionY >= 1)
-            {
-                if (!hasCLicked)
-                {
-                    if (rawX > startGridPos.X)  
-                        gridXValue++;
-                    else if (rawX < startGridPos.X)
-                        gridXValue--;
+        //     if (directionX >= 1 && directionY < 1 || directionX < 1 && directionY >= 1)
+        //     {
+        //         if (!hasCLicked)
+        //         {
+        //             if (rawX > startGridPos.X)  
+        //                 gridXValue++;
+        //             else if (rawX < startGridPos.X)
+        //                 gridXValue--;
 
-                    if (rawY > startGridPos.Y)
-                        gridYValue++;
-                    else if (rawY < startGridPos.Y)
-                        gridYValue--;                  
-                }
-                else
-                {
+        //             if (rawY > startGridPos.Y)
+        //                 gridYValue++;
+        //             else if (rawY < startGridPos.Y)
+        //                 gridYValue--;                  
+        //         }
+        //         else
+        //         {
                     
-                    if (rawX > startGridPos.X)  
-                        rawX -= _swapTolerance;
-                    else if (rawX < startGridPos.X)
-                        rawX += _swapTolerance;
+        //             if (rawX > startGridPos.X)  
+        //                 rawX -= _swapTolerance;
+        //             else if (rawX < startGridPos.X)
+        //                 rawX += _swapTolerance;
                     
-                    if (rawY > startGridPos.Y)
-                        rawY -= _swapTolerance;
-                    else if (rawY < startGridPos.Y)
-                        rawY += _swapTolerance;
+        //             if (rawY > startGridPos.Y)
+        //                 rawY -= _swapTolerance;
+        //             else if (rawY < startGridPos.Y)
+        //                 rawY += _swapTolerance;
 
                     
-                    gridXValue = Mathf.FloorToInt(rawX);
-                    gridYValue = Mathf.FloorToInt(rawY);
-                }
+        //             gridXValue = Mathf.FloorToInt(rawX);
+        //             gridYValue = Mathf.FloorToInt(rawY);
+        //         }
 
-            }
+        //     }
 
-            return new GridPosition(gridXValue, gridYValue);
-        }
+        //     return new GridPosition(gridXValue, gridYValue);
+        // }
 
         return new GridPosition(gridX, gridY);
     }

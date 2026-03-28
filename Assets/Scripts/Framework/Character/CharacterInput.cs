@@ -8,21 +8,14 @@ using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 public class CharacterInput : MonoBehaviour
 {
     public static CharacterInput Instance;
+    public event Action<Vector2> OnNewFingerInput;
     public event Action<SideType> OnDodgeInput;
-    public event Action<GridPosition?> OnGridPositionSelected;
-    public event Action<GridPosition?> OnGridPositionDeselected;
-    private Action<GridPosition, GridPosition> _onRequestGridObjectSwap;
-    private Func<Vector2, bool, GridPosition?, GridPosition?> _isValidGridPositionCallback;
     private Action<InputAction.CallbackContext> _dodgeLeftHandler;
     private Action<InputAction.CallbackContext> _dodgeRightHandler;
     private Action<InputAction.CallbackContext> _dodgeDownHandler;
 
     [SerializeField] private PlayerInput playerInput;
 
-    private GridPosition? _lastGridPositionCache;
-    private GridPosition? _beginTouchGridPosition;
-    private GridPosition? _endTouchGridPosition;
-    
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -65,50 +58,6 @@ public class CharacterInput : MonoBehaviour
         OnDodgeInput?.Invoke(dodgeSide);
     }
 
-    private void OnFingerDown(Finger finger)
-    {
-        if (_isValidGridPositionCallback == null) return;
-        var gridPosition = _isValidGridPositionCallback(finger.screenPosition, false, null);
-        if(gridPosition == null) 
-        {
-            _beginTouchGridPosition = null;
-            return;
-        }
-        
-        _beginTouchGridPosition = gridPosition;
-
-        if(_lastGridPositionCache != null) return;
-        _lastGridPositionCache = gridPosition;
-        OnGridPositionSelected?.Invoke(_lastGridPositionCache.Value);
-    }
-
-    private void OnFingerUp(Finger finger)
-    {
-        if (_isValidGridPositionCallback == null) return;
-        
-        if (_beginTouchGridPosition == _lastGridPositionCache)
-            _endTouchGridPosition = _isValidGridPositionCallback(finger.screenPosition, false, _lastGridPositionCache);
-        else
-            _endTouchGridPosition = _isValidGridPositionCallback(finger.screenPosition, true, _lastGridPositionCache);            
-        
-        if(_beginTouchGridPosition == _endTouchGridPosition) return;
-
-        if (_lastGridPositionCache == null) return;
-
-        if (_endTouchGridPosition == null)
-        {
-            OnGridPositionDeselected?.Invoke(_lastGridPositionCache);   
-            _lastGridPositionCache = null;   
-            return;      
-        }
-
-        OnGridPositionDeselected?.Invoke(_lastGridPositionCache);
-
-        _onRequestGridObjectSwap(_lastGridPositionCache.Value, _endTouchGridPosition.Value);
-
-        _lastGridPositionCache = null;
-    }
-
-    public void SetOnRequestGridObjectSwapCallback(Action<GridPosition, GridPosition> callback) => _onRequestGridObjectSwap = callback;
-    public void SetIsValidGridPositionCallback(Func<Vector2, bool, GridPosition?, GridPosition?> callback) => _isValidGridPositionCallback = callback;
+    private void OnFingerDown(Finger finger) => OnNewFingerInput?.Invoke(finger.screenPosition);
+    private void OnFingerUp(Finger finger) => OnNewFingerInput?.Invoke(finger.screenPosition);
 }

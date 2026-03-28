@@ -31,8 +31,15 @@ public class LevelGrid : MonoBehaviour
 
         _gridSystem.CreateGridObjectVisuals(gridObjectVisuals);     
 
-        CharacterInput.Instance.SetOnRequestGridObjectSwapCallback(OnRequestGridObjectSwap);
-        CharacterInput.Instance.SetIsValidGridPositionCallback(IsValidGridPosition);   
+        CharacterInput.Instance.OnNewFingerInput += OnNewFingerInput;
+    }
+
+    private void OnNewFingerInput(Vector2 fingerPosition)
+    {
+        var newGridPosition = _gridSystem.WorldPositionToGridPosition(fingerPosition);
+        if (!_gridSystem.IsValidGridPosition(newGridPosition)) return;
+
+        
     }
 
     private void OnRequestGridObjectSwap(GridPosition beginGridPosition, GridPosition endGridPosition)
@@ -46,14 +53,5 @@ public class LevelGrid : MonoBehaviour
         var gridObjectB = _gridSystem.GetGridObjectByGridPosition(endGridPosition);
 
         _gridSystem.SwapGridObjects(gridObjectA, gridObjectB);        
-    }
-
-    private GridPosition? IsValidGridPosition(Vector2 worldPosition, bool useTolerance, GridPosition? startGridPosition = null)
-    {
-        var gridPosition = _gridSystem.GetWorldPositionToGridPosition(worldPosition, useTolerance, startGridPosition);
-        if (gridPosition == null) return null;
-        var isValidGridPosition = _gridSystem.IsValidGridPosition(gridPosition.Value);
-
-        return isValidGridPosition ? gridPosition : null;
     }
 }

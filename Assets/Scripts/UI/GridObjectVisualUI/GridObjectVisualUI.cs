@@ -44,18 +44,6 @@ public class GridObjectVisualUI : MonoBehaviour
         counter++;         
     }
 
-    private void OnEnable()
-    {
-        CharacterInput.Instance.OnGridPositionSelected += OnGridObjectVisualUISelected;
-        CharacterInput.Instance.OnGridPositionDeselected += OnGridObjectVisualUIDeselected;
-    }
-
-    private void OnDisable()
-    {
-        CharacterInput.Instance.OnGridPositionSelected -= OnGridObjectVisualUISelected;   
-        CharacterInput.Instance.OnGridPositionDeselected -= OnGridObjectVisualUIDeselected;     
-    }
-
     public GridObject GetGridObject => _gridObject;
     public Vector3 GetRectToWorldTransform() => rectTransform.transform.position;
 
