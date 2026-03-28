@@ -98,7 +98,7 @@ public class GridSystem
     }
 
 
-    public GridPosition? GetWorldPositionToGridPosition(Vector2 worldPosition, bool useTolerance, GridPosition? gridPosition = null)
+    public GridPosition? GetWorldPositionToGridPosition(Vector2 worldPosition, bool hasCLicked, GridPosition? gridPosition = null)
     {
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
             _gridRectTransform,
@@ -138,23 +138,44 @@ public class GridSystem
                 rawX = startGridPos.X;
             }   
 
-            var dx = Mathf.Abs(gridX - startGridPos.X);
-            var dy = Mathf.Abs(gridY - startGridPos.Y);
+            var directionX = Mathf.Abs(gridX - startGridPos.X);
+            var directionY = Mathf.Abs(gridY - startGridPos.Y);
 
 
-            if (dx >= 1 && dy >= 1) return null;
+            if (directionX >= 1 && directionY >= 1) return null;
 
-            if ((dx >= 1 && dy < 1) || (dx < 1 && dy >= 1))
+            if (directionX >= 1 && directionY < 1 || directionX < 1 && directionY >= 1)
             {
-                if (rawX > startGridPos.X)  
-                    gridXValue++;
-                else if (rawX < startGridPos.X)
-                    gridXValue--;
+                if (!hasCLicked)
+                {
+                    if (rawX > startGridPos.X)  
+                        gridXValue++;
+                    else if (rawX < startGridPos.X)
+                        gridXValue--;
 
-                if (rawY > startGridPos.Y)
-                    gridYValue++;
-                else if (rawY < startGridPos.Y)
-                    gridYValue--;                
+                    if (rawY > startGridPos.Y)
+                        gridYValue++;
+                    else if (rawY < startGridPos.Y)
+                        gridYValue--;                  
+                }
+                else
+                {
+                    
+                    if (rawX > startGridPos.X)  
+                        rawX -= _swapTolerance;
+                    else if (rawX < startGridPos.X)
+                        rawX += _swapTolerance;
+                    
+                    if (rawY > startGridPos.Y)
+                        rawY -= _swapTolerance;
+                    else if (rawY < startGridPos.Y)
+                        rawY += _swapTolerance;
+
+                    
+                    gridXValue = Mathf.FloorToInt(rawX);
+                    gridYValue = Mathf.FloorToInt(rawY);
+                }
+
             }
 
             return new GridPosition(gridXValue, gridYValue);

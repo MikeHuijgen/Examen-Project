@@ -86,7 +86,10 @@ public class CharacterInput : MonoBehaviour
     {
         if (_isValidGridPositionCallback == null) return;
         
-        _endTouchGridPosition = _isValidGridPositionCallback(finger.screenPosition, false, _lastGridPositionCache);
+        if (_beginTouchGridPosition == _lastGridPositionCache)
+            _endTouchGridPosition = _isValidGridPositionCallback(finger.screenPosition, false, _lastGridPositionCache);
+        else
+            _endTouchGridPosition = _isValidGridPositionCallback(finger.screenPosition, true, _lastGridPositionCache);            
         
         if(_beginTouchGridPosition == _endTouchGridPosition) return;
 
