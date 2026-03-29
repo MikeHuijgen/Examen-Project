@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class LevelGrid : MonoBehaviour
 {
+    public static event Action<GridPosition?> OnTileSelected;
+    public static event Action<GridPosition?> OnTileDeselected;
+
     [SerializeField] private LevelGridData levelGridData;
     [SerializeField] private List<GridObjectVisual> gridObjectVisuals = new List<GridObjectVisual>();
     private GridSystem _gridSystem;
@@ -58,10 +61,10 @@ public class LevelGrid : MonoBehaviour
             return;
         }
 
-        //Net toegevoegt
         if (endTouchGridPosition.hitGridPosition == _beginTouchGridPosition.hitGridPosition && _currentSelectedGridPosition == null)
         {
             _currentSelectedGridPosition = _beginTouchGridPosition;
+            OnTileSelected?.Invoke(_currentSelectedGridPosition.Value.hitGridPosition);
             return;
         }
 
@@ -69,16 +72,26 @@ public class LevelGrid : MonoBehaviour
 
         if (isClickMove)
         {
-            var startPos = _currentSelectedGridPosition.Value.hitGridPosition;
-
-            var endGridPosition = CalculateClickedEndGridPosition(startPos, endTouchGridPosition.rawX, endTouchGridPosition.rawY);
+            var endGridPosition = CalculateClickedEndGridPosition(_currentSelectedGridPosition.Value.hitGridPosition, endTouchGridPosition.rawX, endTouchGridPosition.rawY);
 
             endGridPosition = CheckGridBounds(endGridPosition);
 
-            if (IsDiagonalMove(startPos, endGridPosition))
+            if (endGridPosition == _currentSelectedGridPosition.Value.hitGridPosition) 
+            {
+                OnTileDeselected?.Invoke(_currentSelectedGridPosition.Value.hitGridPosition);
+                _currentSelectedGridPosition = null;
                 return;
+            }
 
-            OnRequestGridObjectSwap(startPos, endGridPosition);
+            if (IsDiagonalMove(_currentSelectedGridPosition.Value.hitGridPosition, endGridPosition))
+            {
+                OnTileDeselected?.Invoke(_currentSelectedGridPosition.Value.hitGridPosition);
+                _currentSelectedGridPosition = null;
+                return;
+            }
+
+
+            OnRequestGridObjectSwap(_currentSelectedGridPosition.Value.hitGridPosition, endGridPosition);
         }
         else
         {
@@ -119,7 +132,7 @@ public class LevelGrid : MonoBehaviour
         var distanceX = Mathf.FloorToInt(rawX) - startX;
         var distanceY = Mathf.FloorToInt(rawY) - startY;
 
-        if (distanceX >= 1 && distanceY >= 1) return beginGridPosition;
+        if (Mathf.Abs(distanceX) >= 1 && Mathf.Abs(distanceY) >= 1) return beginGridPosition;
 
 
         if (distanceX == 1) return new GridPosition(startX + 1, startY);
@@ -255,6 +268,7 @@ public class LevelGrid : MonoBehaviour
 
     private void OnRequestGridObjectSwap(GridPosition beginGridPosition, GridPosition endGridPosition)
     {
+        if (_currentSelectedGridPosition != null) OnTileDeselected?.Invoke(_currentSelectedGridPosition.Value.hitGridPosition);
         var gridObjectA = _gridSystem.GetGridObjectByGridPosition(beginGridPosition);
         var gridObjectB = _gridSystem.GetGridObjectByGridPosition(endGridPosition);
 
