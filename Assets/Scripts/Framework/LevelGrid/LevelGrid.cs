@@ -45,9 +45,6 @@ public class LevelGrid : MonoBehaviour
         if (!_gridSystem.IsValidGridPosition(newGridPosition)) return;
 
         _beginTouchGridPosition = newGridPosition;
-
-        if (_currentSelectedGridPosition != null) return;
-        _currentSelectedGridPosition = newGridPosition;
     }
 
     private void OnNewFingerUpInput(Vector2 fingerPosition)
@@ -57,9 +54,21 @@ public class LevelGrid : MonoBehaviour
 
         _endSelectedGridPosition = newGridPosition;
 
-        if (_beginTouchGridPosition == _endSelectedGridPosition && _endSelectedGridPosition == _currentSelectedGridPosition) return;
+        if (_beginTouchGridPosition == _endSelectedGridPosition && _currentSelectedGridPosition == null)
+        {
+            _currentSelectedGridPosition = newGridPosition;
+            return;
+        }
 
-        print("Made a move");
+        if (_currentSelectedGridPosition != null && _beginTouchGridPosition == _endSelectedGridPosition)
+        {
+            print("Click move");
+        }
+        else
+        {
+            print("Swipe move");
+        }
+
 
         _currentSelectedGridPosition = null;
     }
