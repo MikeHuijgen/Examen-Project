@@ -59,27 +59,26 @@ public class LevelGrid : MonoBehaviour
             return;
         }
 
-        if (endTouchGridPosition.hitGridPosition == _currentSelectedGridPosition.Value.hitGridPosition)
-        {
-            _currentSelectedGridPosition = null;            
-            return;
-        }
-
         var isClickMove = _beginTouchGridPosition.hitGridPosition == endTouchGridPosition.hitGridPosition;
 
         if (isClickMove)
         {
+            if (endTouchGridPosition.hitGridPosition == _currentSelectedGridPosition.Value.hitGridPosition) return;
+
             if (IsDiagonalMove(_currentSelectedGridPosition.Value.hitGridPosition, endTouchGridPosition.hitGridPosition)) return;
 
             var endGridPosition = CalculateClickedEndGridPosition(_currentSelectedGridPosition.Value.hitGridPosition, endTouchGridPosition.rawX, endTouchGridPosition.rawY);
-            print($"Click move. From : {_currentSelectedGridPosition.Value.hitGridPosition} To : {endGridPosition}");
+
+            OnRequestGridObjectSwap(_currentSelectedGridPosition.Value.hitGridPosition, endGridPosition);
         }
         else
         {
-            print("Swipe move");
+            if (IsDiagonalMove(_beginTouchGridPosition.hitGridPosition, endTouchGridPosition.hitGridPosition)) return;
+
+            var endGridPosition = CalculateSwipeEndGridPosition(_beginTouchGridPosition.hitGridPosition, endTouchGridPosition.rawX, endTouchGridPosition.rawY);
+
+            OnRequestGridObjectSwap(_beginTouchGridPosition.hitGridPosition, endGridPosition);
         }
-
-
 
         _currentSelectedGridPosition = null;
     }
@@ -141,7 +140,7 @@ public class LevelGrid : MonoBehaviour
         }
 
         if (rawY > startY)
-        { 
+        {
             rawY -= levelGridData.swapTolerance;
             var newGridPositionY = Mathf.FloorToInt(rawY);
             distanceY = newGridPositionY - startY;
@@ -161,75 +160,37 @@ public class LevelGrid : MonoBehaviour
 
 
         return beginGridPosition;
-
     }
 
+    private GridPosition CalculateSwipeEndGridPosition(GridPosition beginGridPosition, float rawX, float rawY)
+    {
+        var startX = beginGridPosition.X;
+        var startY = beginGridPosition.Y;
 
-    // private GridPosition CalculateEndPosition(Vector2 fingerPosition, GridPosition endTouchGridPosition, bool isClickMove)
-    // {
+        var deltaX = rawX - startX;
+        var deltaY = rawY - startY;
 
+        if (Mathf.Abs(deltaX) > Mathf.Abs(deltaY))
+        {
+            rawY = startY;
+        }
+        else
+        {
+            rawX = startX;
+        }
 
-    //             // if (gridPosition != null)
-    //     // {
-    //     //     var startGridPos = gridPosition.Value;
-    //     //     var gridXValue = startGridPos.X;
-    //     //     var gridYValue = startGridPos.Y;
+        if (rawX > startX)
+            return new GridPosition(startX + 1, startY);
+        else if (rawX < startX)
+            return new GridPosition(startX - 1, startY);
 
-    //     //     var deltaX = rawX - startGridPos.X;
-    //     //     var deltaY = rawY - startGridPos.Y;
+        if (rawY > startY)
+            return new GridPosition(startX, startY + 1);
+        else if (rawY < startY)
+            return new GridPosition(startX, startY - 1);
 
-    //     //     if (Mathf.Abs(deltaX) > Mathf.Abs(deltaY))
-    //     //     {
-    //     //         rawY = startGridPos.Y;
-    //     //     }
-    //     //     else
-    //     //     {
-    //     //         rawX = startGridPos.X;
-    //     //     }   
-
-    //     //     var directionX = Mathf.Abs(gridX - startGridPos.X);
-    //     //     var directionY = Mathf.Abs(gridY - startGridPos.Y);
-
-
-    //     //     if (directionX >= 1 && directionY >= 1) return null;
-
-    //     //     if (directionX >= 1 && directionY < 1 || directionX < 1 && directionY >= 1)
-    //     //     {
-    //     //         if (!hasCLicked)
-    //     //         {
-    //     //             if (rawX > startGridPos.X)  
-    //     //                 gridXValue++;
-    //     //             else if (rawX < startGridPos.X)
-    //     //                 gridXValue--;
-
-    //     //             if (rawY > startGridPos.Y)
-    //     //                 gridYValue++;
-    //     //             else if (rawY < startGridPos.Y)
-    //     //                 gridYValue--;                  
-    //     //         }
-    //     //         else
-    //     //         {
-
-    //     //             if (rawX > startGridPos.X)  
-    //     //                 rawX -= _swapTolerance;
-    //     //             else if (rawX < startGridPos.X)
-    //     //                 rawX += _swapTolerance;
-
-    //     //             if (rawY > startGridPos.Y)
-    //     //                 rawY -= _swapTolerance;
-    //     //             else if (rawY < startGridPos.Y)
-    //     //                 rawY += _swapTolerance;
-
-
-    //     //             gridXValue = Mathf.FloorToInt(rawX);
-    //     //             gridYValue = Mathf.FloorToInt(rawY);
-    //     //         }
-
-    //     //     }
-
-    //     //     return new GridPosition(gridXValue, gridYValue);
-    //     // }
-    // }
+        return beginGridPosition;
+    }
 
     private void OnRequestGridObjectSwap(GridPosition beginGridPosition, GridPosition endGridPosition)
     {
