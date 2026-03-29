@@ -188,81 +188,42 @@ public class LevelGrid : MonoBehaviour
             return new(startX, startY - 1);
         }
 
-
         return beginGridPosition;
     }
 
     private GridPosition CalculateSwipeEndGridPosition(GridPosition beginGridPosition, float rawX, float rawY)
     {
-        int startX = beginGridPosition.X;
-        int startY = beginGridPosition.Y;
+        var startX = beginGridPosition.X;
+        var startY = beginGridPosition.Y;
 
-        float deltaX = rawX - startX;
-        float deltaY = rawY - startY;
+        var deltaX = rawX - startX;
+        var deltaY = rawY - startY;
 
-        float tolerance = levelGridData.SwipeDirectionTolerance;
-        float maxDiagonalDeviation = levelGridData.SwipeMaxDiagonalDeviation; // <-- nieuw
+        var tolerance = levelGridData.SwipeDirectionTolerance;
+        var maxDiagonalDeviation = levelGridData.SwipeMaxDiagonalDeviation;
 
-        bool dominantHorizontal = Mathf.Abs(deltaX) > Mathf.Abs(deltaY);
-        bool dominantVertical = !dominantHorizontal;
+        var dominantHorizontal = Mathf.Abs(deltaX) > Mathf.Abs(deltaY);
+        var dominantVertical = !dominantHorizontal;
 
-        // 2. Richting bepalen met tolerance
-        bool isHorizontal = Mathf.Abs(deltaX) > Mathf.Abs(deltaY) + tolerance;
-        bool isVertical = Mathf.Abs(deltaY) > Mathf.Abs(deltaX) + tolerance;
+        var isHorizontal = Mathf.Abs(deltaX) > Mathf.Abs(deltaY) + tolerance;
+        var isVertical = Mathf.Abs(deltaY) > Mathf.Abs(deltaX) + tolerance;
 
         if (!isHorizontal && !isVertical)
         {
-            // fallback naar dominante richting
             isHorizontal = dominantHorizontal;
             isVertical = dominantVertical;
         }
 
-        // 3. Te schuin?
         if (isHorizontal && Mathf.Abs(deltaY) > maxDiagonalDeviation)
             return beginGridPosition;
 
         if (isVertical && Mathf.Abs(deltaX) > maxDiagonalDeviation)
             return beginGridPosition;
 
-        // 4. Richting uitvoeren
         if (isHorizontal)
             return new GridPosition(startX + (deltaX > 0 ? 1 : -1), startY);
 
         return new GridPosition(startX, startY + (deltaY > 0 ? 1 : -1));
-
-
-
-        // var startX = beginGridPosition.X;
-        // var startY = beginGridPosition.Y;
-
-        // float deltaX = rawX - startX;
-        // float deltaY = rawY - startY;
-
-        // float tolerance = levelGridData.swapTolerance;
-
-        // bool isHorizontal = Mathf.Abs(deltaX) > Mathf.Abs(deltaY) + tolerance;
-        // bool isVertical   = Mathf.Abs(deltaY) > Mathf.Abs(deltaX) + tolerance;
-
-        // // Als geen van beide duidelijk is → kies de dominante richting zonder tolerance
-        // if (!isHorizontal && !isVertical)
-        // {
-        //     isHorizontal = Mathf.Abs(deltaX) > Mathf.Abs(deltaY);
-        //     isVertical   = !isHorizontal;
-        // }
-
-        // if (isHorizontal)
-        // {
-        //     if (deltaX > 0) return new GridPosition(startX + 1, startY);
-        //     else            return new GridPosition(startX - 1, startY);
-        // }
-
-        // if (isVertical)
-        // {
-        //     if (deltaY > 0) return new GridPosition(startX, startY + 1);
-        //     else            return new GridPosition(startX, startY - 1);
-        // }
-
-        // return beginGridPosition;
     }
 
     private void OnRequestGridObjectSwap(GridPosition beginGridPosition, GridPosition endGridPosition)
