@@ -44,7 +44,6 @@ public class LevelGrid : MonoBehaviour
     private void OnNewFingerDownInput(Vector2 fingerPosition)
     {
         var newGridHit = _gridSystem.ConvertWorldPositionToGridHit(fingerPosition);
-        if (!_gridSystem.IsValidGridPosition(newGridHit.hitGridPosition)) return;
 
         _beginTouchGridPosition = newGridHit;
     }
@@ -57,7 +56,9 @@ public class LevelGrid : MonoBehaviour
 
         if (!_gridSystem.IsValidGridPosition(_beginTouchGridPosition.hitGridPosition))
         {
-            _currentSelectedGridPosition = null;
+            if (_currentSelectedGridPosition == null) return;
+
+            ResetCurrentGridPosition();
             return;
         }
 
@@ -76,17 +77,15 @@ public class LevelGrid : MonoBehaviour
 
             endGridPosition = CheckGridBounds(endGridPosition);
 
-            if (endGridPosition == _currentSelectedGridPosition.Value.hitGridPosition) 
+            if (endGridPosition == _currentSelectedGridPosition.Value.hitGridPosition)
             {
-                OnTileDeselected?.Invoke(_currentSelectedGridPosition.Value.hitGridPosition);
-                _currentSelectedGridPosition = null;
+                ResetCurrentGridPosition();
                 return;
             }
 
             if (IsDiagonalMove(_currentSelectedGridPosition.Value.hitGridPosition, endGridPosition))
             {
-                OnTileDeselected?.Invoke(_currentSelectedGridPosition.Value.hitGridPosition);
-                _currentSelectedGridPosition = null;
+                ResetCurrentGridPosition();
                 return;
             }
 
@@ -102,6 +101,12 @@ public class LevelGrid : MonoBehaviour
             OnRequestGridObjectSwap(_beginTouchGridPosition.hitGridPosition, endGridPosition);
         }
 
+        _currentSelectedGridPosition = null;
+    }
+
+    private void ResetCurrentGridPosition()
+    {
+        OnTileDeselected?.Invoke(_currentSelectedGridPosition.Value.hitGridPosition);
         _currentSelectedGridPosition = null;
     }
 
@@ -131,6 +136,8 @@ public class LevelGrid : MonoBehaviour
 
         var distanceX = Mathf.FloorToInt(rawX) - startX;
         var distanceY = Mathf.FloorToInt(rawY) - startY;
+
+        if (Mathf.Abs(deltaX) >= 3f || Mathf.Abs(deltaY) >= 3f) return beginGridPosition;
 
         if (Mathf.Abs(distanceX) >= 1 && Mathf.Abs(distanceY) >= 1) return beginGridPosition;
 
@@ -205,17 +212,17 @@ public class LevelGrid : MonoBehaviour
         float maxDiagonalDeviation = levelGridData.SwipeMaxDiagonalDeviation; // <-- nieuw
 
         bool dominantHorizontal = Mathf.Abs(deltaX) > Mathf.Abs(deltaY);
-        bool dominantVertical   = !dominantHorizontal;
+        bool dominantVertical = !dominantHorizontal;
 
         // 2. Richting bepalen met tolerance
         bool isHorizontal = Mathf.Abs(deltaX) > Mathf.Abs(deltaY) + tolerance;
-        bool isVertical   = Mathf.Abs(deltaY) > Mathf.Abs(deltaX) + tolerance;
+        bool isVertical = Mathf.Abs(deltaY) > Mathf.Abs(deltaX) + tolerance;
 
         if (!isHorizontal && !isVertical)
         {
             // fallback naar dominante richting
             isHorizontal = dominantHorizontal;
-            isVertical   = dominantVertical;
+            isVertical = dominantVertical;
         }
 
         // 3. Te schuin?
