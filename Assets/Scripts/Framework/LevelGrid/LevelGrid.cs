@@ -54,14 +54,6 @@ public class LevelGrid : MonoBehaviour
 
         var endTouchGridPosition = newGridHit;
 
-        if (!_gridSystem.IsValidGridPosition(_beginTouchGridPosition.hitGridPosition))
-        {
-            if (_currentSelectedGridPosition == null) return;
-
-            ResetCurrentGridPosition();
-            return;
-        }
-
         if (endTouchGridPosition.hitGridPosition == _beginTouchGridPosition.hitGridPosition && _currentSelectedGridPosition == null)
         {
             _currentSelectedGridPosition = _beginTouchGridPosition;
