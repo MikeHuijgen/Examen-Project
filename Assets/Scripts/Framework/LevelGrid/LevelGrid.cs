@@ -18,7 +18,7 @@ public class LevelGrid : MonoBehaviour
             levelGridData.GridHeight,
             levelGridData.GridCellWidth,
             levelGridData.GridCellHeight,
-            levelGridData.swapTolerance);
+            levelGridData.SwipeDirectionTolerance);
         GridObjectUIRoot.OnGridRectReady += rect => _gridSystem.SetRectTransform(rect);
     }
 
@@ -49,13 +49,19 @@ public class LevelGrid : MonoBehaviour
     private void OnNewFingerUpInput(Vector2 fingerPosition)
     {
         var newGridHit = _gridSystem.ConvertWorldPositionToGridHit(fingerPosition);
-        if (!_gridSystem.IsValidGridPosition(newGridHit.hitGridPosition)) { _currentSelectedGridPosition = null; return; }
 
         var endTouchGridPosition = newGridHit;
 
-        if (_beginTouchGridPosition.hitGridPosition == endTouchGridPosition.hitGridPosition && _currentSelectedGridPosition == null)
+        if (!_gridSystem.IsValidGridPosition(_beginTouchGridPosition.hitGridPosition))
         {
-            _currentSelectedGridPosition = newGridHit;
+            _currentSelectedGridPosition = null;
+            return;
+        }
+
+        //Net toegevoegt
+        if (endTouchGridPosition.hitGridPosition == _beginTouchGridPosition.hitGridPosition && _currentSelectedGridPosition == null)
+        {
+            _currentSelectedGridPosition = _beginTouchGridPosition;
             return;
         }
 
@@ -63,19 +69,22 @@ public class LevelGrid : MonoBehaviour
 
         if (isClickMove)
         {
-            if (endTouchGridPosition.hitGridPosition == _currentSelectedGridPosition.Value.hitGridPosition) return;
+            var startPos = _currentSelectedGridPosition.Value.hitGridPosition;
 
-            if (IsDiagonalMove(_currentSelectedGridPosition.Value.hitGridPosition, endTouchGridPosition.hitGridPosition)) return;
+            var endGridPosition = CalculateClickedEndGridPosition(startPos, endTouchGridPosition.rawX, endTouchGridPosition.rawY);
 
-            var endGridPosition = CalculateClickedEndGridPosition(_currentSelectedGridPosition.Value.hitGridPosition, endTouchGridPosition.rawX, endTouchGridPosition.rawY);
+            endGridPosition = CheckGridBounds(endGridPosition);
 
-            OnRequestGridObjectSwap(_currentSelectedGridPosition.Value.hitGridPosition, endGridPosition);
+            if (IsDiagonalMove(startPos, endGridPosition))
+                return;
+
+            OnRequestGridObjectSwap(startPos, endGridPosition);
         }
         else
         {
-            if (IsDiagonalMove(_beginTouchGridPosition.hitGridPosition, endTouchGridPosition.hitGridPosition)) return;
-
             var endGridPosition = CalculateSwipeEndGridPosition(_beginTouchGridPosition.hitGridPosition, endTouchGridPosition.rawX, endTouchGridPosition.rawY);
+
+            endGridPosition = CheckGridBounds(endGridPosition);
 
             OnRequestGridObjectSwap(_beginTouchGridPosition.hitGridPosition, endGridPosition);
         }
@@ -83,15 +92,21 @@ public class LevelGrid : MonoBehaviour
         _currentSelectedGridPosition = null;
     }
 
-    private bool IsDiagonalMove(GridPosition beginTouchPosition, GridPosition endTouchPosition)
+    private bool IsDiagonalMove(GridPosition beginGridPosition, GridPosition endGridPosition)
     {
-        var directionX = Mathf.Abs(endTouchPosition.X - beginTouchPosition.X);
-        var directionY = Mathf.Abs(endTouchPosition.Y - beginTouchPosition.Y);
+        var deltaGridX = Mathf.Abs(beginGridPosition.X - endGridPosition.X);
+        var deltaGridY = Mathf.Abs(beginGridPosition.Y - endGridPosition.Y);
 
-        if (directionX >= 1 && directionY >= 1) return true;
-
-        return false;
+        return deltaGridX >= 1 && deltaGridY >= 1;
     }
+
+    private GridPosition CheckGridBounds(GridPosition pos)
+    {
+        int x = Mathf.Clamp(pos.X, 0, levelGridData.GridWidth - 1);
+        int y = Mathf.Clamp(pos.Y, 0, levelGridData.GridHeight - 1);
+        return new GridPosition(x, y);
+    }
+
 
     private GridPosition CalculateClickedEndGridPosition(GridPosition beginGridPosition, float rawX, float rawY)
     {
@@ -103,6 +118,9 @@ public class LevelGrid : MonoBehaviour
 
         var distanceX = Mathf.FloorToInt(rawX) - startX;
         var distanceY = Mathf.FloorToInt(rawY) - startY;
+
+        if (distanceX >= 1 && distanceY >= 1) return beginGridPosition;
+
 
         if (distanceX == 1) return new GridPosition(startX + 1, startY);
         if (distanceX == -1) return new GridPosition(startX - 1, startY);
@@ -121,7 +139,7 @@ public class LevelGrid : MonoBehaviour
 
         if (rawX > startX)
         {
-            rawX -= levelGridData.swapTolerance;
+            rawX -= levelGridData.ClickTolerance;
             var newGridPositionX = Mathf.FloorToInt(rawX);
             distanceX = newGridPositionX - startX;
 
@@ -131,7 +149,7 @@ public class LevelGrid : MonoBehaviour
         }
         else if (rawX < startX)
         {
-            rawX += levelGridData.swapTolerance;
+            rawX += levelGridData.ClickTolerance;
             var newGridPositionX = Mathf.FloorToInt(rawX);
             distanceX = newGridPositionX - startX;
 
@@ -141,7 +159,7 @@ public class LevelGrid : MonoBehaviour
 
         if (rawY > startY)
         {
-            rawY -= levelGridData.swapTolerance;
+            rawY -= levelGridData.ClickTolerance;
             var newGridPositionY = Mathf.FloorToInt(rawY);
             distanceY = newGridPositionY - startY;
 
@@ -150,7 +168,7 @@ public class LevelGrid : MonoBehaviour
         }
         else if (rawY < startY)
         {
-            rawY += levelGridData.swapTolerance;
+            rawY += levelGridData.ClickTolerance;
             var newGridPositionY = Mathf.FloorToInt(rawY);
             distanceY = newGridPositionY - startY;
 
@@ -164,41 +182,79 @@ public class LevelGrid : MonoBehaviour
 
     private GridPosition CalculateSwipeEndGridPosition(GridPosition beginGridPosition, float rawX, float rawY)
     {
-        var startX = beginGridPosition.X;
-        var startY = beginGridPosition.Y;
+        int startX = beginGridPosition.X;
+        int startY = beginGridPosition.Y;
 
-        var deltaX = rawX - startX;
-        var deltaY = rawY - startY;
+        float deltaX = rawX - startX;
+        float deltaY = rawY - startY;
 
-        if (Mathf.Abs(deltaX) > Mathf.Abs(deltaY))
+        float tolerance = levelGridData.SwipeDirectionTolerance;
+        float maxDiagonalDeviation = levelGridData.SwipeMaxDiagonalDeviation; // <-- nieuw
+
+        bool dominantHorizontal = Mathf.Abs(deltaX) > Mathf.Abs(deltaY);
+        bool dominantVertical   = !dominantHorizontal;
+
+        // 2. Richting bepalen met tolerance
+        bool isHorizontal = Mathf.Abs(deltaX) > Mathf.Abs(deltaY) + tolerance;
+        bool isVertical   = Mathf.Abs(deltaY) > Mathf.Abs(deltaX) + tolerance;
+
+        if (!isHorizontal && !isVertical)
         {
-            rawY = startY;
-        }
-        else
-        {
-            rawX = startX;
+            // fallback naar dominante richting
+            isHorizontal = dominantHorizontal;
+            isVertical   = dominantVertical;
         }
 
-        if (rawX > startX)
-            return new GridPosition(startX + 1, startY);
-        else if (rawX < startX)
-            return new GridPosition(startX - 1, startY);
+        // 3. Te schuin?
+        if (isHorizontal && Mathf.Abs(deltaY) > maxDiagonalDeviation)
+            return beginGridPosition;
 
-        if (rawY > startY)
-            return new GridPosition(startX, startY + 1);
-        else if (rawY < startY)
-            return new GridPosition(startX, startY - 1);
+        if (isVertical && Mathf.Abs(deltaX) > maxDiagonalDeviation)
+            return beginGridPosition;
 
-        return beginGridPosition;
+        // 4. Richting uitvoeren
+        if (isHorizontal)
+            return new GridPosition(startX + (deltaX > 0 ? 1 : -1), startY);
+
+        return new GridPosition(startX, startY + (deltaY > 0 ? 1 : -1));
+
+
+
+        // var startX = beginGridPosition.X;
+        // var startY = beginGridPosition.Y;
+
+        // float deltaX = rawX - startX;
+        // float deltaY = rawY - startY;
+
+        // float tolerance = levelGridData.swapTolerance;
+
+        // bool isHorizontal = Mathf.Abs(deltaX) > Mathf.Abs(deltaY) + tolerance;
+        // bool isVertical   = Mathf.Abs(deltaY) > Mathf.Abs(deltaX) + tolerance;
+
+        // // Als geen van beide duidelijk is → kies de dominante richting zonder tolerance
+        // if (!isHorizontal && !isVertical)
+        // {
+        //     isHorizontal = Mathf.Abs(deltaX) > Mathf.Abs(deltaY);
+        //     isVertical   = !isHorizontal;
+        // }
+
+        // if (isHorizontal)
+        // {
+        //     if (deltaX > 0) return new GridPosition(startX + 1, startY);
+        //     else            return new GridPosition(startX - 1, startY);
+        // }
+
+        // if (isVertical)
+        // {
+        //     if (deltaY > 0) return new GridPosition(startX, startY + 1);
+        //     else            return new GridPosition(startX, startY - 1);
+        // }
+
+        // return beginGridPosition;
     }
 
     private void OnRequestGridObjectSwap(GridPosition beginGridPosition, GridPosition endGridPosition)
     {
-        var dx = Mathf.Abs(beginGridPosition.X - endGridPosition.X);
-        var dy = Mathf.Abs(beginGridPosition.Y - endGridPosition.Y);
-
-        if (dx + dy != 1) return;
-
         var gridObjectA = _gridSystem.GetGridObjectByGridPosition(beginGridPosition);
         var gridObjectB = _gridSystem.GetGridObjectByGridPosition(endGridPosition);
 
