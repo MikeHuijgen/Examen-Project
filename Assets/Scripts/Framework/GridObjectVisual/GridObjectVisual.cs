@@ -10,13 +10,9 @@ public class GridObjectVisual : MonoBehaviour
     public void Initialize(GridObject gridObject, Func<Vector3> rectToWorldPosition)
     {
         _gridObject = gridObject;
-        _gridObject.OnPositionChanged += OnPositionChanged;
         _rectToWorldPosition = rectToWorldPosition;
-        OnPositionChanged();
+        transform.position = _rectToWorldPosition();
     }
 
-    private void OnPositionChanged()
-    {
-        transform.DOMove(_rectToWorldPosition(), .15f).SetEase(Ease.InOutQuad);
-    }
+    public Vector3 GetRectPosition() => _rectToWorldPosition();
 }

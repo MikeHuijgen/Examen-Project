@@ -17,6 +17,6 @@ MonoBehaviour:
   GridCellWidth: 110
   GridCellHeight: 110
   ClickTolerance: 0.4
-  SwipeDirectionTolerance: 0.4
-  SwipeMaxDiagonalDeviation: 2
+  SwipeDirectionTolerance: 0.5
+  SwipeMaxDiagonalDeviation: 1
   GridObjectDebugVisual: {fileID: 5472091287612878839, guid: 1acc3aecdb8173843bededdfa2bf75ec, type: 3}

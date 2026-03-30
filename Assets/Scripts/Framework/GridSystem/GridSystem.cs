@@ -119,8 +119,9 @@ public class GridSystem
         var gridX = Mathf.FloorToInt(rawX);
         var gridY = Mathf.FloorToInt(rawY);
 
-        return new GridHit(new GridPosition(gridX, gridY), rawX, rawY);
+        return new GridHit(new GridPosition(gridX, gridY), rawX, rawY, localPos);
     }
+
 
     public void SwapGridObjects(GridObject gridObjectA, GridObject gridObjectB)
     {

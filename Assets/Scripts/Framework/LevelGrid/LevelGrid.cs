@@ -1,5 +1,7 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class LevelGrid : MonoBehaviour
@@ -82,15 +84,15 @@ public class LevelGrid : MonoBehaviour
             }
 
 
-            OnRequestGridObjectSwap(_currentSelectedGridPosition.Value.hitGridPosition, endGridPosition);
+            StartCoroutine(OnRequestGridObjectSwap(_currentSelectedGridPosition.Value.hitGridPosition, endGridPosition));
         }
         else
         {
-            var endGridPosition = CalculateSwipeEndGridPosition(_beginTouchGridPosition.hitGridPosition, endTouchGridPosition.rawX, endTouchGridPosition.rawY);
+            var endGridPosition = CalculateSwipeEndGridPosition(_beginTouchGridPosition, endTouchGridPosition);
 
             endGridPosition = CheckGridBounds(endGridPosition);
 
-            OnRequestGridObjectSwap(_beginTouchGridPosition.hitGridPosition, endGridPosition);
+            StartCoroutine(OnRequestGridObjectSwap(_beginTouchGridPosition.hitGridPosition, endGridPosition));
         }
 
         _currentSelectedGridPosition = null;
@@ -191,47 +193,49 @@ public class LevelGrid : MonoBehaviour
         return beginGridPosition;
     }
 
-    private GridPosition CalculateSwipeEndGridPosition(GridPosition beginGridPosition, float rawX, float rawY)
+    private GridPosition CalculateSwipeEndGridPosition(GridHit beginHit, GridHit endHit)
     {
-        var startX = beginGridPosition.X;
-        var startY = beginGridPosition.Y;
+        var delta = endHit.localPos - beginHit.localPos;
 
-        var deltaX = rawX - startX;
-        var deltaY = rawY - startY;
+        var absX = Mathf.Abs(delta.x);
+        var absY = Mathf.Abs(delta.y);
 
-        var tolerance = levelGridData.SwipeDirectionTolerance;
-        var maxDiagonalDeviation = levelGridData.SwipeMaxDiagonalDeviation;
+        var tolerance = levelGridData.SwipeDirectionTolerance;  
+        var maxDiagonalTolerance = levelGridData.SwipeMaxDiagonalDeviation; 
 
-        var dominantHorizontal = Mathf.Abs(deltaX) > Mathf.Abs(deltaY);
-        var dominantVertical = !dominantHorizontal;
+        var ratio = absX > absY ? absY / absX : absX / absY;
 
-        var isHorizontal = Mathf.Abs(deltaX) > Mathf.Abs(deltaY) + tolerance;
-        var isVertical = Mathf.Abs(deltaY) > Mathf.Abs(deltaX) + tolerance;
+        if (ratio > maxDiagonalTolerance)
+            return beginHit.hitGridPosition;
 
-        if (!isHorizontal && !isVertical)
+        if (ratio > tolerance)
+            return beginHit.hitGridPosition;
+
+        var horizontal = absX > absY;
+
+        if (horizontal)
         {
-            isHorizontal = dominantHorizontal;
-            isVertical = dominantVertical;
+            var dir = delta.x > 0 ? 1 : -1;
+            return new GridPosition(beginHit.hitGridPosition.X + dir, beginHit.hitGridPosition.Y);
+        }
+        else
+        {
+            var dir = delta.y > 0 ? 1 : -1;
+            return new GridPosition(beginHit.hitGridPosition.X, beginHit.hitGridPosition.Y + dir);
         }
 
-        if (isHorizontal && Mathf.Abs(deltaY) > maxDiagonalDeviation)
-            return beginGridPosition;
-
-        if (isVertical && Mathf.Abs(deltaX) > maxDiagonalDeviation)
-            return beginGridPosition;
-
-        if (isHorizontal)
-            return new GridPosition(startX + (deltaX > 0 ? 1 : -1), startY);
-
-        return new GridPosition(startX, startY + (deltaY > 0 ? 1 : -1));
     }
 
-    private void OnRequestGridObjectSwap(GridPosition beginGridPosition, GridPosition endGridPosition)
+
+    private IEnumerator OnRequestGridObjectSwap(GridPosition beginGridPosition, GridPosition endGridPosition)
     {
         if (_currentSelectedGridPosition != null) OnTileDeselected?.Invoke(_currentSelectedGridPosition.Value.hitGridPosition);
         var gridObjectA = _gridSystem.GetGridObjectByGridPosition(beginGridPosition);
         var gridObjectB = _gridSystem.GetGridObjectByGridPosition(endGridPosition);
 
         _gridSystem.SwapGridObjects(gridObjectA, gridObjectB);
+
+        gridObjectA.GetGridObjectVisual.transform.DOMove(gridObjectA.GetGridObjectVisual.GetRectPosition(), 0.15f).SetEase(Ease.InQuad);
+        yield return gridObjectB.GetGridObjectVisual.transform.DOMove(gridObjectB.GetGridObjectVisual.GetRectPosition(), 0.15f).SetEase(Ease.InQuad).WaitForCompletion();
     }
 }
