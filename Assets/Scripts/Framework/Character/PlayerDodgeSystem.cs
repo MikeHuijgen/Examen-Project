@@ -15,10 +15,7 @@ public class PlayerDodgeSystem : MonoBehaviour
     private float _currentDodgeAmount;
     private bool _canDodge;
 
-    private void Awake()
-    {
-        _characterAnimator = GetComponent<Animator>();
-    }
+    private void Awake() => _characterAnimator = GetComponent<Animator>();
 
     private void Start()
     {
