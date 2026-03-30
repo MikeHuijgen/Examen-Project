@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using DG.Tweening;
 
 public class GridObjectVisual : MonoBehaviour
 {
@@ -16,6 +17,6 @@ public class GridObjectVisual : MonoBehaviour
 
     private void OnPositionChanged()
     {
-        transform.position = _rectToWorldPosition();
+        transform.DOMove(_rectToWorldPosition(), .15f).SetEase(Ease.InOutQuad);
     }
 }
