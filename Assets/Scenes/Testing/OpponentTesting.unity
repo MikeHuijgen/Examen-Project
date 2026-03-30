@@ -151,8 +151,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 611de309a31b4a94991e56586dcd53b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OpponentBehaviour
-  minAttackDelayTime: 2
-  maxAttackDelayTime: 5
+  opponentAttacks: []
+  minAttackDelayTime: 3
+  maxAttackDelayTime: 8
 --- !u!136 &32142246
 CapsuleCollider:
   m_ObjectHideFlags: 0

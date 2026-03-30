@@ -1,9 +1,9 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Base", menuName = "Scriptable Objects/Base")]
-public class Base : ScriptableObject
+public class BaseAttack : ScriptableObject
 {
     public float Damage;
     public float AttackAnim;
-    public float AttackDuration;
+    public float AttackDurationTime;
 }

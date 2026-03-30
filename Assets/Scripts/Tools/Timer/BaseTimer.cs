@@ -4,7 +4,6 @@ public abstract class BaseTimer
     protected float current_time;
     protected bool is_timer_done;
     protected bool is_timer_paused;
-
     protected bool is_timer_active;
 
     public void StartTimer()
