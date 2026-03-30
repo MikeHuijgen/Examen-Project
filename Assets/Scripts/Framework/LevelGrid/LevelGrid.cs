@@ -10,7 +10,7 @@ public class LevelGrid : MonoBehaviour
     public static event Action<GridPosition?> OnTileDeselected;
 
     [SerializeField] private LevelGridData levelGridData;
-    [SerializeField] private List<GridObjectVisual> gridObjectVisuals = new List<GridObjectVisual>();
+    [SerializeField] private List<Match3Block> gridObjectVisuals = new List<Match3Block>();
     private GridSystem _gridSystem;
     private GridHit _beginTouchGridPosition;
     private GridHit? _currentSelectedGridPosition;

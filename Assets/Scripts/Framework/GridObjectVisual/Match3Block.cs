@@ -1,18 +1,17 @@
 using UnityEngine;
 using System;
-using DG.Tweening;
 
-public class GridObjectVisual : MonoBehaviour
+public class Match3Block : MonoBehaviour
 {
-    private GridObject _gridObject;
+    [SerializeField] private FakeAttack fakeAttack;
     private Func<Vector3> _rectToWorldPosition;
 
-    public void Initialize(GridObject gridObject, Func<Vector3> rectToWorldPosition)
+    public void Initialize(Func<Vector3> rectToWorldPosition)
     {
-        _gridObject = gridObject;
         _rectToWorldPosition = rectToWorldPosition;
         transform.position = _rectToWorldPosition();
     }
 
     public Vector3 GetRectPosition() => _rectToWorldPosition();
+    public FakeAttack GetFakeAttack => fakeAttack;
 }

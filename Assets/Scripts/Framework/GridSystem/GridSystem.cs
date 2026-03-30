@@ -67,7 +67,7 @@ public class GridSystem
         }
     }
 
-    public void CreateGridObjectVisuals(List<GridObjectVisual> gridObjectVisualPrefabs)
+    public void CreateGridObjectVisuals(List<Match3Block> gridObjectVisualPrefabs)
     {
         for (var x = 0; x < _width; x++)
         {
@@ -76,7 +76,7 @@ public class GridSystem
                 var gridObjectVisualUI = _gridObjectArray[x, y].GetGridObjectVisualUI;
                 var randomGridVisual = gridObjectVisualPrefabs[UnityEngine.Random.Range(0, gridObjectVisualPrefabs.Count)];
                 var newGridObjectVisual = GameObject.Instantiate(randomGridVisual);
-                newGridObjectVisual.Initialize(_gridObjectArray[x, y], gridObjectVisualUI.GetRectToWorldTransform);
+                newGridObjectVisual.Initialize(gridObjectVisualUI.GetRectToWorldTransform);
 
                 _gridObjectArray[x, y].SetGridObjectVisual(newGridObjectVisual);
             }
