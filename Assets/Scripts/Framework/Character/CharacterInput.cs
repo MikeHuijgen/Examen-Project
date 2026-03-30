@@ -60,49 +60,7 @@ public class CharacterInput : MonoBehaviour
         OnDodgeInput?.Invoke(dodgeSide);
     }
 
-    private void OnFingerDown(Finger finger)
-    {
-        OnNewFingerDownInput?.Invoke(finger.screenPosition);
-        // if (_isValidGridPositionCallback == null) return;
-        // var gridPosition = _isValidGridPositionCallback(finger.screenPosition, false, null);
-        // if(gridPosition == null) 
-        // {
-        //     _beginTouchGridPosition = null;
-        //     return;
-        // }
-        
-        // _beginTouchGridPosition = gridPosition;
+    private void OnFingerDown(Finger finger) => OnNewFingerDownInput?.Invoke(finger.screenPosition);
 
-        // if(_lastGridPositionCache != null) return;
-        // _lastGridPositionCache = gridPosition;
-        // OnGridPositionSelected?.Invoke(_lastGridPositionCache.Value);
-    }
-
-    private void OnFingerUp(Finger finger)
-    {
-        OnNewFingerUpInput?.Invoke(finger.screenPosition);
-        // if (_isValidGridPositionCallback == null) return;
-        
-        // if (_beginTouchGridPosition == _lastGridPositionCache)
-        //     _endTouchGridPosition = _isValidGridPositionCallback(finger.screenPosition, false, _lastGridPositionCache);
-        // else
-        //     _endTouchGridPosition = _isValidGridPositionCallback(finger.screenPosition, true, _lastGridPositionCache);            
-        
-        // if(_beginTouchGridPosition == _endTouchGridPosition) return;
-
-        // if (_lastGridPositionCache == null) return;
-
-        // if (_endTouchGridPosition == null)
-        // {
-        //     OnGridPositionDeselected?.Invoke(_lastGridPositionCache);   
-        //     _lastGridPositionCache = null;   
-        //     return;      
-        // }
-
-        // OnGridPositionDeselected?.Invoke(_lastGridPositionCache);
-
-        // _onRequestGridObjectSwap(_lastGridPositionCache.Value, _endTouchGridPosition.Value);
-
-        // _lastGridPositionCache = null;
-    }
+    private void OnFingerUp(Finger finger) => OnNewFingerUpInput?.Invoke(finger.screenPosition);
 }

@@ -112,8 +112,8 @@ public class LevelGrid : MonoBehaviour
 
     private GridPosition CheckGridBounds(GridPosition pos)
     {
-        int x = Mathf.Clamp(pos.X, 0, levelGridData.GridWidth - 1);
-        int y = Mathf.Clamp(pos.Y, 0, levelGridData.GridHeight - 1);
+        var x = Mathf.Clamp(pos.X, 0, levelGridData.GridWidth - 1);
+        var y = Mathf.Clamp(pos.Y, 0, levelGridData.GridHeight - 1);
         return new GridPosition(x, y);
     }
 
