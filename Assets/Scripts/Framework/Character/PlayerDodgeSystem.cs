@@ -23,15 +23,9 @@ public class PlayerDodgeSystem : MonoBehaviour
         _canDodge = true;
     }
 
-    private void OnEnable()
-    {
-        CharacterInput.Instance.OnDodgeInput += DoDodge;
-    }
+    private void OnEnable() => CharacterInput.Instance.OnDodgeInput += DoDodge;
     
-    private void OnDisable()
-    {
-        CharacterInput.Instance.OnDodgeInput -= DoDodge;
-    }
+    private void OnDisable() => CharacterInput.Instance.OnDodgeInput -= DoDodge;
 
     private void DoDodge(SideType dodgeSide)
     {
@@ -66,13 +60,7 @@ public class PlayerDodgeSystem : MonoBehaviour
         _characterAnimator.SetInteger("SideTypeInt", (int)dodgeSide);
     }
     
-    public (bool isDodging, SideType dodgeSide) GetCurrentDodgeInfo()
-    {
-        return (_isDodging, _currentDodgeSide);
-    }
+    public (bool isDodging, SideType dodgeSide) GetCurrentDodgeInfo() => (_isDodging, _currentDodgeSide);
 
-    public void AddDodge(float dodgeAmount)
-    {
-        _currentDodgeAmount += dodgeAmount;
-    }
+    public void AddDodge(float dodgeAmount) => _currentDodgeAmount += dodgeAmount;
 }

@@ -43,8 +43,5 @@ public class CharacterInput : MonoBehaviour
         playerInput.actions["DodgeDown"].performed -= _dodgeDownHandler;
     }
 
-    private void OnDodgeInputDetected(SideType dodgeSide)
-    {
-        OnDodgeInput?.Invoke(dodgeSide);
-    }
+    private void OnDodgeInputDetected(SideType dodgeSide) => OnDodgeInput?.Invoke(dodgeSide);
 }
