@@ -383,8 +383,29 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 2797627523177970832, guid: cfb0303b938ee3047b12e8a02fe1f641, type: 3}
+      insertIndex: 2
+      addedObject: {fileID: 983837335}
   m_SourcePrefab: {fileID: 100100000, guid: cfb0303b938ee3047b12e8a02fe1f641, type: 3}
+--- !u!1 &983837334 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2797627523177970832, guid: cfb0303b938ee3047b12e8a02fe1f641, type: 3}
+  m_PrefabInstance: {fileID: 983837333}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &983837335
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 983837334}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75f5a4f5c31770d40b18a09c70424cfa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DodgeSwipeInput
+  minimumSwipeDistance: 10
 --- !u!1 &1326889577
 GameObject:
   m_ObjectHideFlags: 0
