@@ -383,29 +383,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 2797627523177970832, guid: cfb0303b938ee3047b12e8a02fe1f641, type: 3}
-      insertIndex: 2
-      addedObject: {fileID: 983837335}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cfb0303b938ee3047b12e8a02fe1f641, type: 3}
---- !u!1 &983837334 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2797627523177970832, guid: cfb0303b938ee3047b12e8a02fe1f641, type: 3}
-  m_PrefabInstance: {fileID: 983837333}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &983837335
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 983837334}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75f5a4f5c31770d40b18a09c70424cfa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DodgeSwipeInput
-  minimumSwipeDistance: 10
 --- !u!1 &1326889577
 GameObject:
   m_ObjectHideFlags: 0
@@ -574,9 +553,9 @@ Camera:
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
-    y: 0
+    y: 0.6
     width: 1
-    height: 1
+    height: 0.4
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 46.2
@@ -606,7 +585,7 @@ Transform:
   m_GameObject: {fileID: 2035804959}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0.03500774, z: -0, w: 0.999387}
-  m_LocalPosition: {x: -0.068, y: 1.367, z: -9.976}
+  m_LocalPosition: {x: -0.38, y: 1.367, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
