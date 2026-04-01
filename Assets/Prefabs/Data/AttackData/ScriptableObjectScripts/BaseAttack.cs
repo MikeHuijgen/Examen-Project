@@ -4,6 +4,6 @@ using UnityEngine;
 public class BaseAttack : ScriptableObject
 {
     public float Damage;
-    public float AttackAnim;
+    public Animation AttackAnim;
     public float AttackDurationTime;
 }

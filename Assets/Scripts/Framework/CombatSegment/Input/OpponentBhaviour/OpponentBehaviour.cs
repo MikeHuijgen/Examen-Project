@@ -3,115 +3,67 @@ using UnityEngine;
 
 public class OpponentBehaviour : MonoBehaviour
 {
+    [SerializeField] private AttackSystem attackSystem;
+
     [SerializeField] private List<OpponentAttack> opponentAttacks;
+    [SerializeField] private List<GameObject> attackDirectionWarnings;
     [SerializeField] private float minAttackDelayTime;
     [SerializeField] private float maxAttackDelayTime;
 
     private CountdownTimer _idleTimer;
-    private CountdownTimer _chargeTimer;
-    private CountdownTimer _attackTimer;
+    private TimerManager _timer;
 
-    private OpponentState _currentState;
-    private OpponentAttack _currentAttack;
-
-    public enum OpponentState
-    {
-        Idle,
-        Charge,
-        Attack,
-    }
+    private float _currentDelay;
 
     private void Start()
     {
-        TransitionToState(OpponentState.Idle);
+        attackDirectionWarnings.ForEach(warningObject => warningObject.SetActive(false));
+        _timer = new TimerManager();
+        SetNewDelay();
     }
 
     private void Update()
     {
-        switch (_currentState)
+        if (!attackSystem.IsIdle)
         {
-            case OpponentState.Idle:
-                HandleIdle();
-                break;
-
-            case OpponentState.Charge:
-                HandleCharge();
-                break;
-
-            case OpponentState.Attack:
-                HandleAttack();
-                break;
+            if(attackSystem.CurrentAttackDirection() == 0)
+            {
+                attackDirectionWarnings[0].SetActive(true);
+            }
+            if (attackSystem.CurrentAttackDirection() == 1)
+            {
+                attackDirectionWarnings[1].SetActive(true);
+            }
+            if (attackSystem.CurrentAttackDirection() == 2)
+            {
+                attackDirectionWarnings[2].SetActive(true);
+            }
+        }
+        else
+        {
+            attackDirectionWarnings.ForEach(warningObject => warningObject.SetActive(false));
+            HandleAttackDelay();
         }
     }
 
-    private void HandleIdle()
+    private void HandleAttackDelay()
     {
-        if (!RunTimer(ref _idleTimer, GetRandomIdleTime()))
-            return;
-        Debug.Log("Charging");
-        TransitionToState(OpponentState.Charge);
-    }
-
-    private void HandleCharge()
-    {
-        if (!RunTimer(ref _chargeTimer, _currentAttack.ChargeDurationTime))
-            return;
-        Debug.Log("Attacking");
-        TransitionToState(OpponentState.Attack);
-    }
-
-    private void HandleAttack()
-    {
-        if (!RunTimer(ref _attackTimer, _currentAttack.AttackDurationTime))
+        if (!_timer.RunTimer(ref _idleTimer, _currentDelay))
             return;
 
-        Debug.Log("Idle");
-        TransitionToState(OpponentState.Idle);
+        var attack = GetAttack();
+        attackSystem.TriggerAttack(attack);
+
+        SetNewDelay();
     }
 
-    private void TransitionToState(OpponentState newState)
+    private void SetNewDelay()
     {
-        _currentState = newState;
-
-        switch (newState)
-        {
-            case OpponentState.Idle:
-                break;
-
-            case OpponentState.Charge:
-                _currentAttack = GetAttack();
-                break;
-
-            case OpponentState.Attack:
-                break;
-        }
-    }
-
-    private bool RunTimer(ref CountdownTimer timer, float duration)
-    {
-        if (timer == null || !timer.IsTimerActive)
-        {
-            timer = new CountdownTimer(duration);
-            timer.StartTimer();
-            return false;
-        }
-
-        timer.Tick(Time.deltaTime);
-
-        if (!timer.IsTimerDone)
-            return false;
-
-        timer.StopTimer();
-        return true;
+        _currentDelay = Random.Range(minAttackDelayTime, maxAttackDelayTime);
     }
 
     private OpponentAttack GetAttack()
     {
         return opponentAttacks[Random.Range(0, opponentAttacks.Count)];
-    }
-
-    private float GetRandomIdleTime()
-    {
-        return Random.Range(minAttackDelayTime, maxAttackDelayTime);
     }
 }

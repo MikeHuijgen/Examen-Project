@@ -151,7 +151,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 611de309a31b4a94991e56586dcd53b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OpponentBehaviour
-  opponentAttacks: []
+  attackSystem: {fileID: 766133201}
+  opponentAttacks:
+  - {fileID: 11400000, guid: 53e517017e6134f439db19430b421268, type: 2}
+  - {fileID: 11400000, guid: 68aed0ed0bd530c49969b30d8474f673, type: 2}
+  - {fileID: 11400000, guid: 574e42c9b595c594198ad605ac762201, type: 2}
   minAttackDelayTime: 3
   maxAttackDelayTime: 8
 --- !u!136 &32142246
@@ -468,6 +472,50 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
+--- !u!1 &766133200
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 766133202}
+  - component: {fileID: 766133201}
+  m_Layer: 0
+  m_Name: AttackSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &766133201
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 766133200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de273fdaa79468d4ab6a8b2fe5ed9f60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AttackSystem
+--- !u!4 &766133202
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 766133200}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.34019, y: 2.54666, z: -1.16954}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -475,3 +523,4 @@ SceneRoots:
   - {fileID: 185011724}
   - {fileID: 708107703}
   - {fileID: 32142249}
+  - {fileID: 766133202}
