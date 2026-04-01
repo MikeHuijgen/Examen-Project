@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21d82b4bdc23e804c94ec80611808030, type: 3}
   m_Name: UpPunch
   m_EditorClassIdentifier: Assembly-CSharp::Opponent
-  Damage: 0
-  AttackAnim: 0
-  AttackDurationTime: 0.3
-  Direction: 0
-  ChargeAnimation: 0
-  ChargeDurationTime: 0.7
+  Damage: 5
+  AttackAnim: {fileID: 0}
+  AttackDurationTime: 0.5
+  Direction: 1
+  ChargeAnimation: {fileID: 0}
+  ChargeDurationTime: 1.5
