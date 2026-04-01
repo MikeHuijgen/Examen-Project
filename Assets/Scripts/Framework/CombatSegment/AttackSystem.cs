@@ -45,15 +45,24 @@ public class AttackSystem : MonoBehaviour
         switch (_state)
         {
             case AttackState.Idle:
-                Debug.Log("Idle");
                 break;
 
             case AttackState.Charging:
+                Debug.Log("Charging");
                 HandleCharging();
                 break;
 
             case AttackState.Attacking:
-                Debug.Log("Attacking in This Direction = " + CurrentAttackDirection());
+                if(_currentAttack.ChargeDurationTime > 0f)
+                {
+                    Debug.Log("Executed Opponenet Attack in This Direction = " + CurrentAttackDirection());
+                    Debug.Log("Damage Done = " + _currentAttack.Damage);
+                }
+                else
+                {
+                    Debug.Log("Executed Player Punch");
+                    Debug.Log("Damage Done = " + _currentAttack.Damage);
+                }
                 HandleAttacking();
                 break;
         }
@@ -63,7 +72,6 @@ public class AttackSystem : MonoBehaviour
     {
         if (!_timer.RunTimer(ref _chargeTimer, _currentAttack.ChargeDurationTime))
         {
-            Debug.Log("Charging");
             return;
         }
 
