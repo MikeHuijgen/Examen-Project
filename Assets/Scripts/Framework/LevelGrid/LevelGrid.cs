@@ -10,8 +10,11 @@ public class LevelGrid : MonoBehaviour
     public static event Action<GridPosition?> OnTileDeselected;
 
     [SerializeField] private LevelGridData levelGridData;
-    [SerializeField] private List<Match3Block> gridObjectVisuals = new List<Match3Block>();
+    [SerializeField] private AttackToMatch3Block[] attackToMatch3Blocks;
+
+    private Dictionary<FakeAttack, Transform> _attackToMatch3BlocksDictionary;
     private GridSystem _gridSystem;
+    private MatchDetector _matchDetector;
     private GridHit _beginTouchGridPosition;
     private GridHit? _currentSelectedGridPosition;
 
@@ -24,20 +27,27 @@ public class LevelGrid : MonoBehaviour
             levelGridData.GridCellWidth,
             levelGridData.GridCellHeight,
             levelGridData.SwipeDirectionTolerance);
+        
+        _matchDetector = new MatchDetector();
         GridObjectUIRoot.OnGridRectReady += rect => _gridSystem.SetRectTransform(rect);
+        FillDictionary();
     }
 
-    void OnDisable()
+    private void FillDictionary()
     {
-        GridObjectUIRoot.OnGridRectReady -= rect => _gridSystem.SetRectTransform(rect);
+        _attackToMatch3BlocksDictionary = new Dictionary<FakeAttack, Transform>();
+        foreach (var attackToMatch3Block in attackToMatch3Blocks)
+        {
+            if (_attackToMatch3BlocksDictionary.ContainsKey(attackToMatch3Block.FakeAttack)) continue;
+
+            _attackToMatch3BlocksDictionary.Add(attackToMatch3Block.FakeAttack, attackToMatch3Block.Match3BlockPrefab);
+        }
     }
 
     private void Start()
     {
         _gridSystem.GenerateGrid();
         _gridSystem.CreateGridObjectVisualUIs(levelGridData.GridObjectDebugVisual);
-
-        _gridSystem.CreateGridObjectVisuals(gridObjectVisuals);
 
         CharacterInput.Instance.OnNewFingerDownInput += OnNewFingerDownInput;
         CharacterInput.Instance.OnNewFingerUpInput += OnNewFingerUpInput;
@@ -235,7 +245,20 @@ public class LevelGrid : MonoBehaviour
 
         _gridSystem.SwapGridObjects(gridObjectA, gridObjectB);
 
-        gridObjectA.GetGridObjectVisual.transform.DOMove(gridObjectA.GetGridObjectVisual.GetRectPosition(), 0.15f).SetEase(Ease.InQuad);
-        yield return gridObjectB.GetGridObjectVisual.transform.DOMove(gridObjectB.GetGridObjectVisual.GetRectPosition(), 0.15f).SetEase(Ease.InQuad).WaitForCompletion();
+        gridObjectA.GetGridMatch3Block.transform.DOMove(gridObjectA.GetGridMatch3Block.GetRectPosition(), 0.15f).SetEase(Ease.InQuad);
+        yield return gridObjectB.GetGridMatch3Block.transform.DOMove(gridObjectB.GetGridMatch3Block.GetRectPosition(), 0.15f).SetEase(Ease.InQuad).WaitForCompletion();
+    }
+
+    public void ReShuffleGrid()
+    {
+        var grid = _gridSystem.GetGridObjectArray;
+        for (var x = 0; x < levelGridData.GridWidth; x++)
+        {
+            for (int y = 0; y < levelGridData.GridHeight; y++)
+            {
+                var gridObjectVisualUI = grid[x, y].GetGridObjectVisualUI;
+                //var match3Block = Instantiate()
+            }
+        }
     }
 }

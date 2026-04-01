@@ -32,6 +32,8 @@ public class GridSystem
     public bool IsValidGridPosition(GridPosition gridPosition) => gridPosition.X >= 0 && gridPosition.Y >= 0 && gridPosition.X < _width && gridPosition.Y < _height;
     public GridObject GetGridObjectByGridPosition(GridPosition gridPosition) => IsValidGridPosition(gridPosition) ? _gridObjectArray[gridPosition.X, gridPosition.Y] : null;
 
+    public GridObject [,] GetGridObjectArray => _gridObjectArray;
+
     public void GenerateGrid()
     {
         _gridObjectArray = new GridObject[_width, _height];
@@ -63,22 +65,6 @@ public class GridSystem
 
                 var rect = newGridObjectVisualUI.GetComponent<RectTransform>();
                 rect.anchoredPosition = ConvertGridPositionToWorldPosition(new GridPosition(x, y));
-            }
-        }
-    }
-
-    public void CreateGridObjectVisuals(List<Match3Block> gridObjectVisualPrefabs)
-    {
-        for (var x = 0; x < _width; x++)
-        {
-            for (int y = 0; y < _height; y++)
-            {
-                var gridObjectVisualUI = _gridObjectArray[x, y].GetGridObjectVisualUI;
-                var randomGridVisual = gridObjectVisualPrefabs[UnityEngine.Random.Range(0, gridObjectVisualPrefabs.Count)];
-                var newGridObjectVisual = GameObject.Instantiate(randomGridVisual);
-                newGridObjectVisual.Initialize(gridObjectVisualUI.GetRectToWorldTransform);
-
-                _gridObjectArray[x, y].SetGridObjectVisual(newGridObjectVisual);
             }
         }
     }
