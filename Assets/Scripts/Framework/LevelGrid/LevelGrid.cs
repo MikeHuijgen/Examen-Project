@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class LevelGrid : MonoBehaviour
@@ -12,7 +14,7 @@ public class LevelGrid : MonoBehaviour
     [SerializeField] private LevelGridData levelGridData;
     [SerializeField] private AttackToMatch3Block[] attackToMatch3Blocks;
 
-    private Dictionary<FakeAttack, Transform> _attackToMatch3BlocksDictionary;
+    private Dictionary<FakeAttack, Match3Block> _attackToMatch3BlocksDictionary;
     private GridSystem _gridSystem;
     private MatchDetector _matchDetector;
     private GridHit _beginTouchGridPosition;
@@ -25,8 +27,7 @@ public class LevelGrid : MonoBehaviour
             levelGridData.GridWidth,
             levelGridData.GridHeight,
             levelGridData.GridCellWidth,
-            levelGridData.GridCellHeight,
-            levelGridData.SwipeDirectionTolerance);
+            levelGridData.GridCellHeight);
         
         _matchDetector = new MatchDetector();
         GridObjectUIRoot.OnGridRectReady += rect => _gridSystem.SetRectTransform(rect);
@@ -35,12 +36,12 @@ public class LevelGrid : MonoBehaviour
 
     private void FillDictionary()
     {
-        _attackToMatch3BlocksDictionary = new Dictionary<FakeAttack, Transform>();
+        _attackToMatch3BlocksDictionary = new Dictionary<FakeAttack, Match3Block>();
         foreach (var attackToMatch3Block in attackToMatch3Blocks)
         {
             if (_attackToMatch3BlocksDictionary.ContainsKey(attackToMatch3Block.FakeAttack)) continue;
 
-            _attackToMatch3BlocksDictionary.Add(attackToMatch3Block.FakeAttack, attackToMatch3Block.Match3BlockPrefab);
+            _attackToMatch3BlocksDictionary.Add(attackToMatch3Block.FakeAttack, attackToMatch3Block.Match3Block);
         }
     }
 
@@ -48,6 +49,7 @@ public class LevelGrid : MonoBehaviour
     {
         _gridSystem.GenerateGrid();
         _gridSystem.CreateGridObjectVisualUIs(levelGridData.GridObjectDebugVisual);
+        ReshuffleGrid();
 
         CharacterInput.Instance.OnNewFingerDownInput += OnNewFingerDownInput;
         CharacterInput.Instance.OnNewFingerUpInput += OnNewFingerUpInput;
@@ -249,7 +251,7 @@ public class LevelGrid : MonoBehaviour
         yield return gridObjectB.GetGridMatch3Block.transform.DOMove(gridObjectB.GetGridMatch3Block.GetRectPosition(), 0.15f).SetEase(Ease.InQuad).WaitForCompletion();
     }
 
-    public void ReShuffleGrid()
+    public void ReshuffleGrid()
     {
         var grid = _gridSystem.GetGridObjectArray;
         for (var x = 0; x < levelGridData.GridWidth; x++)
@@ -257,7 +259,12 @@ public class LevelGrid : MonoBehaviour
             for (int y = 0; y < levelGridData.GridHeight; y++)
             {
                 var gridObjectVisualUI = grid[x, y].GetGridObjectVisualUI;
-                //var match3Block = Instantiate()
+                var attackData = _matchDetector.GetRandomValidAttackData(_attackToMatch3BlocksDictionary.Keys.ToList(), grid, x, y);
+                if(!_attackToMatch3BlocksDictionary.TryGetValue(attackData, out var match3Block)) continue;
+                var newMatch3Block = Instantiate(match3Block, gridObjectVisualUI.GetRectToWorldTransform(), quaternion.identity);
+                newMatch3Block.Initialize(gridObjectVisualUI.GetRectToWorldTransform);
+                grid[x, y].SetMatch3Block(newMatch3Block);
+                grid[x, y].SetAttackData(attackData);
             }
         }
     }

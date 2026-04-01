@@ -5,5 +5,5 @@ using UnityEngine;
 public struct AttackToMatch3Block
 {
     public FakeAttack FakeAttack;
-    public Transform Match3BlockPrefab;
+    public Match3Block Match3Block;
 }

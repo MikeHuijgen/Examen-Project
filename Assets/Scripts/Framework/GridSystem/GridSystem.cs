@@ -14,18 +14,16 @@ public class GridSystem
     private int _height;
     private int _cellWidth;
     private int _cellHeight;
-    private float _swapTolerance;
     private RectTransform _gridRectTransform;
 
     private GridObject[,] _gridObjectArray;
 
-    public GridSystem(int width, int height, int cellWidth, int cellHeight, float swapTolerance)
+    public GridSystem(int width, int height, int cellWidth, int cellHeight)
     {
         _width = width;
         _height = height;
         _cellWidth = cellWidth;
         _cellHeight = cellHeight;
-        _swapTolerance = swapTolerance;
     }
 
     public void SetRectTransform(RectTransform rect) => _gridRectTransform = rect;
@@ -107,7 +105,6 @@ public class GridSystem
 
         return new GridHit(new GridPosition(gridX, gridY), rawX, rawY, localPos);
     }
-
 
     public void SwapGridObjects(GridObject gridObjectA, GridObject gridObjectB)
     {

@@ -1,41 +1,43 @@
+using System.Collections.Generic;
 using UnityEngine;
+
 
 public class MatchDetector
 {
-    // private int GetValidBlockType(List<Match3Block> gridObjectVisualPrefabs ,int x, int y)
-    // {
-    //     List<FakeAttack> possibleTypes = new List<FakeAttack>();
+    public FakeAttack GetRandomValidAttackData(List<FakeAttack> attackDataList , GridObject[,] gridArray, int x, int y)
+    {
+        List<FakeAttack> possibleAttackData = new List<FakeAttack>();
 
-    //     // stel: je hebt 5 soorten blocks (0 t/m 4)
-    //     for (int i = 0; i < gridObjectVisualPrefabs.Count; i++)
-    //     {
-    //         possibleTypes.Add(gridObjectVisualPrefabs[i].GetFakeAttack);
-    //     }
+        // stel: je hebt 5 soorten blocks (0 t/m 4)
+        for (int i = 0; i < attackDataList.Count; i++)
+        {
+            possibleAttackData.Add(attackDataList[i]);
+        }
 
-    //     // 🔍 Check links (horizontaal)
-    //     if (x >= 2)
-    //     {
-    //         var left = _gridObjectArray[x - 1, y].GetGridMatch3Block.GetFakeAttack;
-    //         var left2 = _gridObjectArray[x - 2, y].GetGridMatch3Block.GetFakeAttack;
+        // 🔍 Check links (horizontaal)
+        if (x >= 2)
+        {
+            var left = gridArray[x - 1, y].GetAttackData;
+            var left2 = gridArray[x - 2, y].GetAttackData;
 
-    //         if (left == left2)
-    //         {
-    //             possibleTypes.Remove(left);
-    //         }
-    //     }
+            if (left == left2)
+            {
+                possibleAttackData.Remove(left);
+            }
+        }
 
-    //     // 🔍 Check onder (verticaal)
-    //     if (y >= 2)
-    //     {
-    //         var down = _gridObjectArray[x, y - 1].GetGridMatch3Block.GetFakeAttack;
-    //         var down2 = _gridObjectArray[x, y - 2].GetGridMatch3Block.GetFakeAttack;
+        // 🔍 Check onder (verticaal)
+        if (y >= 2)
+        {
+            var down = gridArray[x, y - 1].GetAttackData;
+            var down2 = gridArray[x, y - 2].GetAttackData;
 
-    //         if (down == down2)
-    //         {
-    //             possibleTypes.Remove(down);
-    //         }
-    //     }
+            if (down == down2)
+            {
+                possibleAttackData.Remove(down);
+            }
+        }
 
-    //     return possibleTypes.Count;
-    // }
+        return possibleAttackData[Random.Range(0, possibleAttackData.Count)];
+    }
 }
