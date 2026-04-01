@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using Unity.Mathematics;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class LevelGrid : MonoBehaviour
@@ -249,6 +250,29 @@ public class LevelGrid : MonoBehaviour
 
         gridObjectA.GetGridMatch3Block.transform.DOMove(gridObjectA.GetGridMatch3Block.GetRectPosition(), 0.15f).SetEase(Ease.InQuad);
         yield return gridObjectB.GetGridMatch3Block.transform.DOMove(gridObjectB.GetGridMatch3Block.GetRectPosition(), 0.15f).SetEase(Ease.InQuad).WaitForCompletion();
+
+        var matches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
+
+        // check if de match is valid
+        // destroy the match
+        // let the others above fall down
+        // Spawn in new random tiles above and fill the gaps above
+        // check hele board voor een match if so dan redo dit dus while loop
+
+        if (matches.Count == 0)
+        {
+            _gridSystem.SwapGridObjects(gridObjectA, gridObjectB);
+            gridObjectA.GetGridMatch3Block.transform.DOMove(gridObjectA.GetGridMatch3Block.GetRectPosition(), 0.15f).SetEase(Ease.InQuad);
+            yield return gridObjectB.GetGridMatch3Block.transform.DOMove(gridObjectB.GetGridMatch3Block.GetRectPosition(), 0.15f).SetEase(Ease.InQuad).WaitForCompletion();     
+            yield break;       
+        }
+
+        foreach (var position in matches)
+        {
+            var grid = _gridSystem.GetGridObjectArray;
+            Destroy(grid[position.X, position.Y].GetGridMatch3Block.gameObject);
+            grid[position.X, position.Y].SetMatch3Block(null);
+        }
     }
 
     public void ReshuffleGrid()

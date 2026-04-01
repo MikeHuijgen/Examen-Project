@@ -8,13 +8,11 @@ public class MatchDetector
     {
         List<FakeAttack> possibleAttackData = new List<FakeAttack>();
 
-        // stel: je hebt 5 soorten blocks (0 t/m 4)
         for (int i = 0; i < attackDataList.Count; i++)
         {
             possibleAttackData.Add(attackDataList[i]);
         }
 
-        // 🔍 Check links (horizontaal)
         if (x >= 2)
         {
             var left = gridArray[x - 1, y].GetAttackData;
@@ -26,7 +24,6 @@ public class MatchDetector
             }
         }
 
-        // 🔍 Check onder (verticaal)
         if (y >= 2)
         {
             var down = gridArray[x, y - 1].GetAttackData;
@@ -39,5 +36,58 @@ public class MatchDetector
         }
 
         return possibleAttackData[Random.Range(0, possibleAttackData.Count)];
+    }
+
+    public HashSet<GridPosition> CheckForAllMatches(GridObject[,] grid, int gridWidth, int gridHeight)
+    {
+        var matches = new HashSet<GridPosition>();
+
+        for (int y = 0; y < gridHeight; y++)
+        {
+            int matchLength = 1;
+            for (int x = 0; x < gridWidth; x++)
+            {
+                if (x == gridWidth - 1 || grid[x, y].GetAttackData != grid[x + 1, y].GetAttackData)
+                {
+                    if (matchLength >= 3)
+                    {
+                        for (int k = 0; k < matchLength; k++)
+                        {
+                            matches.Add(new GridPosition(x - k, y));
+                        }
+                    }
+                    matchLength = 1; // reset
+                }
+                else
+                {
+                    matchLength++;
+                }
+            }
+        }
+
+        for (int x = 0; x < gridWidth; x++)
+        {
+            int matchLength = 1;
+            for (int y = 0; y < gridHeight; y++)
+            {
+                if (y == gridHeight - 1 || grid[x, y].GetAttackData != grid[x, y + 1].GetAttackData)
+                {
+                    if (matchLength >= 3)
+                    {
+                        for (int k = 0; k < matchLength; k++)
+                        {
+                            matches.Add(new GridPosition(x, y - k));
+                        }
+                    }
+                    matchLength = 1;
+                }
+                else
+                {
+                    matchLength++;
+                }
+            }
+        }
+
+        return matches;
     }
 }
