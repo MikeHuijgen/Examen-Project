@@ -26,24 +26,20 @@ public class DodgeSwipeInput : MonoBehaviour
     {
         Vector2 swipeDelta = screenPosition - _swipeStartPosition;
 
-        if (swipeDelta.magnitude < minimumSwipeDistance)
-            return;
+        if (swipeDelta.magnitude < minimumSwipeDistance) return;
 
         SideType swipeSide = GetSwipeSide(swipeDelta);
 
-        if (swipeSide == SideType.None)
-            return;
+        if (swipeSide == SideType.None) return;
 
         CharacterInput.Instance.OnDodgeInputDetected(swipeSide);
     }
 
     private SideType GetSwipeSide(Vector2 swipeDelta)
     {
-        if (Mathf.Abs(swipeDelta.x) > Mathf.Abs(swipeDelta.y))
-            return swipeDelta.x > 0 ? SideType.Right : SideType.Left;
+        if (Mathf.Abs(swipeDelta.x) > Mathf.Abs(swipeDelta.y)) return swipeDelta.x > 0 ? SideType.Right : SideType.Left;
 
-        if (swipeDelta.y < 0)
-            return SideType.Down;
+        if (swipeDelta.y < 0) return SideType.Down;
 
         return SideType.None;
     }
