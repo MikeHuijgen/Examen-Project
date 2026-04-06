@@ -38,9 +38,9 @@ public class MatchDetector
         return possibleAttackData[Random.Range(0, possibleAttackData.Count)];
     }
 
-    public HashSet<GridPosition> CheckForAllMatches(GridObject[,] grid, int gridWidth, int gridHeight)
+    public HashSet<gridObject> CheckForAllMatches(GridObject[,] grid, int gridWidth, int gridHeight)
     {
-        var matches = new HashSet<GridPosition>();
+        var matches = new HashSet<gridObject>();
 
         for (int y = 0; y < gridHeight; y++)
         {
@@ -53,10 +53,10 @@ public class MatchDetector
                     {
                         for (int k = 0; k < matchLength; k++)
                         {
-                            matches.Add(new GridPosition(x - k, y));
+                            matches.Add(new gridObject(x - k, y));
                         }
                     }
-                    matchLength = 1; // reset
+                    matchLength = 1;
                 }
                 else
                 {
@@ -76,7 +76,7 @@ public class MatchDetector
                     {
                         for (int k = 0; k < matchLength; k++)
                         {
-                            matches.Add(new GridPosition(x, y - k));
+                            matches.Add(new gridObject(x, y - k));
                         }
                     }
                     matchLength = 1;

@@ -354,7 +354,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 589d437c6383da0419b31727949930c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FingerInputTester
-  _startDownFingerPosition: {x: 0, y: 0}
 --- !u!4 &696526366
 Transform:
   m_ObjectHideFlags: 0

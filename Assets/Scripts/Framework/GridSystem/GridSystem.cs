@@ -27,8 +27,8 @@ public class GridSystem
     }
 
     public void SetRectTransform(RectTransform rect) => _gridRectTransform = rect;
-    public bool IsValidGridPosition(GridPosition gridPosition) => gridPosition.X >= 0 && gridPosition.Y >= 0 && gridPosition.X < _width && gridPosition.Y < _height;
-    public GridObject GetGridObjectByGridPosition(GridPosition gridPosition) => IsValidGridPosition(gridPosition) ? _gridObjectArray[gridPosition.X, gridPosition.Y] : null;
+    public bool IsValidGridPosition(gridObject gridPosition) => gridPosition.X >= 0 && gridPosition.Y >= 0 && gridPosition.X < _width && gridPosition.Y < _height;
+    public GridObject GetGridObjectByGridPosition(gridObject gridPosition) => IsValidGridPosition(gridPosition) ? _gridObjectArray[gridPosition.X, gridPosition.Y] : null;
 
     public GridObject [,] GetGridObjectArray => _gridObjectArray;
 
@@ -40,7 +40,7 @@ public class GridSystem
         {
             for (int y = 0; y < _height; y++)
             {
-                var newGridPosition = new GridPosition(x, y);
+                var newGridPosition = new gridObject(x, y);
                 var newGridObject = new GridObject(newGridPosition);
                 _gridObjectArray[x, y] = newGridObject;
             }
@@ -62,12 +62,12 @@ public class GridSystem
                 OnNewGridObjectCreated?.Invoke(newGridObjectVisualUI.transform);
 
                 var rect = newGridObjectVisualUI.GetComponent<RectTransform>();
-                rect.anchoredPosition = ConvertGridPositionToWorldPosition(new GridPosition(x, y));
+                rect.anchoredPosition = ConvertGridPositionToWorldPosition(new gridObject(x, y));
             }
         }
     }
 
-    public Vector3 ConvertGridPositionToWorldPosition(GridPosition gridPosition)
+    public Vector3 ConvertGridPositionToWorldPosition(gridObject gridPosition)
     {
         var gridWidthPx = _width * _cellWidth;
         var gridHeightPx = _height * _cellHeight;
@@ -103,10 +103,10 @@ public class GridSystem
         var gridX = Mathf.FloorToInt(rawX);
         var gridY = Mathf.FloorToInt(rawY);
 
-        return new GridHit(new GridPosition(gridX, gridY), rawX, rawY, localPos);
+        return new GridHit(new gridObject(gridX, gridY), rawX, rawY, localPos);
     }
 
-    public void SwapGridObjects(GridObject gridObjectA, GridObject gridObjectB)
+    public void SwapGridObjectsData(GridObject gridObjectA, GridObject gridObjectB)
     {
         var gridPositionA = gridObjectA.GetGridPosition;
         var gridPositionB = gridObjectB.GetGridPosition;

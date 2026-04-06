@@ -11,10 +11,10 @@ public class GridObjectVisualUI : MonoBehaviour
     [SerializeField] private Outline gridVisualOutline;
     private GridObject _gridObject;
 
-    private Func<GridPosition, Vector3> _gridToWorldFunc;
+    private Func<gridObject, Vector3> _gridToWorldFunc;
     private static int counter;
 
-    public void Initialize(GridObject gridObject, int width, int height, Func<GridPosition, Vector3> gridToWorldFunc)
+    public void Initialize(GridObject gridObject, int width, int height, Func<gridObject, Vector3> gridToWorldFunc)
     {
         _gridObject = gridObject;
         _gridObject.OnPositionChanged += OnPositionChanged;
@@ -59,12 +59,12 @@ public class GridObjectVisualUI : MonoBehaviour
         LevelGrid.OnTileDeselected -= OnTileDeselected;        
     }
 
-    private void OnTileSelected(GridPosition? gridPosition)
+    private void OnTileSelected(gridObject? gridPosition)
     {
         if (_gridObject.GetGridPosition != gridPosition) return;
         gridVisualOutline.effectColor = Color.limeGreen;
     }
-    private void OnTileDeselected(GridPosition? gridPosition)
+    private void OnTileDeselected(gridObject? gridPosition)
     {
         if (_gridObject.GetGridPosition != gridPosition) return;
         gridVisualOutline.effectColor = Color.black;

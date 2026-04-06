@@ -9,8 +9,8 @@ using UnityEngine;
 
 public class LevelGrid : MonoBehaviour
 {
-    public static event Action<GridPosition?> OnTileSelected;
-    public static event Action<GridPosition?> OnTileDeselected;
+    public static event Action<gridObject?> OnTileSelected;
+    public static event Action<gridObject?> OnTileDeselected;
 
     [SerializeField] private LevelGridData levelGridData;
     [SerializeField] private AttackToMatch3Block[] attackToMatch3Blocks;
@@ -21,6 +21,8 @@ public class LevelGrid : MonoBehaviour
     private GridHit _beginTouchGridPosition;
     private GridHit? _currentSelectedGridPosition;
 
+    private bool _allowInput = true;
+
 
     private void Awake()
     {
@@ -29,7 +31,7 @@ public class LevelGrid : MonoBehaviour
             levelGridData.GridHeight,
             levelGridData.GridCellWidth,
             levelGridData.GridCellHeight);
-        
+
         _matchDetector = new MatchDetector();
         GridObjectUIRoot.OnGridRectReady += rect => _gridSystem.SetRectTransform(rect);
         FillDictionary();
@@ -65,6 +67,7 @@ public class LevelGrid : MonoBehaviour
 
     private void OnNewFingerUpInput(Vector2 fingerPosition)
     {
+        if (!_allowInput) return;
         var newGridHit = _gridSystem.ConvertWorldPositionToGridHit(fingerPosition);
 
         var endTouchGridPosition = newGridHit;
@@ -97,7 +100,7 @@ public class LevelGrid : MonoBehaviour
             }
 
 
-            StartCoroutine(OnRequestGridObjectSwap(_currentSelectedGridPosition.Value.hitGridPosition, endGridPosition));
+            StartCoroutine(HandleMove(_currentSelectedGridPosition.Value.hitGridPosition, endGridPosition));
         }
         else
         {
@@ -105,7 +108,7 @@ public class LevelGrid : MonoBehaviour
 
             endGridPosition = CheckGridBounds(endGridPosition);
 
-            StartCoroutine(OnRequestGridObjectSwap(_beginTouchGridPosition.hitGridPosition, endGridPosition));
+            StartCoroutine(HandleMove(_beginTouchGridPosition.hitGridPosition, endGridPosition));
         }
 
         _currentSelectedGridPosition = null;
@@ -117,7 +120,7 @@ public class LevelGrid : MonoBehaviour
         _currentSelectedGridPosition = null;
     }
 
-    private bool IsDiagonalMove(GridPosition beginGridPosition, GridPosition endGridPosition)
+    private bool IsDiagonalMove(gridObject beginGridPosition, gridObject endGridPosition)
     {
         var deltaGridX = Mathf.Abs(beginGridPosition.X - endGridPosition.X);
         var deltaGridY = Mathf.Abs(beginGridPosition.Y - endGridPosition.Y);
@@ -125,15 +128,15 @@ public class LevelGrid : MonoBehaviour
         return deltaGridX >= 1 && deltaGridY >= 1;
     }
 
-    private GridPosition CheckGridBounds(GridPosition pos)
+    private gridObject CheckGridBounds(gridObject pos)
     {
         var x = Mathf.Clamp(pos.X, 0, levelGridData.GridWidth - 1);
         var y = Mathf.Clamp(pos.Y, 0, levelGridData.GridHeight - 1);
-        return new GridPosition(x, y);
+        return new gridObject(x, y);
     }
 
 
-    private GridPosition CalculateClickedEndGridPosition(GridPosition beginGridPosition, float rawX, float rawY)
+    private gridObject CalculateClickedEndGridPosition(gridObject beginGridPosition, float rawX, float rawY)
     {
         var startX = beginGridPosition.X;
         var startY = beginGridPosition.Y;
@@ -149,10 +152,10 @@ public class LevelGrid : MonoBehaviour
         if (Mathf.Abs(distanceX) >= 1 && Mathf.Abs(distanceY) >= 1) return beginGridPosition;
 
 
-        if (distanceX == 1) return new GridPosition(startX + 1, startY);
-        if (distanceX == -1) return new GridPosition(startX - 1, startY);
-        if (distanceY == 1) return new GridPosition(startX, startY + 1);
-        if (distanceY == -1) return new GridPosition(startX, startY - 1);
+        if (distanceX == 1) return new gridObject(startX + 1, startY);
+        if (distanceX == -1) return new gridObject(startX - 1, startY);
+        if (distanceY == 1) return new gridObject(startX, startY + 1);
+        if (distanceY == -1) return new gridObject(startX, startY - 1);
 
         if (Mathf.Abs(deltaX) > Mathf.Abs(deltaY))
         {
@@ -170,7 +173,7 @@ public class LevelGrid : MonoBehaviour
             var newGridPositionX = Mathf.FloorToInt(rawX);
             distanceX = newGridPositionX - startX;
 
-            if (distanceX >= 2) return new GridPosition(startX, startY);
+            if (distanceX >= 2) return new gridObject(startX, startY);
             return new(startX + 1, startY);
 
         }
@@ -180,7 +183,7 @@ public class LevelGrid : MonoBehaviour
             var newGridPositionX = Mathf.FloorToInt(rawX);
             distanceX = newGridPositionX - startX;
 
-            if (distanceX <= -2) return new GridPosition(startX, startY);
+            if (distanceX <= -2) return new gridObject(startX, startY);
             return new(startX - 1, startY);
         }
 
@@ -190,7 +193,7 @@ public class LevelGrid : MonoBehaviour
             var newGridPositionY = Mathf.FloorToInt(rawY);
             distanceY = newGridPositionY - startY;
 
-            if (distanceY >= 2) return new GridPosition(startX, startY);
+            if (distanceY >= 2) return new gridObject(startX, startY);
             return new(startX, startY + 1);
         }
         else if (rawY < startY)
@@ -199,22 +202,22 @@ public class LevelGrid : MonoBehaviour
             var newGridPositionY = Mathf.FloorToInt(rawY);
             distanceY = newGridPositionY - startY;
 
-            if (distanceY <= -2) return new GridPosition(startX, startY);
+            if (distanceY <= -2) return new gridObject(startX, startY);
             return new(startX, startY - 1);
         }
 
         return beginGridPosition;
     }
 
-    private GridPosition CalculateSwipeEndGridPosition(GridHit beginHit, GridHit endHit)
+    private gridObject CalculateSwipeEndGridPosition(GridHit beginHit, GridHit endHit)
     {
         var delta = endHit.localPos - beginHit.localPos;
 
         var absX = Mathf.Abs(delta.x);
         var absY = Mathf.Abs(delta.y);
 
-        var tolerance = levelGridData.SwipeDirectionTolerance;  
-        var maxDiagonalTolerance = levelGridData.SwipeMaxDiagonalDeviation; 
+        var tolerance = levelGridData.SwipeDirectionTolerance;
+        var maxDiagonalTolerance = levelGridData.SwipeMaxDiagonalDeviation;
 
         var ratio = absX > absY ? absY / absX : absX / absY;
 
@@ -229,50 +232,77 @@ public class LevelGrid : MonoBehaviour
         if (horizontal)
         {
             var dir = delta.x > 0 ? 1 : -1;
-            return new GridPosition(beginHit.hitGridPosition.X + dir, beginHit.hitGridPosition.Y);
+            return new gridObject(beginHit.hitGridPosition.X + dir, beginHit.hitGridPosition.Y);
         }
         else
         {
             var dir = delta.y > 0 ? 1 : -1;
-            return new GridPosition(beginHit.hitGridPosition.X, beginHit.hitGridPosition.Y + dir);
+            return new gridObject(beginHit.hitGridPosition.X, beginHit.hitGridPosition.Y + dir);
         }
 
     }
 
 
-    private IEnumerator OnRequestGridObjectSwap(GridPosition beginGridPosition, GridPosition endGridPosition)
+    private IEnumerator HandleMove(gridObject beginGridPosition, gridObject endGridPosition)
     {
         if (_currentSelectedGridPosition != null) OnTileDeselected?.Invoke(_currentSelectedGridPosition.Value.hitGridPosition);
+        _allowInput = false;
         var gridObjectA = _gridSystem.GetGridObjectByGridPosition(beginGridPosition);
         var gridObjectB = _gridSystem.GetGridObjectByGridPosition(endGridPosition);
 
-        _gridSystem.SwapGridObjects(gridObjectA, gridObjectB);
+        _gridSystem.SwapGridObjectsData(gridObjectA, gridObjectB);
 
-        gridObjectA.GetGridMatch3Block.transform.DOMove(gridObjectA.GetGridMatch3Block.GetRectPosition(), 0.15f).SetEase(Ease.InQuad);
-        yield return gridObjectB.GetGridMatch3Block.transform.DOMove(gridObjectB.GetGridMatch3Block.GetRectPosition(), 0.15f).SetEase(Ease.InQuad).WaitForCompletion();
+        yield return MoveVisuals(gridObjectA, gridObjectB);
 
         var matches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
 
-        // check if de match is valid
-        // destroy the match
-        // let the others above fall down
-        // Spawn in new random tiles above and fill the gaps above
-        // check hele board voor een match if so dan redo dit dus while loop
-
-        if (matches.Count == 0)
+        if (!HasAMatch(matches))
         {
-            _gridSystem.SwapGridObjects(gridObjectA, gridObjectB);
-            gridObjectA.GetGridMatch3Block.transform.DOMove(gridObjectA.GetGridMatch3Block.GetRectPosition(), 0.15f).SetEase(Ease.InQuad);
-            yield return gridObjectB.GetGridMatch3Block.transform.DOMove(gridObjectB.GetGridMatch3Block.GetRectPosition(), 0.15f).SetEase(Ease.InQuad).WaitForCompletion();     
-            yield break;       
+            _gridSystem.SwapGridObjectsData(gridObjectA, gridObjectB);
+
+            yield return MoveVisuals(gridObjectA, gridObjectB);    
+            _allowInput = true;        
+            yield break;
         }
 
+        while (HasAMatch(matches))
+        {
+            yield return DestroyMatches(matches);
+
+            yield return CollapseColumns();
+
+            yield return FillBoard();
+            matches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);            
+        }
+
+        _allowInput = true;
+    }
+
+    private bool HasAMatch(HashSet<gridObject> matchList)
+    {
+        if (matchList.Count == 0) return false;
+
+        return true;
+    }
+
+    private IEnumerator MoveVisuals(GridObject gridObjectA, GridObject gridObjectB)
+    {
+        gridObjectA.GetGridMatch3Block.transform.DOMove(gridObjectA.GetGridMatch3Block.GetRectPosition(), levelGridData.VisualSwapSpeed).SetEase(Ease.InQuad);
+        yield return gridObjectB.GetGridMatch3Block.transform.DOMove(gridObjectB.GetGridMatch3Block.GetRectPosition(), levelGridData.VisualSwapSpeed).SetEase(Ease.InQuad).WaitForCompletion();       
+    }
+
+    private IEnumerator DestroyMatches(HashSet<gridObject> matches)
+    {
         foreach (var position in matches)
         {
             var grid = _gridSystem.GetGridObjectArray;
             Destroy(grid[position.X, position.Y].GetGridMatch3Block.gameObject);
             grid[position.X, position.Y].SetMatch3Block(null);
+            grid[position.X, position.Y].SetAttackData(null);
         }
+
+        matches.Clear();
+        yield return new WaitForSeconds(.15f);
     }
 
     public void ReshuffleGrid()
@@ -284,7 +314,7 @@ public class LevelGrid : MonoBehaviour
             {
                 var gridObjectVisualUI = grid[x, y].GetGridObjectVisualUI;
                 var attackData = _matchDetector.GetRandomValidAttackData(_attackToMatch3BlocksDictionary.Keys.ToList(), grid, x, y);
-                if(!_attackToMatch3BlocksDictionary.TryGetValue(attackData, out var match3Block)) continue;
+                if (!_attackToMatch3BlocksDictionary.TryGetValue(attackData, out var match3Block)) continue;
                 var newMatch3Block = Instantiate(match3Block, gridObjectVisualUI.GetRectToWorldTransform(), quaternion.identity);
                 newMatch3Block.Initialize(gridObjectVisualUI.GetRectToWorldTransform);
                 grid[x, y].SetMatch3Block(newMatch3Block);
@@ -292,4 +322,110 @@ public class LevelGrid : MonoBehaviour
             }
         }
     }
+
+    private IEnumerator CollapseColumns()
+    {
+        var grid = _gridSystem.GetGridObjectArray;
+        var tweens = new List<Tween>();
+
+        for (int x = 0; x < levelGridData.GridWidth; x++)
+        {
+            int writeY = 0;
+
+            // 1. Verzamel alle tiles
+            List<(GridObject gridObj, Match3Block block, FakeAttack attack)> tiles = new();
+
+            for (int y = 0; y < levelGridData.GridHeight; y++)
+            {
+                var block = grid[x, y].GetGridMatch3Block;
+                if (block != null)
+                    tiles.Add((grid[x, y], block, grid[x, y].GetAttackData));
+            }
+
+            // 2. Laat ze vallen
+            foreach (var tile in tiles)
+            {
+                var targetGridObj = grid[x, writeY];
+
+                if (tile.gridObj != targetGridObj)
+                {
+                    var targetPos = targetGridObj.GetGridObjectVisualUI.GetRectToWorldTransform();
+                    var startPos = tile.block.transform.position;
+
+                    // 2a. Start tween vanaf huidige positie naar target
+                    var tween = tile.block.transform
+                        .DOMove(targetPos, levelGridData.VisualFallSpeed)
+                        .SetEase(Ease.OutQuint)
+                        .SetDelay(0.05f * writeY);
+
+                    tweens.Add(tween);
+
+                    // 2b. Update grid pas NA de tween
+                    tween.OnComplete(() =>
+                    {
+                        tile.block.Initialize(targetGridObj.GetGridObjectVisualUI.GetRectToWorldTransform);
+                        targetGridObj.SetMatch3Block(tile.block);
+                        targetGridObj.SetAttackData(tile.attack);
+
+                        tile.gridObj.SetMatch3Block(null);
+                        tile.gridObj.SetAttackData(null);
+                    });
+                }
+
+                writeY++;
+            }
+
+            // 3. Lege plekken bovenaan
+            for (int y = writeY; y < levelGridData.GridHeight; y++)
+            {
+                grid[x, y].SetMatch3Block(null);
+                grid[x, y].SetAttackData(null);
+            }
+        }
+
+        // 4. Wacht op ALLE tweens
+        if (tweens.Count > 0)
+        {
+            var seq = DOTween.Sequence();
+            foreach (var t in tweens) seq.Join(t);
+            yield return seq.WaitForCompletion();
+        }
+    }
+
+    private IEnumerator FillBoard()
+    {
+        var grid = _gridSystem.GetGridObjectArray;
+        var tweens = new List<Tween>();
+
+        for (int x = 0; x < levelGridData.GridWidth; x++)
+        {
+            for (int y = 0; y < levelGridData.GridHeight; y++)
+            {
+                if (grid[x, y].GetGridMatch3Block != null) continue;
+
+                var attackData = _matchDetector.GetRandomValidAttackData(_attackToMatch3BlocksDictionary.Keys.ToList(),grid,x,y);
+
+                var prefab = _attackToMatch3BlocksDictionary[attackData];
+
+                var newBlock = Instantiate(prefab);
+
+                newBlock.Initialize(grid[x, y].GetGridObjectVisualUI.GetRectToWorldTransform);
+
+                float spawnOffset = 5f;
+
+                float spawnY = grid[x, levelGridData.GridHeight - 1].GetGridObjectVisualUI.GetRectToWorldTransform().y + spawnOffset;
+
+                var targetPos = newBlock.GetRectPosition();
+
+                var startPos = new Vector3(targetPos.x, spawnY, targetPos.z);
+                newBlock.transform.position = startPos;
+
+                grid[x, y].SetMatch3Block(newBlock);
+                grid[x, y].SetAttackData(attackData);
+
+                yield return newBlock.transform.DOMove(targetPos, levelGridData.VisualFallSpeed).SetEase(Ease.OutCubic).WaitForCompletion();
+            }
+        }
+    }
+
 }

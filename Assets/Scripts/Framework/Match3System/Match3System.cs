@@ -8,7 +8,7 @@ public class Match3System
         
     // }
 
-    public HashSet<Match> GetAllMatches(GridPosition[,] grid, Func<GridPosition, GridObject> GetGridObjectFromGridPosition)
+    public HashSet<Match> GetAllMatches(gridObject[,] grid, Func<gridObject, GridObject> GetGridObjectFromGridPosition)
     {
         foreach (var gridPosition in grid)
         {

@@ -19,4 +19,6 @@ MonoBehaviour:
   ClickTolerance: 0.4
   SwipeDirectionTolerance: 0.5
   SwipeMaxDiagonalDeviation: 1
+  VisualSwapSpeed: 0.15
+  VisualFallSpeed: 0.2
   GridObjectDebugVisual: {fileID: 5472091287612878839, guid: 1acc3aecdb8173843bededdfa2bf75ec, type: 3}

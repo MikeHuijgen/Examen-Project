@@ -10,5 +10,7 @@ public class LevelGridData : ScriptableObject
     [Range(0, 1)] public float ClickTolerance = .45f;
     [Range(0, 1)] public float SwipeDirectionTolerance = .15f;
     [Range(0, 1)] public float SwipeMaxDiagonalDeviation = .45f;
+    public float VisualSwapSpeed = .15f;
+    public float VisualFallSpeed = .25f;
     public GridObjectVisualUI GridObjectDebugVisual;
 }
