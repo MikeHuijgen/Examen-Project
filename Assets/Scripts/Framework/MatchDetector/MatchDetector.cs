@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
 public class MatchDetector
 {
     public FakeAttack GetRandomValidAttackData(List<FakeAttack> attackDataList , GridObject[,] gridArray, int x, int y)

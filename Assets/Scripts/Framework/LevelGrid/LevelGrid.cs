@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using Unity.Mathematics;
-using UnityEditor.Rendering;
 using UnityEngine;
 
 public class LevelGrid : MonoBehaviour
@@ -83,9 +82,9 @@ public class LevelGrid : MonoBehaviour
 
         if (isClickMove)
         {
-            var endGridPosition = CalculateClickedEndGridPosition(_currentSelectedGridPosition.Value.hitGridPosition, endTouchGridPosition.rawX, endTouchGridPosition.rawY);
+            var endGridPosition = _gridSystem.CalculateClickedEndGridPosition(_currentSelectedGridPosition.Value.hitGridPosition, endTouchGridPosition.rawX, endTouchGridPosition.rawY, levelGridData.ClickTolerance);
 
-            endGridPosition = CheckGridBounds(endGridPosition);
+            endGridPosition = _gridSystem.CheckGridBounds(endGridPosition);
 
             if (endGridPosition == _currentSelectedGridPosition.Value.hitGridPosition)
             {
@@ -93,7 +92,7 @@ public class LevelGrid : MonoBehaviour
                 return;
             }
 
-            if (IsDiagonalMove(_currentSelectedGridPosition.Value.hitGridPosition, endGridPosition))
+            if (_gridSystem.IsDiagonalMove(_currentSelectedGridPosition.Value.hitGridPosition, endGridPosition))
             {
                 ResetCurrentGridPosition();
                 return;
@@ -104,9 +103,9 @@ public class LevelGrid : MonoBehaviour
         }
         else
         {
-            var endGridPosition = CalculateSwipeEndGridPosition(_beginTouchGridPosition, endTouchGridPosition);
+            var endGridPosition = _gridSystem.CalculateSwipeEndGridPosition(_beginTouchGridPosition, endTouchGridPosition, levelGridData.SwipeDirectionTolerance, levelGridData.SwipeMaxDiagonalDeviation);
 
-            endGridPosition = CheckGridBounds(endGridPosition);
+            endGridPosition = _gridSystem.CheckGridBounds(endGridPosition);
 
             StartCoroutine(HandleMove(_beginTouchGridPosition.hitGridPosition, endGridPosition));
         }
@@ -119,129 +118,6 @@ public class LevelGrid : MonoBehaviour
         OnTileDeselected?.Invoke(_currentSelectedGridPosition.Value.hitGridPosition);
         _currentSelectedGridPosition = null;
     }
-
-    private bool IsDiagonalMove(gridObject beginGridPosition, gridObject endGridPosition)
-    {
-        var deltaGridX = Mathf.Abs(beginGridPosition.X - endGridPosition.X);
-        var deltaGridY = Mathf.Abs(beginGridPosition.Y - endGridPosition.Y);
-
-        return deltaGridX >= 1 && deltaGridY >= 1;
-    }
-
-    private gridObject CheckGridBounds(gridObject pos)
-    {
-        var x = Mathf.Clamp(pos.X, 0, levelGridData.GridWidth - 1);
-        var y = Mathf.Clamp(pos.Y, 0, levelGridData.GridHeight - 1);
-        return new gridObject(x, y);
-    }
-
-
-    private gridObject CalculateClickedEndGridPosition(gridObject beginGridPosition, float rawX, float rawY)
-    {
-        var startX = beginGridPosition.X;
-        var startY = beginGridPosition.Y;
-
-        var deltaX = rawX - startX;
-        var deltaY = rawY - startY;
-
-        var distanceX = Mathf.FloorToInt(rawX) - startX;
-        var distanceY = Mathf.FloorToInt(rawY) - startY;
-
-        if (Mathf.Abs(deltaX) >= 3f || Mathf.Abs(deltaY) >= 3f) return beginGridPosition;
-
-        if (Mathf.Abs(distanceX) >= 1 && Mathf.Abs(distanceY) >= 1) return beginGridPosition;
-
-
-        if (distanceX == 1) return new gridObject(startX + 1, startY);
-        if (distanceX == -1) return new gridObject(startX - 1, startY);
-        if (distanceY == 1) return new gridObject(startX, startY + 1);
-        if (distanceY == -1) return new gridObject(startX, startY - 1);
-
-        if (Mathf.Abs(deltaX) > Mathf.Abs(deltaY))
-        {
-            rawY = startY;
-        }
-        else
-        {
-            rawX = startX;
-        }
-
-
-        if (rawX > startX)
-        {
-            rawX -= levelGridData.ClickTolerance;
-            var newGridPositionX = Mathf.FloorToInt(rawX);
-            distanceX = newGridPositionX - startX;
-
-            if (distanceX >= 2) return new gridObject(startX, startY);
-            return new(startX + 1, startY);
-
-        }
-        else if (rawX < startX)
-        {
-            rawX += levelGridData.ClickTolerance;
-            var newGridPositionX = Mathf.FloorToInt(rawX);
-            distanceX = newGridPositionX - startX;
-
-            if (distanceX <= -2) return new gridObject(startX, startY);
-            return new(startX - 1, startY);
-        }
-
-        if (rawY > startY)
-        {
-            rawY -= levelGridData.ClickTolerance;
-            var newGridPositionY = Mathf.FloorToInt(rawY);
-            distanceY = newGridPositionY - startY;
-
-            if (distanceY >= 2) return new gridObject(startX, startY);
-            return new(startX, startY + 1);
-        }
-        else if (rawY < startY)
-        {
-            rawY += levelGridData.ClickTolerance;
-            var newGridPositionY = Mathf.FloorToInt(rawY);
-            distanceY = newGridPositionY - startY;
-
-            if (distanceY <= -2) return new gridObject(startX, startY);
-            return new(startX, startY - 1);
-        }
-
-        return beginGridPosition;
-    }
-
-    private gridObject CalculateSwipeEndGridPosition(GridHit beginHit, GridHit endHit)
-    {
-        var delta = endHit.localPos - beginHit.localPos;
-
-        var absX = Mathf.Abs(delta.x);
-        var absY = Mathf.Abs(delta.y);
-
-        var tolerance = levelGridData.SwipeDirectionTolerance;
-        var maxDiagonalTolerance = levelGridData.SwipeMaxDiagonalDeviation;
-
-        var ratio = absX > absY ? absY / absX : absX / absY;
-
-        if (ratio > maxDiagonalTolerance)
-            return beginHit.hitGridPosition;
-
-        if (ratio > tolerance)
-            return beginHit.hitGridPosition;
-
-        var horizontal = absX > absY;
-
-        if (horizontal)
-        {
-            var dir = delta.x > 0 ? 1 : -1;
-            return new gridObject(beginHit.hitGridPosition.X + dir, beginHit.hitGridPosition.Y);
-        }
-        else
-        {
-            var dir = delta.y > 0 ? 1 : -1;
-            return new gridObject(beginHit.hitGridPosition.X, beginHit.hitGridPosition.Y + dir);
-        }
-
-    }
-
 
     private IEnumerator HandleMove(gridObject beginGridPosition, gridObject endGridPosition)
     {
@@ -330,9 +206,8 @@ public class LevelGrid : MonoBehaviour
 
         for (int x = 0; x < levelGridData.GridWidth; x++)
         {
-            int writeY = 0;
+            var writeY = 0;
 
-            // 1. Verzamel alle tiles
             List<(GridObject gridObj, Match3Block block, FakeAttack attack)> tiles = new();
 
             for (int y = 0; y < levelGridData.GridHeight; y++)
@@ -342,7 +217,6 @@ public class LevelGrid : MonoBehaviour
                     tiles.Add((grid[x, y], block, grid[x, y].GetAttackData));
             }
 
-            // 2. Laat ze vallen
             foreach (var tile in tiles)
             {
                 var targetGridObj = grid[x, writeY];
@@ -352,15 +226,10 @@ public class LevelGrid : MonoBehaviour
                     var targetPos = targetGridObj.GetGridObjectVisualUI.GetRectToWorldTransform();
                     var startPos = tile.block.transform.position;
 
-                    // 2a. Start tween vanaf huidige positie naar target
-                    var tween = tile.block.transform
-                        .DOMove(targetPos, levelGridData.VisualFallSpeed)
-                        .SetEase(Ease.OutQuint)
-                        .SetDelay(0.05f * writeY);
+                    var tween = tile.block.transform.DOMove(targetPos, levelGridData.VisualFallSpeed).SetEase(Ease.OutQuint).SetDelay(0.05f * writeY);
 
                     tweens.Add(tween);
 
-                    // 2b. Update grid pas NA de tween
                     tween.OnComplete(() =>
                     {
                         tile.block.Initialize(targetGridObj.GetGridObjectVisualUI.GetRectToWorldTransform);
@@ -375,7 +244,6 @@ public class LevelGrid : MonoBehaviour
                 writeY++;
             }
 
-            // 3. Lege plekken bovenaan
             for (int y = writeY; y < levelGridData.GridHeight; y++)
             {
                 grid[x, y].SetMatch3Block(null);
@@ -383,7 +251,6 @@ public class LevelGrid : MonoBehaviour
             }
         }
 
-        // 4. Wacht op ALLE tweens
         if (tweens.Count > 0)
         {
             var seq = DOTween.Sequence();

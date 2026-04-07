@@ -30,7 +30,7 @@ public class GridSystem
     public bool IsValidGridPosition(gridObject gridPosition) => gridPosition.X >= 0 && gridPosition.Y >= 0 && gridPosition.X < _width && gridPosition.Y < _height;
     public GridObject GetGridObjectByGridPosition(gridObject gridPosition) => IsValidGridPosition(gridPosition) ? _gridObjectArray[gridPosition.X, gridPosition.Y] : null;
 
-    public GridObject [,] GetGridObjectArray => _gridObjectArray;
+    public GridObject[,] GetGridObjectArray => _gridObjectArray;
 
     public void GenerateGrid()
     {
@@ -118,5 +118,126 @@ public class GridSystem
         gridObjectB.SetGridPosition(gridPositionA);
 
         OnSwappedGridObjects?.Invoke();
+    }
+
+    public gridObject CalculateClickedEndGridPosition(gridObject beginGridPosition, float rawX, float rawY, float clickTolerance)
+    {
+        var startX = beginGridPosition.X;
+        var startY = beginGridPosition.Y;
+
+        var deltaX = rawX - startX;
+        var deltaY = rawY - startY;
+
+        var distanceX = Mathf.FloorToInt(rawX) - startX;
+        var distanceY = Mathf.FloorToInt(rawY) - startY;
+
+        if (Mathf.Abs(deltaX) >= 3f || Mathf.Abs(deltaY) >= 3f) return beginGridPosition;
+
+        if (Mathf.Abs(distanceX) >= 1 && Mathf.Abs(distanceY) >= 1) return beginGridPosition;
+
+
+        if (distanceX == 1) return new gridObject(startX + 1, startY);
+        if (distanceX == -1) return new gridObject(startX - 1, startY);
+        if (distanceY == 1) return new gridObject(startX, startY + 1);
+        if (distanceY == -1) return new gridObject(startX, startY - 1);
+
+        if (Mathf.Abs(deltaX) > Mathf.Abs(deltaY))
+        {
+            rawY = startY;
+        }
+        else
+        {
+            rawX = startX;
+        }
+
+
+        if (rawX > startX)
+        {
+            rawX -= clickTolerance;
+            var newGridPositionX = Mathf.FloorToInt(rawX);
+            distanceX = newGridPositionX - startX;
+
+            if (distanceX >= 2) return new gridObject(startX, startY);
+            return new(startX + 1, startY);
+
+        }
+        else if (rawX < startX)
+        {
+            rawX += clickTolerance;
+            var newGridPositionX = Mathf.FloorToInt(rawX);
+            distanceX = newGridPositionX - startX;
+
+            if (distanceX <= -2) return new gridObject(startX, startY);
+            return new(startX - 1, startY);
+        }
+
+        if (rawY > startY)
+        {
+            rawY -= clickTolerance;
+            var newGridPositionY = Mathf.FloorToInt(rawY);
+            distanceY = newGridPositionY - startY;
+
+            if (distanceY >= 2) return new gridObject(startX, startY);
+            return new(startX, startY + 1);
+        }
+        else if (rawY < startY)
+        {
+            rawY += clickTolerance;
+            var newGridPositionY = Mathf.FloorToInt(rawY);
+            distanceY = newGridPositionY - startY;
+
+            if (distanceY <= -2) return new gridObject(startX, startY);
+            return new(startX, startY - 1);
+        }
+
+        return beginGridPosition;
+    }
+
+    public gridObject CalculateSwipeEndGridPosition(GridHit beginHit, GridHit endHit, float swipeDirectionTolerance, float swipeMaxDiagonalDeviation)
+    {
+        var delta = endHit.localPos - beginHit.localPos;
+
+        var absX = Mathf.Abs(delta.x);
+        var absY = Mathf.Abs(delta.y);
+
+        var tolerance = swipeDirectionTolerance;
+        var maxDiagonalTolerance = swipeMaxDiagonalDeviation;
+
+        var ratio = absX > absY ? absY / absX : absX / absY;
+
+        if (ratio > maxDiagonalTolerance)
+            return beginHit.hitGridPosition;
+
+        if (ratio > tolerance)
+            return beginHit.hitGridPosition;
+
+        var horizontal = absX > absY;
+
+        if (horizontal)
+        {
+            var dir = delta.x > 0 ? 1 : -1;
+            return new gridObject(beginHit.hitGridPosition.X + dir, beginHit.hitGridPosition.Y);
+        }
+        else
+        {
+            var dir = delta.y > 0 ? 1 : -1;
+            return new gridObject(beginHit.hitGridPosition.X, beginHit.hitGridPosition.Y + dir);
+        }
+
+    }
+
+    public bool IsDiagonalMove(gridObject beginGridPosition, gridObject endGridPosition)
+    {
+        var deltaGridX = Mathf.Abs(beginGridPosition.X - endGridPosition.X);
+        var deltaGridY = Mathf.Abs(beginGridPosition.Y - endGridPosition.Y);
+
+        return deltaGridX >= 1 && deltaGridY >= 1;
+    }
+
+    public gridObject CheckGridBounds(gridObject pos)
+    {
+        var x = Mathf.Clamp(pos.X, 0, _width - 1);
+        var y = Mathf.Clamp(pos.Y, 0, _height - 1);
+        return new gridObject(x, y);
     }
 }
