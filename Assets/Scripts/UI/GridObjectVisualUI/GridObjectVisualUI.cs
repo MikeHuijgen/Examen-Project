@@ -6,13 +6,10 @@ using UnityEngine.UI;
 public class GridObjectVisualUI : MonoBehaviour
 {
     [SerializeField] private RectTransform rectTransform;
-    [SerializeField] private TextMeshProUGUI debugTextGridPosition;
-    [SerializeField] private TextMeshProUGUI debugTextGridObject;
     [SerializeField] private Outline gridVisualOutline;
     private GridObject _gridObject;
 
     private Func<gridObject, Vector3> _gridToWorldFunc;
-    private static int counter;
 
     public void Initialize(GridObject gridObject, int width, int height, Func<gridObject, Vector3> gridToWorldFunc)
     {
@@ -20,28 +17,12 @@ public class GridObjectVisualUI : MonoBehaviour
         _gridObject.OnPositionChanged += OnPositionChanged;
         rectTransform.sizeDelta = new Vector2(width, height);
         _gridToWorldFunc = gridToWorldFunc;
-        UpdateText();
     }
 
     public void OnPositionChanged()
     {
         var gridPosition = _gridObject.GetGridPosition;
         rectTransform.anchoredPosition = _gridToWorldFunc(gridPosition);
-        debugTextGridPosition.text =     
-        "x = " + _gridObject.GetGridPosition.X + "\n" +
-        "y = " + _gridObject.GetGridPosition.Y;
-
-    }
-
-
-    private void UpdateText()
-    {
-        debugTextGridPosition.text =         
-        "x = " + _gridObject.GetGridPosition.X + "\n" +
-        "y = " + _gridObject.GetGridPosition.Y;
-        
-        debugTextGridObject.text = counter.ToString();
-        counter++;         
     }
 
     public GridObject GetGridObject => _gridObject;

@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class MatchDetector
 {
-    public FakeAttack GetRandomValidAttackData(List<FakeAttack> attackDataList , GridObject[,] gridArray, int x, int y)
+    public FakeAttack GetRandomValidAttackData(List<FakeAttack> attackDataList, GridObject[,] gridArray, int x, int y)
     {
         List<FakeAttack> possibleAttackData = new List<FakeAttack>();
 
@@ -88,5 +88,54 @@ public class MatchDetector
         }
 
         return matches;
+    }
+
+    public bool HasMatchAt(GridObject[,] grid, int x, int y)
+    {
+        var block = grid[x, y].GetGridMatch3Block;
+        if (block == null) return false;
+
+        var blockType = block.GetFakeAttack;
+
+        int width = grid.GetLength(0);
+        int height = grid.GetLength(1);
+
+        int count = 1;
+
+        for (var i = x - 1; i >= 0; i--)
+        {
+            var leftBlock = grid[i, y].GetGridMatch3Block;
+            if (leftBlock != null && leftBlock.GetFakeAttack == blockType) count++;
+            else break;
+        }
+
+        for (var i = x + 1; i < width; i++)
+        {
+            var rightBlock = grid[i, y].GetGridMatch3Block;
+            if (rightBlock != null && rightBlock.GetFakeAttack == blockType) count++;
+            else break;
+        }
+
+        if (count >= 3) return true;
+
+        count = 1;
+
+        for (var i = y - 1; i >= 0; i--)
+        {
+            var downBlock = grid[x, i].GetGridMatch3Block;
+            if (downBlock != null && downBlock.GetFakeAttack == blockType) count++;
+            else break;
+        }
+
+        for (int i = y + 1; i < height; i++)
+        {
+            var upBlock = grid[x, i].GetGridMatch3Block;
+            if (upBlock != null && upBlock.GetFakeAttack == blockType) count++;
+            else break;
+        }
+
+        if (count >= 3) return true;
+
+        return false;
     }
 }

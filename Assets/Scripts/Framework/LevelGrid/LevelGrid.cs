@@ -144,17 +144,18 @@ public class LevelGrid : MonoBehaviour
 
         while (true)
         {
-            matches = _matchDetector.CheckForAllMatches(
-                _gridSystem.GetGridObjectArray,
-                levelGridData.GridWidth,
-                levelGridData.GridHeight);
+            matches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
 
-            if (!HasAMatch(matches))
-                break;
+            if (!HasAMatch(matches))break;
 
             yield return DestroyMatches(matches);
 
             yield return CollapseAndFill();
+        }
+
+        if (!PlayerHasPossibleMoves(_gridSystem.GetGridObjectArray))
+        {
+            
         }
 
         _allowInput = true;
@@ -293,6 +294,37 @@ public class LevelGrid : MonoBehaviour
 
             yield return seq.WaitForCompletion();
         }
+    }
+
+    private bool PlayerHasPossibleMoves(GridObject[,] grid)
+    {
+        var width = grid.GetLength(0);
+        var height = grid.GetLength(1);
+
+        for (var x = 0; x < width; x++)
+        {
+            for (var y = 0; y < height; y++)
+            {
+                foreach (var dir in new Vector2Int[] { Vector2Int.right, Vector2Int.up })
+                {
+                    var nx = x + dir.x;
+                    var ny = y + dir.y;
+
+                    if (nx >= width || ny >= height) continue;
+
+                    _gridSystem.SwapGridObjectsData(grid[x, y], grid[nx, ny]);
+
+                    if (_matchDetector.HasMatchAt(grid, x, y) || _matchDetector.HasMatchAt(grid, nx, ny))
+                    {
+                        _gridSystem.SwapGridObjectsData(grid[x, y], grid[nx, ny]);
+                        return true;
+                    }
+
+                    _gridSystem.SwapGridObjectsData(grid[x, y], grid[nx, ny]);
+                }
+            }
+        }
+        return false;
     }
 
 }
