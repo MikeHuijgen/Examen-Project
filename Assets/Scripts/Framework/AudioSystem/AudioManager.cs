@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -8,9 +9,8 @@ public class AudioManager : MonoBehaviour
     [Header("Sound Library")]
     [SerializeField] private SoundData[] sounds;
 
-    [Header("Audio Source")]
-    [SerializeField] private AudioSource sfxSource;
-    [SerializeField] private AudioSource musicSource;
+    [Header("Audio Pool")]
+    [SerializeField] private AudioPool audioPool;
 
     private Dictionary<string, SoundData> _soundLookup;
 
@@ -25,6 +25,7 @@ public class AudioManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
+        audioPool.InitializePool();
         BuildSoundLookup();
     }
 
@@ -39,43 +40,36 @@ public class AudioManager : MonoBehaviour
     {
         _soundLookup.TryGetValue(soundIdentifier, out SoundData sound);
 
-        sfxSource.pitch = sound.Pitch;
-        sfxSource.loop = sound.Loop;
+        var source = audioPool.GetAudioSource();
+        
+        source.pitch = sound.Pitch;
+        source.loop = sound.Loop;
 
         if (sound.Loop)
         {
-            sfxSource.clip = sound.AudioClip;
-            sfxSource.volume = sound.Volume;
-            sfxSource.Play();
+            source.clip = sound.AudioClip;
+            source.volume = sound.Volume;
+            source.Play();
         }
         else
         {
-            sfxSource.PlayOneShot(sound.AudioClip, sound.Volume);
+            source.PlayOneShot(sound.AudioClip, sound.Volume);
+            StartCoroutine(StopSoundOnFinish(source));
         }
     }
-
-    public void StopSfx()
+    
+    public void StopSound(AudioSource source)
     {
-        sfxSource.Stop();
-        sfxSource.clip = null;
-        sfxSource.loop = false;
-        sfxSource.pitch = 1f;
+        source.Stop();
+        source.clip = null;
+        source.loop = false;
+        source.pitch = 1f;
+        
+        audioPool.ReturnAudioSource(source);
     }
-
-    public void PlayMusic(string soundIdentifier)
+    private IEnumerator StopSoundOnFinish(AudioSource source)
     {
-        _soundLookup.TryGetValue(soundIdentifier, out SoundData sound);
-
-        musicSource.clip = sound.AudioClip;
-        musicSource.volume = sound.Volume;
-        musicSource.pitch = sound.Pitch;
-        musicSource.loop = true;
-        musicSource.Play();
-    }
-
-    public void StopMusic()
-    {
-        musicSource.Stop();
-        musicSource.clip = null;
+        yield return new WaitUntil(() => !source.isPlaying);
+        StopSound(source);
     }
 }
