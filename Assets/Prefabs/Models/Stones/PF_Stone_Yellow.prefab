@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3539008243811176820}
   m_Layer: 0
-  m_Name: YellowCircleStone_Prefab
+  m_Name: PF_Stone_Yellow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
