@@ -8,14 +8,14 @@ public class AudioPool : MonoBehaviour
     [SerializeField] private int initialSize = 30;
     [SerializeField] private Transform parent;
 
-    private Queue<AudioSource> pool = new Queue<AudioSource>();
+    private readonly Queue<AudioSource> _pool = new Queue<AudioSource>();
     
     public void InitializePool()
     {
         for (int i = 0; i < initialSize; i++)
         {
             var source = CreateNewAudioSource();
-            pool.Enqueue(source);
+            _pool.Enqueue(source);
         }
     }
 
@@ -23,15 +23,15 @@ public class AudioPool : MonoBehaviour
     {
         var source = Instantiate(AudioSourcePrefab, parent);
         source.gameObject.SetActive(false);
-        pool.Enqueue(source);
+        _pool.Enqueue(source);
         return source;
     }
 
     public AudioSource GetAudioSource()
     {
-        if (pool.Count == 0) pool.Enqueue(CreateNewAudioSource());
+        if (_pool.Count == 0) _pool.Enqueue(CreateNewAudioSource());
 
-        var source = pool.Dequeue();
+        var source = _pool.Dequeue();
         source.gameObject.SetActive(true);
         return source;
     }
@@ -39,6 +39,6 @@ public class AudioPool : MonoBehaviour
     public void ReturnAudioSource(AudioSource source)
     {
         source.gameObject.SetActive(false);
-        pool.Enqueue(source);
+        _pool.Enqueue(source);
     }
 }
