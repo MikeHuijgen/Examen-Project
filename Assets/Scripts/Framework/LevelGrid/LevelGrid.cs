@@ -128,6 +128,12 @@ public class LevelGrid : MonoBehaviour
         var gridObjectA = _gridSystem.GetGridObjectByGridPosition(beginGridPosition);
         var gridObjectB = _gridSystem.GetGridObjectByGridPosition(endGridPosition);
 
+        if (gridObjectA == null || gridObjectB == null || gridObjectA == gridObjectB)
+        {
+            _allowInput = true;
+            yield break;
+        }
+
         _gridSystem.SwapGridObjectsData(gridObjectA, gridObjectB);
 
         yield return MoveVisuals(gridObjectA, gridObjectB);

@@ -131,6 +131,7 @@ public class GridSystem
         if (Mathf.Abs(deltaX) >= 3f || Mathf.Abs(deltaY) >= 3f) return beginGridPosition;
 
         if (Mathf.Abs(distanceX) >= 1 && Mathf.Abs(distanceY) >= 1) return beginGridPosition;
+        if (Mathf.Abs(distanceX) == 0 && Mathf.Abs(distanceY) == 0) return beginGridPosition;
 
 
         if (distanceX == 1) return new gridObject(startX + 1, startY);

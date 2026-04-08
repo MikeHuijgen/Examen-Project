@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1069690559581250312}
   - component: {fileID: 909050216073802112}
   - component: {fileID: 2371706516048460852}
-  - component: {fileID: 5646980438542701341}
+  - component: {fileID: 4515998454721406670}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -58,7 +58,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 4e7c28b8ce777404abdc94868ec667ea, type: 2}
   m_Color: {r: 0.8490566, g: 0.8490566, b: 0.8490566, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Sprite: {fileID: 0}
   m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -76,7 +76,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5646980438542701341
+--- !u!114 &4515998454721406670
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -89,8 +89,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Outline
   m_EffectColor: {r: 0, g: 0, b: 0, a: 1}
-  m_EffectDistance: {x: 3, y: -3}
-  m_UseGraphicAlpha: 1
+  m_EffectDistance: {x: 2, y: -2}
+  m_UseGraphicAlpha: 0
 --- !u!1 &8624995404633548566
 GameObject:
   m_ObjectHideFlags: 0
@@ -141,6 +141,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridTileVisual
   rectTransform: {fileID: 157017584124344043}
-  debugTextGridPosition: {fileID: 0}
-  debugTextGridObject: {fileID: 0}
-  gridVisualOutline: {fileID: 5646980438542701341}
+  gridVisualOutline: {fileID: 4515998454721406670}
