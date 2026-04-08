@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class GridObjectVisualUI : MonoBehaviour
 {
     [SerializeField] private RectTransform rectTransform;
-    [SerializeField] private Outline gridVisualOutline;
+    [SerializeField] private Image border;
     private GridObject _gridObject;
 
     private Func<gridObject, Vector3> _gridToWorldFunc;
@@ -43,11 +43,11 @@ public class GridObjectVisualUI : MonoBehaviour
     private void OnTileSelected(gridObject? gridPosition)
     {
         if (_gridObject.GetGridPosition != gridPosition) return;
-        gridVisualOutline.effectColor = Color.limeGreen;
+        border.color = Color.limeGreen;
     }
     private void OnTileDeselected(gridObject? gridPosition)
     {
         if (_gridObject.GetGridPosition != gridPosition) return;
-        gridVisualOutline.effectColor = Color.black;
+        border.color = Color.black;
     }
 }
