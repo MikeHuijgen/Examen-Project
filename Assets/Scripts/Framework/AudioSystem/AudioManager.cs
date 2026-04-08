@@ -16,7 +16,7 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
-        if (Instance != null && Instance != this)
+        if (Instance != null)
         {
             Destroy(gameObject);
             return;
@@ -38,7 +38,11 @@ public class AudioManager : MonoBehaviour
 
     public void PlaySound(string soundIdentifier)
     {
-        _soundLookup.TryGetValue(soundIdentifier, out SoundData sound);
+        if(!_soundLookup.TryGetValue(soundIdentifier, out var sound))
+        {
+            Debug.LogError("No sound found with the given identifier");
+            return;
+        }
 
         var source = audioPool.GetAudioSource();
         

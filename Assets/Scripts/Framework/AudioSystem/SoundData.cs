@@ -10,5 +10,5 @@ public class SoundData : ScriptableObject
 
     [Range(0f, 1f)] public float Volume = 1f;
     public float Pitch = 1f;
-    public bool Loop = false;
+    public bool Loop;
 }
