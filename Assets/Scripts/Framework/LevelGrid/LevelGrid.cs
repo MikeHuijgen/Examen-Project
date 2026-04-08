@@ -45,7 +45,7 @@ public class LevelGrid : MonoBehaviour
         FillDictionary();
         _attackKeys = new List<FakeAttack>();
         _attackKeys = _attackToMatch3BlocksDictionary.Keys.ToList();
-        Application.targetFrameRate = 60;
+        Application.targetFrameRate = 120;
         QualitySettings.vSyncCount = 0;
         _match3BlockPool.InitializePool(transform);
     }
@@ -226,7 +226,6 @@ public class LevelGrid : MonoBehaviour
                 var attackData = _matchDetector.GetRandomValidAttackData(_attackKeys, grid, x, y);
                 if (!_attackToMatch3BlocksDictionary.TryGetValue(attackData, out var match3Block)) continue;
                 var newMatch3Block = _match3BlockPool.GetMatch3BlockByAttackData(attackData);
-                print(newMatch3Block);
                 newMatch3Block.Initialize(gridObjectVisualUI.GetRectToWorldTransform);
                 grid[x, y].SetMatch3Block(newMatch3Block);
                 grid[x, y].SetAttackData(attackData);
