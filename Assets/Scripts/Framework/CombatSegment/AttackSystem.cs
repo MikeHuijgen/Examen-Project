@@ -7,7 +7,8 @@ public class AttackSystem : MonoBehaviour
     private CountdownTimer _chargeTimer;
     private CountdownTimer _attackTimer;
     private TimerManager _timer;
-    private OpponentAttack _currentAttack;
+
+    private BaseAttack _currentAttack;
 
     public bool IsIdle => _state == AttackState.Idle;
 
@@ -23,14 +24,13 @@ public class AttackSystem : MonoBehaviour
         _timer = new TimerManager();
     }
 
-
-    public void TriggerAttack(OpponentAttack attack)
+    public void TriggerAttack(BaseAttack attack)
     {
         if (!IsIdle) return;
 
         _currentAttack = attack;
 
-        if (_currentAttack.ChargeDurationTime > 0f)
+        if (_currentAttack is OpponentAttack opponentAttack && opponentAttack.ChargeDurationTime > 0f)
         {
             _state = AttackState.Charging;
         }
@@ -53,26 +53,34 @@ public class AttackSystem : MonoBehaviour
                 break;
 
             case AttackState.Attacking:
-                if(_currentAttack.ChargeDurationTime > 0f)
-                {
-                    Debug.Log("Executed Opponenet Attack in This Direction = " + CurrentAttackDirection());
-                    Debug.Log("Damage Done = " + _currentAttack.Damage);
-                }
-                else
-                {
-                    Debug.Log("Executed Player Punch");
-                    Debug.Log("Damage Done = " + _currentAttack.Damage);
-                }
+                HandleAttackExecution();
                 HandleAttacking();
                 break;
         }
     }
 
+    private void HandleAttackExecution()
+    {
+        if (_currentAttack is OpponentAttack opponentAttack)
+        {
+            Debug.Log("Executed Opponent Attack in Direction = " + opponentAttack.Direction);
+            Debug.Log("Damage Done = " + opponentAttack.Damage);
+        }
+        else
+        {
+            Debug.Log("Executed Player Punch");
+            Debug.Log("Damage Done = " + _currentAttack.Damage);
+        }
+    }
+
     private void HandleCharging()
     {
-        if (!_timer.RunTimer(ref _chargeTimer, _currentAttack.ChargeDurationTime))
+        if (_currentAttack is OpponentAttack opponentAttack && opponentAttack.ChargeDurationTime > 0f)
         {
-            return;
+            if (!_timer.RunTimer(ref _chargeTimer, opponentAttack.ChargeDurationTime))
+            {
+                return;
+            }
         }
 
         _state = AttackState.Attacking;
@@ -91,6 +99,12 @@ public class AttackSystem : MonoBehaviour
     public int CurrentAttackDirection()
     {
         if (IsIdle) return -1;
-        return _currentAttack.Direction;
+
+        if (_currentAttack is OpponentAttack opponentAttack)
+        {
+            return opponentAttack.Direction;
+        }
+
+        return -1;
     }
 }
