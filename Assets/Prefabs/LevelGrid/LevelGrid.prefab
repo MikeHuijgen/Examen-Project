@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8638016569917829304}
   - component: {fileID: 5713675024628666864}
+  - component: {fileID: 6476355683486470653}
   m_Layer: 0
   m_Name: LevelGrid
   m_TagString: Untagged
@@ -54,3 +55,22 @@ MonoBehaviour:
     Match3Block: {fileID: 3607441784381934679, guid: 5a9b702b216f6074eaf8d386d8e7cf41, type: 3}
   - FakeAttack: {fileID: 11400000, guid: 1a37d9467bf7da544b2b85922d828685, type: 2}
     Match3Block: {fileID: 3607441784381934679, guid: 550fc9dae38442242b6bb60b52eac032, type: 3}
+  _match3BlockPool: {fileID: 6476355683486470653}
+--- !u!114 &6476355683486470653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6636569109232428911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 90eb0f0ce24c0ba4fbcb6843b3208d23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Match3BlockPool
+  initialPoolSizePerMatch3Block: 25
+  match3BlockPrefabs:
+  - {fileID: 3607441784381934679, guid: 3f87e07ba14233042bbb10e3440cd183, type: 3}
+  - {fileID: 3607441784381934679, guid: 124ee7686152962418124c2949098302, type: 3}
+  - {fileID: 3607441784381934679, guid: 550fc9dae38442242b6bb60b52eac032, type: 3}
+  - {fileID: 3607441784381934679, guid: 5a9b702b216f6074eaf8d386d8e7cf41, type: 3}

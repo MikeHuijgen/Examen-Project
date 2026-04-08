@@ -19,7 +19,7 @@ public class LevelGrid : MonoBehaviour
 
     [SerializeField] private LevelGridData levelGridData;
     [SerializeField] private AttackToMatch3Block[] attackToMatch3Blocks;
-
+    [SerializeField] private Match3BlockPool _match3BlockPool;
     private Dictionary<FakeAttack, Match3Block> _attackToMatch3BlocksDictionary;
     private GridSystem _gridSystem;
     private MatchDetector _matchDetector;
@@ -47,6 +47,7 @@ public class LevelGrid : MonoBehaviour
         _attackKeys = _attackToMatch3BlocksDictionary.Keys.ToList();
         Application.targetFrameRate = 60;
         QualitySettings.vSyncCount = 0;
+        _match3BlockPool.InitializePool(transform);
     }
 
     private void FillDictionary()
@@ -203,7 +204,7 @@ public class LevelGrid : MonoBehaviour
 
             if (block == null) continue;
 
-            Destroy(block.gameObject);
+            _match3BlockPool.ReturnMatch3Block(block);
 
             grid[position.X, position.Y].SetMatch3Block(null);
             grid[position.X, position.Y].SetAttackData(null);
@@ -224,7 +225,8 @@ public class LevelGrid : MonoBehaviour
                 var gridObjectVisualUI = grid[x, y].GetGridObjectVisualUI;
                 var attackData = _matchDetector.GetRandomValidAttackData(_attackKeys, grid, x, y);
                 if (!_attackToMatch3BlocksDictionary.TryGetValue(attackData, out var match3Block)) continue;
-                var newMatch3Block = Instantiate(match3Block, gridObjectVisualUI.GetRectToWorldTransform(), quaternion.identity);
+                var newMatch3Block = _match3BlockPool.GetMatch3BlockByAttackData(attackData);
+                print(newMatch3Block);
                 newMatch3Block.Initialize(gridObjectVisualUI.GetRectToWorldTransform);
                 grid[x, y].SetMatch3Block(newMatch3Block);
                 grid[x, y].SetAttackData(attackData);
@@ -284,8 +286,7 @@ public class LevelGrid : MonoBehaviour
 
                 var attackData = _matchDetector.GetRandomValidAttackData(_attackKeys, grid, x, y);
 
-                var prefab = _attackToMatch3BlocksDictionary[attackData];
-                var newBlock = Instantiate(prefab);
+                var newBlock = _match3BlockPool.GetMatch3BlockByAttackData(attackData);
 
                 var targetGrid = grid[x, y];
                 var targetPos = targetGrid.GetGridObjectVisualUI.GetRectToWorldTransform();

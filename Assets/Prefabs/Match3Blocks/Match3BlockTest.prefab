@@ -67,7 +67,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 70a8392c7aab2c448b4bf366aee85d26, type: 2}
+  - {fileID: 2100000, guid: a81e60339ff444c4694549bd12564ee7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -123,7 +123,7 @@ GameObject:
   - component: {fileID: 3672682101605212365}
   - component: {fileID: 3607441784381934679}
   m_Layer: 0
-  m_Name: GridObjectVisual4
+  m_Name: Match3BlockTest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -157,4 +157,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc410a7372c166242850c910d03670df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridObjectVisual
-  fakeAttack: {fileID: 11400000, guid: fca63e7d77941e14793d5badf2a054ac, type: 2}
+  fakeAttack: {fileID: 11400000, guid: 1a37d9467bf7da544b2b85922d828685, type: 2}
