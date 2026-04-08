@@ -52,11 +52,8 @@ public class CharacterInput : MonoBehaviour
         Touch.onFingerDown -= OnFingerDown;      
         Touch.onFingerUp -= OnFingerUp; 
     }
-
-    private void OnDodgeInputDetected(SideType dodgeSide)
-    {
-        OnDodgeInput?.Invoke(dodgeSide);
-    }
+    
+    public void OnDodgeInputDetected(SideType dodgeSide) => OnDodgeInput?.Invoke(dodgeSide);
 
     private void OnFingerDown(Finger finger) => OnNewFingerDownInput?.Invoke(finger.screenPosition);
 

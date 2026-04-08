@@ -63,6 +63,12 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4973012409423327181, guid: 1002c38cde9a43e418bf091c41772e11, type: 3}
       insertIndex: -1
       addedObject: {fileID: 909055386880982165}
+    - targetCorrespondingSourceObject: {fileID: 4973012409423327181, guid: 1002c38cde9a43e418bf091c41772e11, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 101565033687392927}
+    - targetCorrespondingSourceObject: {fileID: 4973012409423327181, guid: 1002c38cde9a43e418bf091c41772e11, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4989426409756222545}
   m_SourcePrefab: {fileID: 100100000, guid: 1002c38cde9a43e418bf091c41772e11, type: 3}
 --- !u!1 &2797627523177970832 stripped
 GameObject:
@@ -83,5 +89,40 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Dodge
   dodgeDuration: 0.5
   cooldownDuration: 1
-  startDodgeAmount: 1
-  maxDodgeAmount: 3
+  startDodgeAmount: 1000
+  maxDodgeAmount: 1000
+--- !u!114 &101565033687392927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2797627523177970832}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75f5a4f5c31770d40b18a09c70424cfa, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DodgeSwipeInput
+  minimumSwipeDistance: 100
+--- !u!95 &4989426409756222545
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2797627523177970832}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 46895de920b37a743a12c27102217c7a, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
