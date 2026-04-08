@@ -11,6 +11,12 @@ public class LevelGrid : MonoBehaviour
     public static event Action<gridObject?> OnTileSelected;
     public static event Action<gridObject?> OnTileDeselected;
 
+    private static readonly Vector2Int[] Directions =
+    {
+        Vector2Int.right,
+        Vector2Int.up
+    };
+
     [SerializeField] private LevelGridData levelGridData;
     [SerializeField] private AttackToMatch3Block[] attackToMatch3Blocks;
 
@@ -19,6 +25,9 @@ public class LevelGrid : MonoBehaviour
     private MatchDetector _matchDetector;
     private GridHit _beginTouchGridPosition;
     private GridHit? _currentSelectedGridPosition;
+    private List<FakeAttack> _attackKeys;
+    private List<Tween> _tweens = new List<Tween>();
+    private List<(Match3Block block, FakeAttack attack)> _tiles = new();
 
     private bool _allowInput = true;
 
@@ -34,6 +43,10 @@ public class LevelGrid : MonoBehaviour
         _matchDetector = new MatchDetector();
         GridObjectUIRoot.OnGridRectReady += rect => _gridSystem.SetRectTransform(rect);
         FillDictionary();
+        _attackKeys = new List<FakeAttack>();
+        _attackKeys = _attackToMatch3BlocksDictionary.Keys.ToList();
+        Application.targetFrameRate = 60;
+        QualitySettings.vSyncCount = 0;
     }
 
     private void FillDictionary()
@@ -196,6 +209,8 @@ public class LevelGrid : MonoBehaviour
             grid[position.X, position.Y].SetAttackData(null);
         }
 
+        Handheld.Vibrate();
+
         yield return new WaitForSeconds(.15f);
     }
 
@@ -207,7 +222,7 @@ public class LevelGrid : MonoBehaviour
             for (int y = 0; y < levelGridData.GridHeight; y++)
             {
                 var gridObjectVisualUI = grid[x, y].GetGridObjectVisualUI;
-                var attackData = _matchDetector.GetRandomValidAttackData(_attackToMatch3BlocksDictionary.Keys.ToList(), grid, x, y);
+                var attackData = _matchDetector.GetRandomValidAttackData(_attackKeys, grid, x, y);
                 if (!_attackToMatch3BlocksDictionary.TryGetValue(attackData, out var match3Block)) continue;
                 var newMatch3Block = Instantiate(match3Block, gridObjectVisualUI.GetRectToWorldTransform(), quaternion.identity);
                 newMatch3Block.Initialize(gridObjectVisualUI.GetRectToWorldTransform);
@@ -220,20 +235,19 @@ public class LevelGrid : MonoBehaviour
     private IEnumerator CollapseAndFill()
     {
         var grid = _gridSystem.GetGridObjectArray;
-        var tweens = new List<Tween>();
+        _tweens.Clear();
 
         for (int x = 0; x < levelGridData.GridWidth; x++)
         {
             var writeY = 0;
-
-            List<(Match3Block block, FakeAttack attack)> tiles = new();
+            _tiles.Clear();
 
             for (var y = 0; y < levelGridData.GridHeight; y++)
             {
                 var block = grid[x, y].GetGridMatch3Block;
                 if (block == null) continue;
 
-                tiles.Add((block, grid[x, y].GetAttackData));
+                _tiles.Add((block, grid[x, y].GetAttackData));
             }
 
             for (var y = 0; y < levelGridData.GridHeight; y++)
@@ -242,7 +256,7 @@ public class LevelGrid : MonoBehaviour
                 grid[x, y].SetAttackData(null);
             }
 
-            foreach (var tile in tiles)
+            foreach (var tile in _tiles)
             {
                 var targetGrid = grid[x, writeY];
                 var targetPos = targetGrid.GetGridObjectVisualUI.GetRectToWorldTransform();
@@ -252,7 +266,7 @@ public class LevelGrid : MonoBehaviour
 
                 var tween = tile.block.transform.DOMove(targetPos, levelGridData.VisualFallSpeed).SetEase(Ease.OutQuint);
 
-                tweens.Add(tween);
+                _tweens.Add(tween);
 
                 tween.OnComplete(() =>
                 {
@@ -268,7 +282,7 @@ public class LevelGrid : MonoBehaviour
             {
                 var y = writeY + i;
 
-                var attackData = _matchDetector.GetRandomValidAttackData(_attackToMatch3BlocksDictionary.Keys.ToList(), grid, x, y);
+                var attackData = _matchDetector.GetRandomValidAttackData(_attackKeys, grid, x, y);
 
                 var prefab = _attackToMatch3BlocksDictionary[attackData];
                 var newBlock = Instantiate(prefab);
@@ -284,7 +298,7 @@ public class LevelGrid : MonoBehaviour
 
                 var tween = newBlock.transform.DOMove(targetPos, levelGridData.VisualFallSpeed).SetEase(Ease.OutCubic);
 
-                tweens.Add(tween);
+                _tweens.Add(tween);
 
                 tween.OnComplete(() =>
                 {
@@ -293,10 +307,10 @@ public class LevelGrid : MonoBehaviour
             }
         }
 
-        if (tweens.Count > 0)
+        if (_tweens.Count > 0)
         {
             var seq = DOTween.Sequence();
-            foreach (var t in tweens) seq.Join(t);
+            foreach (var t in _tweens) seq.Join(t);
 
             yield return seq.WaitForCompletion();
         }
@@ -311,7 +325,7 @@ public class LevelGrid : MonoBehaviour
         {
             for (var y = 0; y < height; y++)
             {
-                foreach (var dir in new Vector2Int[] { Vector2Int.right, Vector2Int.up })
+                foreach (var dir in Directions)
                 {
                     var nx = x + dir.x;
                     var ny = y + dir.y;
