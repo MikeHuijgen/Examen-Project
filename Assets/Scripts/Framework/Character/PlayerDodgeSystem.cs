@@ -31,6 +31,7 @@ public class PlayerDodgeSystem : MonoBehaviour
     {
         if (!_canDodge) return;
 
+        AudioManager.Instance.PlaySound("Dodge");
         StartCoroutine(DodgeCoroutine(dodgeSide));
     }
     
