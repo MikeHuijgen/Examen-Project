@@ -56,7 +56,7 @@ Assets/Scripts/Data/
  FakeAttack.cs
  LevelGridData/LevelGridData.cs
 Assets/Scripts/
- FPSCounter.cs
+ Debug/FPSCounter.cs
  Framework/
   AttackToMatch3Block.cs
   AudioSystem/
