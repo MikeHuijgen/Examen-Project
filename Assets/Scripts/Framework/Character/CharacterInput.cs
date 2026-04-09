@@ -13,9 +13,10 @@ public class CharacterInput : MonoBehaviour
     private Action<InputAction.CallbackContext> _dodgeLeftHandler;
     private Action<InputAction.CallbackContext> _dodgeRightHandler;
     private Action<InputAction.CallbackContext> _dodgeDownHandler;
+    private bool _allowFingerTaucheInput = true;
 
     [SerializeField] private PlayerInput playerInput;
-    
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -23,9 +24,9 @@ public class CharacterInput : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-        
+
         Instance = this;
-        
+
         _dodgeLeftHandler = ctx => OnDodgeInputDetected(SideType.Left);
         _dodgeRightHandler = ctx => OnDodgeInputDetected(SideType.Right);
         _dodgeDownHandler = ctx => OnDodgeInputDetected(SideType.Down);
@@ -48,14 +49,40 @@ public class CharacterInput : MonoBehaviour
         playerInput.actions["DodgeRight"].performed -= _dodgeRightHandler;
         playerInput.actions["DodgeDown"].performed -= _dodgeDownHandler;
 
-        EnhancedTouchSupport.Disable();  
-        Touch.onFingerDown -= OnFingerDown;      
-        Touch.onFingerUp -= OnFingerUp; 
+        EnhancedTouchSupport.Disable();
+        Touch.onFingerDown -= OnFingerDown;
+        Touch.onFingerUp -= OnFingerUp;
     }
-    
+
+    public void OnPauseStart()
+    {
+        _allowFingerTaucheInput = false;
+        foreach (var action in playerInput.currentActionMap.actions)
+        {
+            action.Disable();
+        }
+    }
+
+    public void OnPauseFinished()
+    {
+        _allowFingerTaucheInput = true;
+        foreach (var action in playerInput.currentActionMap.actions)
+        {
+            action.Enable();
+        }
+    }
+
     public void OnDodgeInputDetected(SideType dodgeSide) => OnDodgeInput?.Invoke(dodgeSide);
 
-    private void OnFingerDown(Finger finger) => OnNewFingerDownInput?.Invoke(finger.screenPosition);
+    private void OnFingerDown(Finger finger)
+    {
+        if (!_allowFingerTaucheInput) return;
+        OnNewFingerDownInput?.Invoke(finger.screenPosition);
+    }
 
-    private void OnFingerUp(Finger finger) => OnNewFingerUpInput?.Invoke(finger.screenPosition);
+    private void OnFingerUp(Finger finger)
+    {
+        if (!_allowFingerTaucheInput) return;
+        OnNewFingerUpInput?.Invoke(finger.screenPosition);
+    }
 }
