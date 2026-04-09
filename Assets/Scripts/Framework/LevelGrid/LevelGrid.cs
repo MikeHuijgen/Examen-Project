@@ -166,19 +166,31 @@ public class LevelGrid : MonoBehaviour
         {
             matches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
 
-            if (!HasAMatch(matches))break;
+            if (!HasAMatch(matches)) break;
 
             yield return DestroyMatches(matches);
 
             yield return CollapseAndFill();
         }
 
-        if (!PlayerHasPossibleMoves(_gridSystem.GetGridObjectArray))
-        {
-            
-        }
+        CheckForPossibleMoves();
 
         _allowInput = true;
+    }
+
+    private void CheckForPossibleMoves()
+    {
+        var grid = _gridSystem.GetGridObjectArray;
+        if (PlayerHasPossibleMoves(grid)) return;
+
+        foreach (var gridObject in grid)
+        {
+            _match3BlockPool.ReturnMatch3Block(gridObject.GetGridMatch3Block);
+            gridObject.SetAttackData(null);
+            gridObject.SetMatch3Block(null);
+        }
+
+        ReshuffleGrid();
     }
 
     private bool HasAMatch(HashSet<gridObject> matchList)
@@ -209,8 +221,6 @@ public class LevelGrid : MonoBehaviour
             grid[position.X, position.Y].SetMatch3Block(null);
             grid[position.X, position.Y].SetAttackData(null);
         }
-
-        Handheld.Vibrate();
 
         yield return new WaitForSeconds(.15f);
     }
