@@ -123,7 +123,7 @@ GameObject:
   - component: {fileID: 3672682101605212365}
   - component: {fileID: 3607441784381934679}
   m_Layer: 0
-  m_Name: Match3BlockTest
+  m_Name: PF_Match_3_Block_Test
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

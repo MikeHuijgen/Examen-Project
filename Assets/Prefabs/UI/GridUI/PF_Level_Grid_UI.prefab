@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6933990580499422406}
   m_Layer: 5
-  m_Name: LevelGridUI
+  m_Name: PF_Level_Grid_UI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

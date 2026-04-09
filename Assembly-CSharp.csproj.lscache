@@ -59,6 +59,10 @@ Assets/Scripts/
  FPSCounter.cs
  Framework/
   AttackToMatch3Block.cs
+  AudioSystem/
+   AudioManager.cs
+   AudioPool.cs
+   SoundData.cs
   CameraHolder/CameraHolder.cs
   Character/
    AttackSystem.cs

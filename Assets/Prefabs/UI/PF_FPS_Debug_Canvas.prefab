@@ -153,7 +153,7 @@ GameObject:
   - component: {fileID: 1090878883211412307}
   - component: {fileID: 890138510104982989}
   m_Layer: 5
-  m_Name: FPSDebugCanvas
+  m_Name: PF_FPS_Debug_Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
