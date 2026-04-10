@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 9061819968115049122}
   - component: {fileID: 5653273486898685316}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: StartScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -408,7 +408,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6320546127976026363}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 7032768594382740792}
+        m_TargetAssemblyTypeName: SceneLoader, Assembly-CSharp
+        m_MethodName: loadscene
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &6448219915415042886
 GameObject:
   m_ObjectHideFlags: 0
@@ -460,7 +472,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 894160bc80e01e34286fb2a5efc84466, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SceneLoader
-  _sceneNubmer: 0
+  _sceneNubmer: 1
 --- !u!1 &7546826881865363085
 GameObject:
   m_ObjectHideFlags: 0
