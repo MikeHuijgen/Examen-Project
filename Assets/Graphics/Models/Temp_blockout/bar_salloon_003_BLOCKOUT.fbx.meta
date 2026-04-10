@@ -3,7 +3,37 @@ guid: 7c3457770fed05349a342d261dbf3f8a
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material
+    second: {fileID: 2100000, guid: efa4f544331fc2d448c40755dcfe0337, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.001
+    second: {fileID: 2100000, guid: ddb825e1aa24d2d448ca82b83d6cfece, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.002
+    second: {fileID: 2100000, guid: 3455956f88a1d324c86fd8666e246553, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.003
+    second: {fileID: 2100000, guid: 7de62fb5830c1494da8b15ee10022918, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Material.004
+    second: {fileID: 2100000, guid: a356be031be7e4844b7cd6ddf7c78f06, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: trimsheet
+    second: {fileID: 2100000, guid: 5fc9b5b604026d14d8259848a5ec8bb4, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
