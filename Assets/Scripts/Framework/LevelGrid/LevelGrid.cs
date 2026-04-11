@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class LevelGrid : MonoBehaviour
@@ -41,7 +40,7 @@ public class LevelGrid : MonoBehaviour
             levelGridData.GridCellHeight);
 
         _matchDetector = new MatchDetector();
-        GridObjectUIRoot.OnGridRectReady += rect => _gridSystem.SetRectTransform(rect);
+
         FillDictionary();
         _attackKeys = new List<FakeAttack>(_attackToMatch3BlocksDictionary.Keys.ToList());
         Application.targetFrameRate = 120;
@@ -85,7 +84,7 @@ public class LevelGrid : MonoBehaviour
 
         var endTouchGridPosition = newGridHit;
 
-        if (endTouchGridPosition.hitGridPosition == _beginTouchGridPosition.hitGridPosition && _currentSelectedGridPosition == null)
+        if (endTouchGridPosition.hitGridPosition == _beginTouchGridPosition.hitGridPosition && !_currentSelectedGridPosition.HasValue)
         {
             _currentSelectedGridPosition = _beginTouchGridPosition;
             OnTileSelected?.Invoke(_currentSelectedGridPosition.Value.hitGridPosition);

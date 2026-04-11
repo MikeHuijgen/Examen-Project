@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class GridObject
 {
-    public event Action OnPositionChanged;
     private GridPosition _gridPosition;
     private FakeAttack _fakeAttackData;
     private Match3Block _match3Block;
@@ -15,11 +14,5 @@ public class GridObject
     public FakeAttack GetAttackData => _fakeAttackData;
     public void SetMatch3Block(Match3Block match3Block) => _match3Block = match3Block;
     public void SetAttackData(FakeAttack attackData) => _fakeAttackData = attackData;
-
-    public void SetGridPosition(GridPosition gridPosition)
-    {
-        _gridPosition = gridPosition; 
-        OnPositionChanged?.Invoke();
-    }
-
+    public void SetGridPosition(GridPosition gridPosition) => _gridPosition = gridPosition; 
 }

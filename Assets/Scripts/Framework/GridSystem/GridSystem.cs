@@ -1,20 +1,12 @@
-using System;
-using System.Collections.Generic;
-using NUnit.Framework.Constraints;
 using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class GridSystem
 {
-    public static event Action<Transform> OnNewGridObjectCreated;
-
     private int _width;
     private int _height;
     private float _cellWidth;
     private float _cellHeight;
-    private RectTransform _gridRectTransform;
 
     private GridObject[,] _gridObjectArray;
 
@@ -26,7 +18,6 @@ public class GridSystem
         _cellHeight = cellHeight;
     }
 
-    public void SetRectTransform(RectTransform rect) => _gridRectTransform = rect;
     public bool IsValidGridPosition(GridPosition gridPosition) => gridPosition.X >= 0 && gridPosition.Y >= 0 && gridPosition.X < _width && gridPosition.Y < _height;
     public GridObject GetGridObjectByGridPosition(GridPosition gridPosition) => IsValidGridPosition(gridPosition) ? _gridObjectArray[gridPosition.X, gridPosition.Y] : null;
 
@@ -47,7 +38,7 @@ public class GridSystem
         }
     }
 
-    public void CreateGridTileVisuals(Transform gridTileVisual)
+    public void CreateGridTileVisuals(GridTileVisual gridTileVisual)
     {
         for (var x = 0; x < _width; x++)
         {
@@ -55,16 +46,7 @@ public class GridSystem
             {
                 var newTileVisual = GameObject.Instantiate(gridTileVisual, new Vector3(x * _cellWidth, y * _cellHeight, 0), quaternion.identity);
                 newTileVisual.transform.localScale = new Vector3(_cellWidth, _cellHeight, 0);
-                // var newGridObjectVisualUI = GameObject.Instantiate(gridObjectVisualUI);
-
-                // newGridObjectVisualUI.Initialize(_gridObjectArray[x, y], _cellWidth, _cellHeight, ConvertGridPositionToWorldPosition);
-
-                // _gridObjectArray[x, y].SetGridObjectVisualUI(newGridObjectVisualUI);
-
-                // OnNewGridObjectCreated?.Invoke(newGridObjectVisualUI.transform);
-
-                // var rect = newGridObjectVisualUI.GetComponent<RectTransform>();
-                // rect.anchoredPosition = ConvertGridPositionToWorldPosition(new gridObject(x, y));
+                newTileVisual.SetGridTileVisualPosition(new GridPosition(x, y));
             }
         }
     }

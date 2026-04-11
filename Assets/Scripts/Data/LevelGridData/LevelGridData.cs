@@ -12,5 +12,5 @@ public class LevelGridData : ScriptableObject
     [Range(0, 1)] public float SwipeMaxDiagonalDeviation = .45f;
     public float VisualSwapSpeed = .15f;
     public float VisualFallSpeed = .25f;
-    public Transform GridTileVisual;
+    public GridTileVisual GridTileVisual;
 }
