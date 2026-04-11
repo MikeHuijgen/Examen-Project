@@ -64,7 +64,7 @@ public class LevelGrid : MonoBehaviour
     {
         _gridSystem.GenerateGrid();
         _gridSystem.CreateGridTileVisuals(levelGridData.GridTileVisual);
-        //ReshuffleGrid();
+        ReshuffleGrid();
 
         CharacterInput.Instance.OnNewFingerDownInput += OnNewFingerDownInput;
         CharacterInput.Instance.OnNewFingerUpInput += OnNewFingerUpInput;
@@ -112,7 +112,7 @@ public class LevelGrid : MonoBehaviour
             }
 
 
-            StartCoroutine(HandleMove(_currentSelectedGridPosition.Value.hitGridPosition, endGridPosition));
+            //StartCoroutine(HandleMove(_currentSelectedGridPosition.Value.hitGridPosition, endGridPosition));
         }
         else
         {
@@ -120,7 +120,7 @@ public class LevelGrid : MonoBehaviour
 
             endGridPosition = _gridSystem.CheckGridBounds(endGridPosition);
 
-            StartCoroutine(HandleMove(_beginTouchGridPosition.hitGridPosition, endGridPosition));
+            //StartCoroutine(HandleMove(_beginTouchGridPosition.hitGridPosition, endGridPosition));
         }
 
         _currentSelectedGridPosition = null;
@@ -231,13 +231,16 @@ public class LevelGrid : MonoBehaviour
         {
             for (int y = 0; y < levelGridData.GridHeight; y++)
             {
-                var gridObjectVisualUI = grid[x, y].GetGridObjectVisualUI;
-                var attackData = _matchDetector.GetRandomValidAttackData(_attackKeys, grid, x, y);
-                if (!_attackToMatch3BlocksDictionary.TryGetValue(attackData, out var match3Block)) continue;
-                var newMatch3Block = _match3BlockPool.GetMatch3BlockByAttackData(attackData);
-                newMatch3Block.Initialize(gridObjectVisualUI.GetRectToWorldTransform);
-                grid[x, y].SetMatch3Block(newMatch3Block);
-                grid[x, y].SetAttackData(attackData);
+                var randomAttackData = _matchDetector.GetRandomValidAttackData(_attackKeys, grid, x, y);
+                if(!_match3BlockPool.GetMatch3BlockByAttackData(randomAttackData, out var newMatch3Block)) continue;
+
+                var blockPositionX = x * levelGridData.GridCellWidth + levelGridData.GridCellWidth / 2;
+                var blockPositionY = y * levelGridData.GridCellHeight + levelGridData.GridCellHeight / 2;
+                newMatch3Block.SetPosition(blockPositionX, blockPositionY);
+                // var gridObjectVisualUI = grid[x, y].GetGridObjectVisualUI;
+                // newMatch3Block.Initialize(gridObjectVisualUI.GetRectToWorldTransform);
+                // grid[x, y].SetMatch3Block(newMatch3Block);
+                // grid[x, y].SetAttackData(attackData);
             }
         }
     }
@@ -290,29 +293,29 @@ public class LevelGrid : MonoBehaviour
 
             for (var i = 0; i < spawnCount; i++)
             {
-                var y = writeY + i;
+                // var y = writeY + i;
 
-                var attackData = _matchDetector.GetRandomValidAttackData(_attackKeys, grid, x, y);
+                // var attackData = _matchDetector.GetRandomValidAttackData(_attackKeys, grid, x, y);
 
-                var newBlock = _match3BlockPool.GetMatch3BlockByAttackData(attackData);
+                // var newBlock = _match3BlockPool.GetMatch3BlockByAttackData(attackData);
 
-                var targetGrid = grid[x, y];
-                var targetPos = targetGrid.GetGridObjectVisualUI.GetRectToWorldTransform();
+                // var targetGrid = grid[x, y];
+                // var targetPos = targetGrid.GetGridObjectVisualUI.GetRectToWorldTransform();
 
-                var spawnY = targetPos.y + (spawnCount - i) + 5f;
-                newBlock.transform.position = new Vector3(targetPos.x, spawnY, targetPos.z);
+                // var spawnY = targetPos.y + (spawnCount - i) + 5f;
+                // newBlock.transform.position = new Vector3(targetPos.x, spawnY, targetPos.z);
 
-                targetGrid.SetMatch3Block(newBlock);
-                targetGrid.SetAttackData(attackData);
+                // targetGrid.SetMatch3Block(newBlock);
+                // targetGrid.SetAttackData(attackData);
 
-                var tween = newBlock.transform.DOMove(targetPos, levelGridData.VisualFallSpeed).SetEase(Ease.OutCubic);
+                // var tween = newBlock.transform.DOMove(targetPos, levelGridData.VisualFallSpeed).SetEase(Ease.OutCubic);
 
-                _tweens.Add(tween);
+                // _tweens.Add(tween);
 
-                tween.OnComplete(() =>
-                {
-                    newBlock.Initialize(targetGrid.GetGridObjectVisualUI.GetRectToWorldTransform);
-                });
+                // tween.OnComplete(() =>
+                // {
+                //     newBlock.Initialize(targetGrid.GetGridObjectVisualUI.GetRectToWorldTransform);
+                // });
             }
         }
 

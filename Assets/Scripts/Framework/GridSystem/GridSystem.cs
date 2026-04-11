@@ -11,13 +11,13 @@ public class GridSystem
 
     private int _width;
     private int _height;
-    private int _cellWidth;
-    private int _cellHeight;
+    private float _cellWidth;
+    private float _cellHeight;
     private RectTransform _gridRectTransform;
 
     private GridObject[,] _gridObjectArray;
 
-    public GridSystem(int width, int height, int cellWidth, int cellHeight)
+    public GridSystem(int width, int height, float cellWidth, float cellHeight)
     {
         _width = width;
         _height = height;

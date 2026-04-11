@@ -12,6 +12,11 @@ public class Match3Block : MonoBehaviour
         transform.position = _rectToWorldPosition();
     }
 
+    public void SetPosition(float x, float y)
+    {
+        transform.position = new Vector3(x, y, 0);
+    }
+
     public Vector3 GetRectPosition() => _rectToWorldPosition();
     public FakeAttack GetFakeAttack => fakeAttack;
 }
