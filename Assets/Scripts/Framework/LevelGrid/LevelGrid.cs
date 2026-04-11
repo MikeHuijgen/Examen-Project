@@ -8,8 +8,8 @@ using UnityEngine;
 
 public class LevelGrid : MonoBehaviour
 {
-    public static event Action<gridObject?> OnTileSelected;
-    public static event Action<gridObject?> OnTileDeselected;
+    public static event Action<GridPosition?> OnTileSelected;
+    public static event Action<GridPosition?> OnTileDeselected;
 
     private static readonly Vector2Int[] Directions =
     {
@@ -43,8 +43,7 @@ public class LevelGrid : MonoBehaviour
         _matchDetector = new MatchDetector();
         GridObjectUIRoot.OnGridRectReady += rect => _gridSystem.SetRectTransform(rect);
         FillDictionary();
-        _attackKeys = new List<FakeAttack>();
-        _attackKeys = _attackToMatch3BlocksDictionary.Keys.ToList();
+        _attackKeys = new List<FakeAttack>(_attackToMatch3BlocksDictionary.Keys.ToList());
         Application.targetFrameRate = 120;
         QualitySettings.vSyncCount = 0;
         _match3BlockPool.InitializePool(transform);
@@ -64,8 +63,8 @@ public class LevelGrid : MonoBehaviour
     private void Start()
     {
         _gridSystem.GenerateGrid();
-        _gridSystem.CreateGridObjectVisualUIs(levelGridData.GridObjectDebugVisual);
-        ReshuffleGrid();
+        _gridSystem.CreateGridTileVisuals(levelGridData.GridTileVisual);
+        //ReshuffleGrid();
 
         CharacterInput.Instance.OnNewFingerDownInput += OnNewFingerDownInput;
         CharacterInput.Instance.OnNewFingerUpInput += OnNewFingerUpInput;
@@ -133,7 +132,7 @@ public class LevelGrid : MonoBehaviour
         _currentSelectedGridPosition = null;
     }
 
-    private IEnumerator HandleMove(gridObject beginGridPosition, gridObject endGridPosition)
+    private IEnumerator HandleMove(GridPosition beginGridPosition, GridPosition endGridPosition)
     {
         if (_currentSelectedGridPosition != null) OnTileDeselected?.Invoke(_currentSelectedGridPosition.Value.hitGridPosition);
 
@@ -193,7 +192,7 @@ public class LevelGrid : MonoBehaviour
         ReshuffleGrid();
     }
 
-    private bool HasAMatch(HashSet<gridObject> matchList)
+    private bool HasAMatch(HashSet<GridPosition> matchList)
     {
         if (matchList.Count == 0) return false;
 
@@ -206,7 +205,7 @@ public class LevelGrid : MonoBehaviour
         yield return gridObjectB.GetGridMatch3Block.transform.DOMove(gridObjectB.GetGridMatch3Block.GetRectPosition(), levelGridData.VisualSwapSpeed).SetEase(Ease.InQuad).WaitForCompletion();
     }
 
-    private IEnumerator DestroyMatches(HashSet<gridObject> matches)
+    private IEnumerator DestroyMatches(HashSet<GridPosition> matches)
     {
         var grid = _gridSystem.GetGridObjectArray;
 
