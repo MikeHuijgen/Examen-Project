@@ -4,6 +4,7 @@ using NUnit.Framework.Constraints;
 using Unity.Mathematics;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class GridSystem
 {
@@ -83,23 +84,12 @@ public class GridSystem
     }
 
 
-    public GridHit ConvertWorldPositionToGridHit(Vector2 worldPosition)
+    public GridHit ConvertScreenPositionToGridHit(Vector2 worldPosition)
     {
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            _gridRectTransform,
-            worldPosition,
-            CameraHolder.Match3Camera,
-            out var localPos
-        );
+        var localPos = CameraHolder.Match3Camera.ScreenToWorldPoint(worldPosition);
 
-        var gridWidthPx = _width * _cellWidth;
-        var gridHeightPx = _height * _cellHeight;
-
-        var offsetX = -gridWidthPx / 2f;
-        var offsetY = -gridHeightPx / 2f;
-
-        var rawX = (localPos.x - offsetX) / _cellWidth;
-        var rawY = (localPos.y - offsetY) / _cellHeight;
+        var rawX = localPos.x / _cellWidth;
+        var rawY = localPos.y / _cellHeight;
 
         var gridX = Mathf.FloorToInt(rawX);
         var gridY = Mathf.FloorToInt(rawY);

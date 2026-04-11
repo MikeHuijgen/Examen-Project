@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::LevelGridData
   GridWidth: 7
   GridHeight: 7
-  GridCellWidth: 2
-  GridCellHeight: 2
+  GridCellWidth: 2.5
+  GridCellHeight: 2.5
   ClickTolerance: 0.4
   SwipeDirectionTolerance: 0.5
   SwipeMaxDiagonalDeviation: 1

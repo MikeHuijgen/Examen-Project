@@ -30,14 +30,14 @@ public class GridObjectVisualUI : MonoBehaviour
 
     void OnEnable()
     {
-        LevelGrid.OnTileSelected += OnTileSelected;
-        LevelGrid.OnTileDeselected += OnTileDeselected;
+        // LevelGrid.OnTileSelected += OnTileSelected;
+        // LevelGrid.OnTileDeselected += OnTileDeselected;
     }
 
     void OnDisable()
     {
-        LevelGrid.OnTileSelected -= OnTileSelected;
-        LevelGrid.OnTileDeselected -= OnTileDeselected;        
+        // LevelGrid.OnTileSelected -= OnTileSelected;
+        // LevelGrid.OnTileDeselected -= OnTileDeselected;        
     }
 
     private void OnTileSelected(GridPosition? gridPosition)
