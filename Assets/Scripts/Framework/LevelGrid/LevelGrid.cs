@@ -7,9 +7,6 @@ using UnityEngine;
 
 public class LevelGrid : MonoBehaviour
 {
-    public static event Action<GridPosition?> OnTileSelected;
-    public static event Action<GridPosition?> OnTileDeselected;
-
     private static readonly Vector2Int[] Directions =
     {
         Vector2Int.right,
@@ -87,7 +84,7 @@ public class LevelGrid : MonoBehaviour
         if (endTouchGridPosition.hitGridPosition == _beginTouchGridPosition.hitGridPosition && !_currentSelectedGridPosition.HasValue)
         {
             _currentSelectedGridPosition = _beginTouchGridPosition;
-            OnTileSelected?.Invoke(_currentSelectedGridPosition.Value.hitGridPosition);
+            _gridSystem.SelectTileByGridPosition(_currentSelectedGridPosition.Value.hitGridPosition);
             return;
         }
 
@@ -128,13 +125,13 @@ public class LevelGrid : MonoBehaviour
 
     private void ResetCurrentGridPosition()
     {
-        OnTileDeselected?.Invoke(_currentSelectedGridPosition.Value.hitGridPosition);
+        _gridSystem.DeselectTileByGridPosition(_currentSelectedGridPosition.Value.hitGridPosition);
         _currentSelectedGridPosition = null;
     }
 
     private IEnumerator HandleMove(GridPosition beginGridPosition, GridPosition endGridPosition)
     {
-        if (_currentSelectedGridPosition != null) OnTileDeselected?.Invoke(_currentSelectedGridPosition.Value.hitGridPosition);
+        if (_currentSelectedGridPosition != null) _gridSystem.DeselectTileByGridPosition(_currentSelectedGridPosition.Value.hitGridPosition);
 
         _allowInput = false;
 

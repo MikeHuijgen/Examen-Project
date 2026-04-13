@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -9,6 +10,8 @@ public class GridSystem
     private float _cellHeight;
 
     private GridObject[,] _gridObjectArray;
+
+    Dictionary<GridPosition, GridTileVisual> _gridTileVisuals = new Dictionary<GridPosition, GridTileVisual>();
 
     public GridSystem(int width, int height, float cellWidth, float cellHeight)
     {
@@ -46,7 +49,7 @@ public class GridSystem
             {
                 var newTileVisual = GameObject.Instantiate(gridTileVisual, new Vector3(x * _cellWidth, y * _cellHeight, 0), quaternion.identity);
                 newTileVisual.transform.localScale = new Vector3(_cellWidth, _cellHeight, 0);
-                newTileVisual.SetGridTileVisualPosition(new GridPosition(x,y));
+                _gridTileVisuals[new GridPosition(x,y)] = newTileVisual;
             }
         }
     }
@@ -211,5 +214,17 @@ public class GridSystem
         var x = Mathf.Clamp(pos.X, 0, _width - 1);
         var y = Mathf.Clamp(pos.Y, 0, _height - 1);
         return new GridPosition(x, y);
+    }
+
+    public void SelectTileByGridPosition(GridPosition targetGridPosition)
+    {
+       if(!_gridTileVisuals.TryGetValue(targetGridPosition, out var gridTileVisual)) return;
+       gridTileVisual.OnTileSelected();
+    }
+
+    public void DeselectTileByGridPosition(GridPosition targetGridPosition)
+    {
+       if(!_gridTileVisuals.TryGetValue(targetGridPosition, out var gridTileVisual)) return;
+       gridTileVisual.OnTileDeselected();
     }
 }
