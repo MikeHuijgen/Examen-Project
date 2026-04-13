@@ -281,7 +281,7 @@ public class LevelGrid : MonoBehaviour
                 targetGrid.SetMatch3Block(tile.block);
                 targetGrid.SetAttackData(tile.attack);
 
-                var tween = tile.block.transform.DOMove(targetGrid.GetWorldPosition(levelGridData.GridCellWidth, levelGridData.GridCellHeight), levelGridData.VisualFallSpeed).SetEase(Ease.OutBounce);
+                var tween = tile.block.transform.DOMove(targetGrid.GetWorldPosition(levelGridData.GridCellWidth, levelGridData.GridCellHeight), levelGridData.VisualFallSpeed).SetEase(Ease.OutBounce, .7f);
 
                 _tweens.Add(tween);
 
@@ -310,7 +310,7 @@ public class LevelGrid : MonoBehaviour
                 targetGrid.SetMatch3Block(newMatch3Block);
                 targetGrid.SetAttackData(attackData);
 
-                var tween = newMatch3Block.transform.DOMove(targetGrid.GetWorldPosition(levelGridData.GridCellWidth, levelGridData.GridCellHeight), levelGridData.VisualFallSpeed).SetEase(Ease.OutBounce);
+                var tween = newMatch3Block.transform.DOMove(targetGrid.GetWorldPosition(levelGridData.GridCellWidth, levelGridData.GridCellHeight), levelGridData.VisualFallSpeed).SetEase(Ease.OutBounce, .7f);
 
                 _tweens.Add(tween);
             }

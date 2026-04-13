@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BasicLevelData
   m_EditorClassIdentifier: Assembly-CSharp::LevelGridData
   GridWidth: 7
-  GridHeight: 7
+  GridHeight: 8
   GridCellWidth: 2.5
   GridCellHeight: 2.5
   ClickTolerance: 0.4
