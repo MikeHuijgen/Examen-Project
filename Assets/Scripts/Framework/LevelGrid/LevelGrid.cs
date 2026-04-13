@@ -204,8 +204,8 @@ public class LevelGrid : MonoBehaviour
         var newBeginGridObjectPosition = beginGridObject.GetWorldPosition(levelGridData.GridCellWidth, levelGridData.GridCellHeight);
         var newEndGridObjectPosition = endGridObject.GetWorldPosition(levelGridData.GridCellWidth, levelGridData.GridCellHeight);
 
-        beginGridObject.GetGridMatch3Block.transform.DOMove(newBeginGridObjectPosition, levelGridData.VisualSwapSpeed).SetEase(Ease.InQuad);
-        yield return endGridObject.GetGridMatch3Block.transform.DOMove(newEndGridObjectPosition, levelGridData.VisualSwapSpeed).SetEase(Ease.InQuad).WaitForCompletion();
+        beginGridObject.GetGridMatch3Block.transform.DOMove(newBeginGridObjectPosition, levelGridData.VisualSwapSpeed).SetEase(Ease.InOutQuad);
+        yield return endGridObject.GetGridMatch3Block.transform.DOMove(newEndGridObjectPosition, levelGridData.VisualSwapSpeed).SetEase(Ease.InOutQuad).WaitForCompletion();
     }
 
     private IEnumerator DestroyMatches(HashSet<GridPosition> matches)
@@ -284,7 +284,7 @@ public class LevelGrid : MonoBehaviour
                 targetGrid.SetMatch3Block(tile.block);
                 targetGrid.SetAttackData(tile.attack);
 
-                var tween = tile.block.transform.DOMove(targetGrid.GetWorldPosition(levelGridData.GridCellWidth, levelGridData.GridCellHeight), levelGridData.VisualFallSpeed).SetEase(Ease.OutQuint);
+                var tween = tile.block.transform.DOMove(targetGrid.GetWorldPosition(levelGridData.GridCellWidth, levelGridData.GridCellHeight), levelGridData.VisualFallSpeed).SetEase(Ease.OutBounce);
 
                 _tweens.Add(tween);
 
@@ -313,7 +313,7 @@ public class LevelGrid : MonoBehaviour
                 targetGrid.SetMatch3Block(newMatch3Block);
                 targetGrid.SetAttackData(attackData);
 
-                var tween = newMatch3Block.transform.DOMove(targetGrid.GetWorldPosition(levelGridData.GridCellWidth, levelGridData.GridCellHeight), levelGridData.VisualFallSpeed).SetEase(Ease.OutCubic);
+                var tween = newMatch3Block.transform.DOMove(targetGrid.GetWorldPosition(levelGridData.GridCellWidth, levelGridData.GridCellHeight), levelGridData.VisualFallSpeed).SetEase(Ease.OutBounce);
 
                 _tweens.Add(tween);
             }
