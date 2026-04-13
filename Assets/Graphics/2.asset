@@ -15,7 +15,7 @@ MonoBehaviour:
   active: 1
   mode:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 2
   gaussianStart:
     m_OverrideState: 1
     m_Value: 6.8
@@ -30,13 +30,13 @@ MonoBehaviour:
     m_Value: 1
   focusDistance:
     m_OverrideState: 1
-    m_Value: 6.32
+    m_Value: 5.1
   aperture:
     m_OverrideState: 1
-    m_Value: 1.6
+    m_Value: 2.6
   focalLength:
     m_OverrideState: 1
-    m_Value: 113
+    m_Value: 67
   bladeCount:
     m_OverrideState: 1
     m_Value: 4
@@ -56,7 +56,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d7fd9488000d3734a9e00ee676215985, type: 3}
-  m_Name: Box Volume Profile
+  m_Name: 2
   m_EditorClassIdentifier: Unity.RenderPipelines.Core.Runtime::UnityEngine.Rendering.VolumeProfile
   components:
   - {fileID: 7474315361556411618}
@@ -78,10 +78,10 @@ MonoBehaviour:
   active: 1
   postExposure:
     m_OverrideState: 1
-    m_Value: 0.77
+    m_Value: 0.87
   contrast:
     m_OverrideState: 1
-    m_Value: 17
+    m_Value: 12
   colorFilter:
     m_OverrideState: 1
     m_Value: {r: 1, g: 0.9364233, b: 0.9025157, a: 1}
@@ -112,7 +112,7 @@ MonoBehaviour:
     m_Value: {x: 0.5, y: 0.5}
   intensity:
     m_OverrideState: 1
-    m_Value: 0.134
+    m_Value: 0.228
   smoothness:
     m_OverrideState: 1
     m_Value: 0.78
@@ -137,7 +137,7 @@ MonoBehaviour:
     m_Value: 1
   threshold:
     m_OverrideState: 1
-    m_Value: 0.81
+    m_Value: 0.95
   intensity:
     m_OverrideState: 1
     m_Value: 2.54
