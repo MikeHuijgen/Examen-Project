@@ -46,7 +46,7 @@ public class GridSystem
             {
                 var newTileVisual = GameObject.Instantiate(gridTileVisual, new Vector3(x * _cellWidth, y * _cellHeight, 0), quaternion.identity);
                 newTileVisual.transform.localScale = new Vector3(_cellWidth, _cellHeight, 0);
-                newTileVisual.SetGridTileVisualPosition(new GridPosition(x, y));
+                newTileVisual.SetGridTileVisualPosition(new GridPosition(x,y));
             }
         }
     }

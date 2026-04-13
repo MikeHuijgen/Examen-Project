@@ -1,5 +1,3 @@
-using System;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,12 +6,11 @@ public class GridTileVisual : MonoBehaviour
     [SerializeField] private Image border;
     private GridPosition _gridTileVisualPosition;
 
-    public void SetGridTileVisualPosition(GridPosition gridPosition) => _gridTileVisualPosition = gridPosition;
-
-    void OnEnable()
+    public void SetGridTileVisualPosition(GridPosition gridPosition)
     {
+        _gridTileVisualPosition = gridPosition;
         LevelGrid.OnTileSelected += OnTileSelected;
-        LevelGrid.OnTileDeselected += OnTileDeselected;
+        LevelGrid.OnTileDeselected += OnTileDeselected; 
     }
 
     void OnDisable()
