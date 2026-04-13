@@ -1,5 +1,4 @@
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
@@ -12,11 +11,11 @@ public class CharacterInput : MonoBehaviour
     public event Action<Vector2> OnNewFingerUpInput;
     public event Action<SideType> OnDodgeInput;
 
-
     //temp
     public event Action<BaseAttack> OnPlayerAttack;
 
     private Func<Vector2, bool, GridPosition?, GridPosition?> _isValidGridPositionCallback;
+
     private Action<InputAction.CallbackContext> _dodgeLeftHandler;
     private Action<InputAction.CallbackContext> _dodgeRightHandler;
     private Action<InputAction.CallbackContext> _dodgeDownHandler;

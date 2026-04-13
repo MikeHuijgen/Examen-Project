@@ -6,42 +6,23 @@ using UnityEngine.UI;
 public class GridObjectVisualUI : MonoBehaviour
 {
     [SerializeField] private RectTransform rectTransform;
-    [SerializeField] private TextMeshProUGUI debugTextGridPosition;
-    [SerializeField] private TextMeshProUGUI debugTextGridObject;
-    [SerializeField] private Outline gridVisualOutline;
+    [SerializeField] private Image border;
     private GridObject _gridObject;
 
-    private Func<GridPosition, Vector3> _gridToWorldFunc;
-    private static int counter;
+    private Func<gridObject, Vector3> _gridToWorldFunc;
 
-    public void Initialize(GridObject gridObject, int width, int height, Func<GridPosition, Vector3> gridToWorldFunc)
+    public void Initialize(GridObject gridObject, int width, int height, Func<gridObject, Vector3> gridToWorldFunc)
     {
         _gridObject = gridObject;
         _gridObject.OnPositionChanged += OnPositionChanged;
         rectTransform.sizeDelta = new Vector2(width, height);
         _gridToWorldFunc = gridToWorldFunc;
-        UpdateText();
     }
 
     public void OnPositionChanged()
     {
         var gridPosition = _gridObject.GetGridPosition;
         rectTransform.anchoredPosition = _gridToWorldFunc(gridPosition);
-        debugTextGridPosition.text =     
-        "x = " + _gridObject.GetGridPosition.X + "\n" +
-        "y = " + _gridObject.GetGridPosition.Y;
-
-    }
-
-
-    private void UpdateText()
-    {
-        debugTextGridPosition.text =         
-        "x = " + _gridObject.GetGridPosition.X + "\n" +
-        "y = " + _gridObject.GetGridPosition.Y;
-        
-        debugTextGridObject.text = counter.ToString();
-        counter++;         
     }
 
     public GridObject GetGridObject => _gridObject;
@@ -59,14 +40,14 @@ public class GridObjectVisualUI : MonoBehaviour
         LevelGrid.OnTileDeselected -= OnTileDeselected;        
     }
 
-    private void OnTileSelected(GridPosition? gridPosition)
+    private void OnTileSelected(gridObject? gridPosition)
     {
         if (_gridObject.GetGridPosition != gridPosition) return;
-        gridVisualOutline.effectColor = Color.limeGreen;
+        border.color = Color.limeGreen;
     }
-    private void OnTileDeselected(GridPosition? gridPosition)
+    private void OnTileDeselected(gridObject? gridPosition)
     {
         if (_gridObject.GetGridPosition != gridPosition) return;
-        gridVisualOutline.effectColor = Color.black;
+        border.color = Color.black;
     }
 }
