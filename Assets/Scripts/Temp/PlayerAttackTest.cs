@@ -1,16 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 public class PlayerAttackTest : MonoBehaviour
 {
     [SerializeField] private AttackSystem attackSystem;
     [SerializeField] private List<BaseAttack> baseAttacks;
 
-    private void Update()
-    {
-        if (!attackSystem.IsIdle)
-            return;
+    private PlayerInput _playerInput;
 
-        HandleInput();
+    private void Start()
+    {
+        _playerInput = GetComponent<PlayerInput>();
+        _playerInput.enabled = true;
     }
 
     private void HandleInput()
