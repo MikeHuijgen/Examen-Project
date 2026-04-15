@@ -40,9 +40,10 @@ public class Match3BlockPool : MonoBehaviour
         return block;
     }
 
-    public Match3Block GetMatch3BlockByAttackData(FakeAttack attack, Transform parent = null)
+    public bool GetMatch3BlockByAttackData(FakeAttack attack, out Match3Block result)
     {
-        if (!_pool.ContainsKey(attack)) return null;
+        result = null;
+        if (!_pool.ContainsKey(attack)) return false;
 
         var queue = _pool[attack];
 
@@ -50,7 +51,7 @@ public class Match3BlockPool : MonoBehaviour
 
         if (queue.Count == 0)
         {
-            block = CreateNewBlock(_prefabMap[attack], parent ?? transform);
+            block = CreateNewBlock(_prefabMap[attack], transform);
         }
         else
         {
@@ -58,7 +59,8 @@ public class Match3BlockPool : MonoBehaviour
         }
 
         block.gameObject.SetActive(true);
-        return block;
+        result = block;
+        return true;
     }
 
     public void ReturnMatch3Block(Match3Block block)
