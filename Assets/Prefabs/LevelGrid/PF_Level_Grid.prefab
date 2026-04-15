@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8638016569917829304}
   - component: {fileID: 5713675024628666864}
   - component: {fileID: 6476355683486470653}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PF_Level_Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}

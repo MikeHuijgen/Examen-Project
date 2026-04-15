@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3672682101605212365}
   - component: {fileID: 3607441784381934679}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PF_Match_3_Block_Yellow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -97,6 +97,10 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 50d1a570cc2bbe248b38e7105db71ee1, type: 3}
       propertyPath: m_Name
       value: M_Stone_Yellow
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 50d1a570cc2bbe248b38e7105db71ee1, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

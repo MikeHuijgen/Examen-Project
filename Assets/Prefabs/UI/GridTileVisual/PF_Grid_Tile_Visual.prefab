@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4657944644745506970}
   - component: {fileID: 6676562490839790052}
   - component: {fileID: 4740726784333934759}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -85,7 +85,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2790733544451034764}
   - component: {fileID: 8059167982047488199}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: PF_Grid_Tile_Visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -131,7 +131,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1687701803697762762}
   - component: {fileID: 6967135891433178551}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: TileImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -184,7 +184,7 @@ GameObject:
   - component: {fileID: 3958575483889672853}
   - component: {fileID: 6453185304633151588}
   - component: {fileID: 6030672582509544682}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: TileCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -285,7 +285,7 @@ GameObject:
   - component: {fileID: 7531074645280764583}
   - component: {fileID: 5255539287778818970}
   - component: {fileID: 7592171953607785388}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
