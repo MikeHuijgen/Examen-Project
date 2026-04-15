@@ -625,6 +625,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de273fdaa79468d4ab6a8b2fe5ed9f60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AttackSystem
+  playerDodgeSystem: {fileID: 0}
 --- !u!4 &766133202
 Transform:
   m_ObjectHideFlags: 0
@@ -731,6 +732,10 @@ PrefabInstance:
       propertyPath: m_DefaultActionMap
       value: 7a63fcb7-000a-4b47-a73c-a674159c01ae
       objectReference: {fileID: 0}
+    - target: {fileID: 3685076801437546403, guid: 22d53871838017344bf0f35f201a2402, type: 3}
+      propertyPath: _playerAttackTest
+      value: 
+      objectReference: {fileID: 1163924385}
     - target: {fileID: 3779768140400638871, guid: 22d53871838017344bf0f35f201a2402, type: 3}
       propertyPath: m_Name
       value: Input
@@ -807,7 +812,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1163924384}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3e9185a130a6f8a4aa793e6d505a6d8f, type: 3}
   m_Name: 
@@ -818,6 +823,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3ff87686a0af11244a18e1fb63ed4819, type: 2}
   - {fileID: 11400000, guid: 705d221ffb1a0fa4a9caa1252e033103, type: 2}
   - {fileID: 11400000, guid: 8c4fa548b30d1a64789adb0b06d5a0b8, type: 2}
+  - {fileID: 11400000, guid: 255dda4e2b6f0114591a2efdcf79a0b0, type: 2}
 --- !u!136 &1163924386
 CapsuleCollider:
   m_ObjectHideFlags: 0

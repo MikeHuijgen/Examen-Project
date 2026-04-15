@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class AttackSystem : MonoBehaviour
 {
+    [SerializeField] private PlayerDodgeSystem playerDodgeSystem;
+
     private AttackState _state = AttackState.Idle;
 
     private CountdownTimer _chargeTimer;
@@ -26,6 +28,7 @@ public class AttackSystem : MonoBehaviour
 
     public void TriggerAttack(BaseAttack attack)
     {
+        Debug.Log("Triggered Attack: " + attack);
         if (!IsIdle) return;
 
         _currentAttack = attack;
@@ -63,8 +66,12 @@ public class AttackSystem : MonoBehaviour
     {
         if (_currentAttack is OpponentAttack opponentAttack)
         {
-            Debug.Log("Executed Opponent Attack in Direction = " + opponentAttack.Direction);
-            Debug.Log("Damage Done = " + opponentAttack.Damage);
+            //Debug.Log("Executed Opponent Attack in Direction = " + opponentAttack.Direction);
+            //Debug.Log("Damage Done = " + opponentAttack.Damage);
+            if (playerDodgeSystem.GetCurrentDodgeInfo().isDodging && playerDodgeSystem.GetCurrentDodgeInfo().dodgeSide == SideType.Left && opponentAttack.Direction == 2)
+            {
+                Debug.Log("Player Dodged Left attack");
+            }
         }
         else
         {

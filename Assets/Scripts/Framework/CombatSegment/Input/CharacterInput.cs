@@ -11,10 +11,10 @@ public class CharacterInput : MonoBehaviour
     public event Action<Vector2> OnNewFingerUpInput;
     public event Action<SideType> OnDodgeInput;
 
-    //temp
+    //temp Action
     public event Action<BaseAttack> OnPlayerAttack;
 
-    private Func<Vector2, bool, GridPosition?, GridPosition?> _isValidGridPositionCallback;
+    //private Func<Vector2, bool, GridPosition?, GridPosition?> _isValidGridPositionCallback;
 
     private Action<InputAction.CallbackContext> _dodgeLeftHandler;
     private Action<InputAction.CallbackContext> _dodgeRightHandler;
@@ -25,11 +25,14 @@ public class CharacterInput : MonoBehaviour
     private Action<InputAction.CallbackContext> _secondAttackHandler;
     private Action<InputAction.CallbackContext> _thirdAttackHandler;
     private Action<InputAction.CallbackContext> _fourthAttackHandler;
+    private Action<InputAction.CallbackContext> _fifthAttackHandler;
 
+    [SerializeField] private PlayerAttackTest _playerAttackTest;
     [SerializeField] private PlayerInput playerInput;
     
     private void Awake()
     {
+        Debug.Log(_playerAttackTest);
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
@@ -43,11 +46,13 @@ public class CharacterInput : MonoBehaviour
         _dodgeDownHandler = ctx => OnDodgeInputDetected(SideType.Down);
 
 
-        //temp Attacks
-        _firstAttackHandler = ctx => Debug.Log("first Attack");
-        _secondAttackHandler = ctx => Debug.Log("second Attack");
-        _thirdAttackHandler = ctx => Debug.Log("third Attack");
-        _fourthAttackHandler = ctx => Debug.Log("fourth Attack");
+        //temp Attack handlers
+        _firstAttackHandler = ctx => _playerAttackTest.TriggerAttack(1);
+        _secondAttackHandler = ctx => _playerAttackTest.TriggerAttack(2);
+        _thirdAttackHandler = ctx => _playerAttackTest.TriggerAttack(3);
+        _fourthAttackHandler = ctx => _playerAttackTest.TriggerAttack(4);
+        _fifthAttackHandler = ctx => _playerAttackTest.TriggerAttack(5);
+
     }
 
     private void OnEnable()
@@ -56,11 +61,12 @@ public class CharacterInput : MonoBehaviour
         playerInput.actions["DodgeRight"].performed += _dodgeRightHandler;
         playerInput.actions["DodgeDown"].performed += _dodgeDownHandler;
 
-        //temp Attacks
+        //temp Inputs
         playerInput.actions["firstAttack"].performed += _firstAttackHandler;
         playerInput.actions["secondAttack"].performed += _secondAttackHandler;
         playerInput.actions["thirdAttack"].performed += _thirdAttackHandler;
         playerInput.actions["fourthAttack"].performed += _fourthAttackHandler;
+        playerInput.actions["fifthAttack"].performed += _fifthAttackHandler;
 
         EnhancedTouchSupport.Enable();
         Touch.onFingerDown += OnFingerDown;
@@ -73,19 +79,17 @@ public class CharacterInput : MonoBehaviour
         playerInput.actions["DodgeRight"].performed -= _dodgeRightHandler;
         playerInput.actions["DodgeDown"].performed -= _dodgeDownHandler;
 
-        //temp Attacks
+        //temp Inputs
         playerInput.actions["firstAttack"].performed -= _firstAttackHandler;
         playerInput.actions["secondAttack"].performed -= _secondAttackHandler;
         playerInput.actions["thirdAttack"].performed -= _thirdAttackHandler;
         playerInput.actions["fourthAttack"].performed -= _fourthAttackHandler;
+        playerInput.actions["fifthAttack"].performed -= _fifthAttackHandler;
 
-        EnhancedTouchSupport.Disable();  
-        Touch.onFingerDown -= OnFingerDown;      
-        Touch.onFingerUp -= OnFingerUp; 
+        EnhancedTouchSupport.Disable();
+        Touch.onFingerDown -= OnFingerDown;
+        Touch.onFingerUp -= OnFingerUp;
     }
-   
-    //temp
-    //public string OnPlayerAttackDetected();
 
     public void OnDodgeInputDetected(SideType dodgeSide) => OnDodgeInput?.Invoke(dodgeSide);
 
