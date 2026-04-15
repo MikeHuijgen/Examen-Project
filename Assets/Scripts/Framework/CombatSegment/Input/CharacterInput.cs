@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
@@ -6,67 +7,64 @@ using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
 
 public class CharacterInput : MonoBehaviour
 {
-    public static CharacterInput Instance;
+    public static CharacterInput Instance { get; private set; }
+
     public event Action<Vector2> OnNewFingerDownInput;
     public event Action<Vector2> OnNewFingerUpInput;
     public event Action<SideType> OnDodgeInput;
-
-    //temp Action
-    public event Action<BaseAttack> OnPlayerAttack;
-
-    //private Func<Vector2, bool, GridPosition?, GridPosition?> _isValidGridPositionCallback;
-
-    private Action<InputAction.CallbackContext> _dodgeLeftHandler;
-    private Action<InputAction.CallbackContext> _dodgeRightHandler;
-    private Action<InputAction.CallbackContext> _dodgeDownHandler;
-
-    //Temp Inputs
-    private Action<InputAction.CallbackContext> _firstAttackHandler;
-    private Action<InputAction.CallbackContext> _secondAttackHandler;
-    private Action<InputAction.CallbackContext> _thirdAttackHandler;
-    private Action<InputAction.CallbackContext> _fourthAttackHandler;
-    private Action<InputAction.CallbackContext> _fifthAttackHandler;
+    
+    public event Action<int> OnPlayerAttack;
 
     [SerializeField] private PlayerAttackTest _playerAttackTest;
-    [SerializeField] private PlayerInput playerInput;
-    
+    [SerializeField] private PlayerInput _playerInput;
+
+    private readonly Dictionary<string, SideType> _dodgeBindings = new()
+    {
+        { "DodgeLeft", SideType.Left },
+        { "DodgeRight", SideType.Right },
+        { "DodgeDown", SideType.Down }
+    };
+
+    private readonly Dictionary<string, int> _attackBindings = new()
+    {
+        { "firstAttack", 1 },
+        { "secondAttack", 2 },
+        { "thirdAttack", 3 },
+        { "fourthAttack", 4 },
+        { "fifthAttack", 5 }
+    };
+
+    private readonly Dictionary<string, Action<InputAction.CallbackContext>> _dodgeHandlers = new();
+    private readonly Dictionary<string, Action<InputAction.CallbackContext>> _attackHandlers = new();
+
     private void Awake()
     {
-        Debug.Log(_playerAttackTest);
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
-        
+
         Instance = this;
 
-        _dodgeLeftHandler = ctx => OnDodgeInputDetected(SideType.Left);
-        _dodgeRightHandler = ctx => OnDodgeInputDetected(SideType.Right);
-        _dodgeDownHandler = ctx => OnDodgeInputDetected(SideType.Down);
+        foreach (var pair in _dodgeBindings)
+        {
+            var side = pair.Value;
+            _dodgeHandlers[pair.Key] = ctx => OnDodgeInputDetected(side);
+        }
 
-
-        //temp Attack handlers
-        _firstAttackHandler = ctx => _playerAttackTest.TriggerAttack(1);
-        _secondAttackHandler = ctx => _playerAttackTest.TriggerAttack(2);
-        _thirdAttackHandler = ctx => _playerAttackTest.TriggerAttack(3);
-        _fourthAttackHandler = ctx => _playerAttackTest.TriggerAttack(4);
-        _fifthAttackHandler = ctx => _playerAttackTest.TriggerAttack(5);
-
+        foreach (var pair in _attackBindings)
+        {
+            int attackIndex = pair.Value;
+            _attackHandlers[pair.Key] = ctx => OnAttackInputDetected(attackIndex);
+        }
     }
 
     private void OnEnable()
     {
-        playerInput.actions["DodgeLeft"].performed += _dodgeLeftHandler;
-        playerInput.actions["DodgeRight"].performed += _dodgeRightHandler;
-        playerInput.actions["DodgeDown"].performed += _dodgeDownHandler;
+        foreach (var pair in _dodgeHandlers) Bind(pair.Key, pair.Value);
 
-        //temp Inputs
-        playerInput.actions["firstAttack"].performed += _firstAttackHandler;
-        playerInput.actions["secondAttack"].performed += _secondAttackHandler;
-        playerInput.actions["thirdAttack"].performed += _thirdAttackHandler;
-        playerInput.actions["fourthAttack"].performed += _fourthAttackHandler;
-        playerInput.actions["fifthAttack"].performed += _fifthAttackHandler;
+        foreach (var pair in _attackHandlers) Bind(pair.Key, pair.Value);
 
         EnhancedTouchSupport.Enable();
         Touch.onFingerDown += OnFingerDown;
@@ -75,24 +73,28 @@ public class CharacterInput : MonoBehaviour
 
     private void OnDisable()
     {
-        playerInput.actions["DodgeLeft"].performed -= _dodgeLeftHandler;
-        playerInput.actions["DodgeRight"].performed -= _dodgeRightHandler;
-        playerInput.actions["DodgeDown"].performed -= _dodgeDownHandler;
+        foreach (var pair in _dodgeHandlers) Unbind(pair.Key, pair.Value);
 
-        //temp Inputs
-        playerInput.actions["firstAttack"].performed -= _firstAttackHandler;
-        playerInput.actions["secondAttack"].performed -= _secondAttackHandler;
-        playerInput.actions["thirdAttack"].performed -= _thirdAttackHandler;
-        playerInput.actions["fourthAttack"].performed -= _fourthAttackHandler;
-        playerInput.actions["fifthAttack"].performed -= _fifthAttackHandler;
+        foreach (var pair in _attackHandlers) Unbind(pair.Key, pair.Value);
 
         EnhancedTouchSupport.Disable();
         Touch.onFingerDown -= OnFingerDown;
         Touch.onFingerUp -= OnFingerUp;
     }
 
-    public void OnDodgeInputDetected(SideType dodgeSide) => OnDodgeInput?.Invoke(dodgeSide);
+    private void Bind(string actionName, Action<InputAction.CallbackContext> handler) => _playerInput.actions[actionName].performed += handler;
 
+    private void Unbind(string actionName, Action<InputAction.CallbackContext> handler) => _playerInput.actions[actionName].performed -= handler;
+
+    // Public for external calls
+    public void OnDodgeInputDetected(SideType dodgeSide) => OnDodgeInput?.Invoke(dodgeSide);
+    
+    public void OnAttackInputDetected(int attackIndex)
+    {
+        _playerAttackTest.TriggerAttack(attackIndex);
+        OnPlayerAttack?.Invoke(attackIndex);
+    }
+    
     private void OnFingerDown(Finger finger) => OnNewFingerDownInput?.Invoke(finger.screenPosition);
 
     private void OnFingerUp(Finger finger) => OnNewFingerUpInput?.Invoke(finger.screenPosition);
