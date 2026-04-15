@@ -68,7 +68,7 @@ public class AttackSystem : MonoBehaviour
         if (_currentAttack is not OpponentAttack opponentAttack)
         {
             _opponentHealth.TakeDamage(_currentAttack.Damage);
-            Debug.Log("Enemy Damage Done = " + _currentAttack.Damage);
+            _state = AttackState.Idle;
             return;
         }
 
@@ -77,7 +77,7 @@ public class AttackSystem : MonoBehaviour
         if (!dodge.isDodging)
         {
             _playerHealth.TakeDamage(_currentAttack.Damage);
-            return;
+            _state = AttackState.Idle;
         }
 
         SideType requiredDodge = GetRequiredDodge(opponentAttack.Direction);
@@ -89,6 +89,7 @@ public class AttackSystem : MonoBehaviour
         else
         {
             _playerHealth.TakeDamage(_currentAttack.Damage);
+            _state = AttackState.Idle;
         }
     }
 
