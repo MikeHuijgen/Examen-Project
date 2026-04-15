@@ -72,6 +72,10 @@ public class AttackSystem : MonoBehaviour
             {
                 Debug.Log("Player Dodged Left attack");
             }
+            else
+            {
+                Debug.Log("you suck");
+            }
         }
         else
         {
