@@ -398,6 +398,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 101565033687392927, guid: cfb0303b938ee3047b12e8a02fe1f641, type: 3}
+      propertyPath: dodgeCamera
+      value: 
+      objectReference: {fileID: 2035804961}
     - target: {fileID: 828718815887627994, guid: cfb0303b938ee3047b12e8a02fe1f641, type: 3}
       propertyPath: IsDodging
       value: 0
