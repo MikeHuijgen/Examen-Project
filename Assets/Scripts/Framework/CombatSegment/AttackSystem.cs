@@ -1,8 +1,11 @@
+using System;
 using UnityEngine;
 
 public class AttackSystem : MonoBehaviour
 {
     [SerializeField] private PlayerDodgeSystem playerDodgeSystem;
+    [SerializeField] private HealthComponent _playerHealth;
+    [SerializeField] private HealthComponent _opponentHealth;
 
     private AttackState _state = AttackState.Idle;
 
@@ -28,7 +31,6 @@ public class AttackSystem : MonoBehaviour
 
     public void TriggerAttack(BaseAttack attack)
     {
-        Debug.Log("Triggered Attack: " + attack);
         if (!IsIdle) return;
 
         _currentAttack = attack;
@@ -51,7 +53,6 @@ public class AttackSystem : MonoBehaviour
                 break;
 
             case AttackState.Charging:
-                Debug.Log("Charging");
                 HandleCharging();
                 break;
 
@@ -64,23 +65,30 @@ public class AttackSystem : MonoBehaviour
 
     private void HandleAttackExecution()
     {
-        if (_currentAttack is OpponentAttack opponentAttack)
+        if (_currentAttack is not OpponentAttack opponentAttack)
         {
-            //Debug.Log("Executed Opponent Attack in Direction = " + opponentAttack.Direction);
-            //Debug.Log("Damage Done = " + opponentAttack.Damage);
-            if (playerDodgeSystem.GetCurrentDodgeInfo().isDodging && playerDodgeSystem.GetCurrentDodgeInfo().dodgeSide == SideType.Left && opponentAttack.Direction == 2)
-            {
-                Debug.Log("Player Dodged Left attack");
-            }
-            else
-            {
-                Debug.Log("you suck");
-            }
+            _opponentHealth.TakeDamage(_currentAttack.Damage);
+            Debug.Log("Enemy Damage Done = " + _currentAttack.Damage);
+            return;
+        }
+
+        var dodge = playerDodgeSystem.GetCurrentDodgeInfo();
+
+        if (!dodge.isDodging)
+        {
+            _playerHealth.TakeDamage(_currentAttack.Damage);
+            return;
+        }
+
+        SideType requiredDodge = GetRequiredDodge(opponentAttack.Direction);
+
+        if (dodge.dodgeSide == requiredDodge)
+        {
+            Debug.Log($"Player Dodged {requiredDodge} attack");
         }
         else
         {
-            Debug.Log("Executed Player Punch");
-            Debug.Log("Damage Done = " + _currentAttack.Damage);
+            _playerHealth.TakeDamage(_currentAttack.Damage);
         }
     }
 
@@ -117,5 +125,16 @@ public class AttackSystem : MonoBehaviour
         }
 
         return -1;
+    }
+
+    private SideType GetRequiredDodge(int direction)
+    {
+        return direction switch
+        {
+            0 => SideType.Right,
+            1 => SideType.Down,
+            2 => SideType.Left,
+            _ => throw new Exception("Invalid attack direction")
+        };
     }
 }
