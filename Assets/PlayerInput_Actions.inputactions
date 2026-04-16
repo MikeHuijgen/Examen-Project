@@ -16,6 +16,51 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "fifthAttack",
+                    "type": "Button",
+                    "id": "c43fdf0c-359b-49d9-86d2-2375dfd7e131",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "fourthAttack",
+                    "type": "Button",
+                    "id": "282a0f64-241f-4e09-a874-16cdf5356499",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "thirdAttack",
+                    "type": "Button",
+                    "id": "e3eed8ae-d09b-46c2-8b46-033a9b7793bd",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "secondAttack",
+                    "type": "Button",
+                    "id": "384ae54d-6b8a-48fc-8e01-b54cafb9ea58",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "firstAttack",
+                    "type": "Button",
+                    "id": "37e411db-bd49-4d03-8857-69b9612e67fa",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "DodgeRight",
                     "type": "Button",
                     "id": "642e020c-f22a-4c6b-9757-45dc4f3d96bf",
@@ -43,6 +88,61 @@
                     "processors": "",
                     "groups": "",
                     "action": "DodgeLeft",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8766c576-6cb7-427a-84fc-d23ea16c457f",
+                    "path": "<Keyboard>/5",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "fifthAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2e363aa3-74ab-4838-9aa3-b98fac3f4ef1",
+                    "path": "<Keyboard>/4",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "fourthAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ee7d9b85-8112-4494-a0b8-24a1f8268519",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "thirdAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "20c3ed51-32bf-4bce-aa39-26d31fe0fe67",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "secondAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bdd92445-fe34-490a-8bd8-1cf47a682a32",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "firstAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

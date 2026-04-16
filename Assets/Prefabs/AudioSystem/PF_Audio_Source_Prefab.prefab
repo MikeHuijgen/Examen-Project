@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5632385055408019281}
   - component: {fileID: 2720682555581073108}
   m_Layer: 0
-  m_Name: AudioSourcePrefab
+  m_Name: PF_Audio_Source_Prefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

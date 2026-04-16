@@ -3,9 +3,9 @@ using UnityEngine;
 
 public class MatchDetector
 {
-    public FakeAttack GetRandomValidAttackData(List<FakeAttack> attackDataList, GridObject[,] gridArray, int x, int y)
+    public BaseAttack GetRandomValidAttackData(List<BaseAttack> attackDataList, GridObject[,] gridArray, int x, int y)
     {
-        List<FakeAttack> possibleAttackData = new List<FakeAttack>();
+        List<BaseAttack> possibleAttackData = new List<BaseAttack>();
 
         for (int i = 0; i < attackDataList.Count; i++)
         {
@@ -37,9 +37,9 @@ public class MatchDetector
         return possibleAttackData[Random.Range(0, possibleAttackData.Count)];
     }
 
-    public HashSet<GridPosition> CheckForAllMatches(GridObject[,] grid, int gridWidth, int gridHeight)
+    public HashSet<Match> CheckForAllMatches(GridObject[,] grid, int gridWidth, int gridHeight)
     {
-        var matches = new HashSet<GridPosition>();
+        var matches = new HashSet<Match>();
 
         for (int y = 0; y < gridHeight; y++)
         {
@@ -50,10 +50,13 @@ public class MatchDetector
                 {
                     if (matchLength >= 3)
                     {
+                        var matchGridPositions = new GridPosition[matchLength];
                         for (int k = 0; k < matchLength; k++)
                         {
-                            matches.Add(new GridPosition(x - k, y));
+                            matchGridPositions[k] = new GridPosition(x - k, y);
                         }
+
+                        matches.Add(new Match(grid[x,y].GetAttackData, matchGridPositions));
                     }
                     matchLength = 1;
                 }
@@ -73,10 +76,13 @@ public class MatchDetector
                 {
                     if (matchLength >= 3)
                     {
+                        var matchGridPositions = new GridPosition[matchLength];
                         for (int k = 0; k < matchLength; k++)
                         {
-                            matches.Add(new GridPosition(x, y - k));
+                            matchGridPositions[k] = new GridPosition(x, y - k);
                         }
+
+                        matches.Add(new Match(grid[x, y].GetAttackData, matchGridPositions));
                     }
                     matchLength = 1;
                 }
@@ -95,7 +101,7 @@ public class MatchDetector
         var block = grid[x, y].GetGridMatch3Block;
         if (block == null) return false;
 
-        var blockType = block.GetFakeAttack;
+        var blockType = block.GetAttackData;
 
         int width = grid.GetLength(0);
         int height = grid.GetLength(1);
@@ -105,14 +111,14 @@ public class MatchDetector
         for (var i = x - 1; i >= 0; i--)
         {
             var leftBlock = grid[i, y].GetGridMatch3Block;
-            if (leftBlock != null && leftBlock.GetFakeAttack == blockType) count++;
+            if (leftBlock != null && leftBlock.GetAttackData == blockType) count++;
             else break;
         }
 
         for (var i = x + 1; i < width; i++)
         {
             var rightBlock = grid[i, y].GetGridMatch3Block;
-            if (rightBlock != null && rightBlock.GetFakeAttack == blockType) count++;
+            if (rightBlock != null && rightBlock.GetAttackData == blockType) count++;
             else break;
         }
 
@@ -123,14 +129,14 @@ public class MatchDetector
         for (var i = y - 1; i >= 0; i--)
         {
             var downBlock = grid[x, i].GetGridMatch3Block;
-            if (downBlock != null && downBlock.GetFakeAttack == blockType) count++;
+            if (downBlock != null && downBlock.GetAttackData == blockType) count++;
             else break;
         }
 
         for (int i = y + 1; i < height; i++)
         {
             var upBlock = grid[x, i].GetGridMatch3Block;
-            if (upBlock != null && upBlock.GetFakeAttack == blockType) count++;
+            if (upBlock != null && upBlock.GetAttackData == blockType) count++;
             else break;
         }
 
