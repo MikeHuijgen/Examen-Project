@@ -8,17 +8,17 @@ public class Match3BlockPool : MonoBehaviour
     [SerializeField] private int initialPoolSizePerMatch3Block = 15;
     [SerializeField] private Match3Block[] match3BlockPrefabs;
 
-    private Dictionary<FakeAttack, Queue<Match3Block>> _pool;
-    private Dictionary<FakeAttack, Match3Block> _prefabMap;
+    private Dictionary<BaseAttack, Queue<Match3Block>> _pool;
+    private Dictionary<BaseAttack, Match3Block> _prefabMap;
 
     public void InitializePool(Transform parent)
     {
-        _pool = new Dictionary<FakeAttack, Queue<Match3Block>>();
-        _prefabMap = new Dictionary<FakeAttack, Match3Block>();
+        _pool = new Dictionary<BaseAttack, Queue<Match3Block>>();
+        _prefabMap = new Dictionary<BaseAttack, Match3Block>();
 
         foreach (var prefab in match3BlockPrefabs)
         {
-            var attack = prefab.GetFakeAttack;
+            var attack = prefab.GetAttackData;
 
             if (_prefabMap.ContainsKey(attack)) continue;
 
@@ -40,7 +40,7 @@ public class Match3BlockPool : MonoBehaviour
         return block;
     }
 
-    public bool GetMatch3BlockByAttackData(FakeAttack attack, out Match3Block result)
+    public bool GetMatch3BlockByAttackData(BaseAttack attack, out Match3Block result)
     {
         result = null;
         if (!_pool.ContainsKey(attack)) return false;
@@ -65,7 +65,7 @@ public class Match3BlockPool : MonoBehaviour
 
     public void ReturnMatch3Block(Match3Block block)
     {
-        var attack = block.GetFakeAttack;
+        var attack = block.GetAttackData;
 
         if (!_pool.ContainsKey(attack))
         {

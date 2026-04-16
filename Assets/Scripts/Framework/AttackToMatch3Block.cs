@@ -4,6 +4,6 @@ using UnityEngine;
 [Serializable]
 public struct AttackToMatch3Block
 {
-    public FakeAttack FakeAttack;
+    public BaseAttack attackData;
     public Match3Block Match3Block;
 }

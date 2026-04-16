@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3259757235030990342}
   m_Layer: 0
-  m_Name: BaseCharacter
+  m_Name: PF_Base_Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
