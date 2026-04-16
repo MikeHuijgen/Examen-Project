@@ -392,6 +392,7 @@ GameObject:
   m_Component:
   - component: {fileID: 766133202}
   - component: {fileID: 766133201}
+  - component: {fileID: 766133203}
   m_Layer: 0
   m_Name: AttackSystem
   m_TagString: Untagged
@@ -429,6 +430,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &766133203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 766133200}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24fbf39b24281184f98536bd8d8f8f6e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AttackListener
+  attackSystem: {fileID: 766133201}
 --- !u!1 &912468351 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2797627523177970832, guid: cfb0303b938ee3047b12e8a02fe1f641, type: 3}
@@ -2546,25 +2560,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 2430536831863986580, guid: 71398b28d0a51364c972d73ab945c3e8, type: 3}
-      propertyPath: m_Enabled
+    - target: {fileID: 4657912951577545914, guid: 71398b28d0a51364c972d73ab945c3e8, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 1101.95
+      objectReference: {fileID: 0}
+    - target: {fileID: 4657912951577545914, guid: 71398b28d0a51364c972d73ab945c3e8, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 1214.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4657912951577545914, guid: 71398b28d0a51364c972d73ab945c3e8, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4657912951577545914, guid: 71398b28d0a51364c972d73ab945c3e8, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7130777879010707353, guid: 71398b28d0a51364c972d73ab945c3e8, type: 3}
       propertyPath: m_Name
       value: PF_Camera_Holder
-      objectReference: {fileID: 0}
-    - target: {fileID: 7929716527272760425, guid: 71398b28d0a51364c972d73ab945c3e8, type: 3}
-      propertyPath: m_CullingMask.m_Bits
-      value: 311
-      objectReference: {fileID: 0}
-    - target: {fileID: 8240118904795142658, guid: 71398b28d0a51364c972d73ab945c3e8, type: 3}
-      propertyPath: m_Antialiasing
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8240118904795142658, guid: 71398b28d0a51364c972d73ab945c3e8, type: 3}
-      propertyPath: m_RenderPostProcessing
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
