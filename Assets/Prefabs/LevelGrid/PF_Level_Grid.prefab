@@ -54,7 +54,9 @@ MonoBehaviour:
   - attackData: {fileID: 11400000, guid: af9de7cebb32ba848a19db356ddf3feb, type: 2}
     Match3Block: {fileID: 3607441784381934679, guid: 5a9b702b216f6074eaf8d386d8e7cf41, type: 3}
   - attackData: {fileID: 11400000, guid: 8c4fa548b30d1a64789adb0b06d5a0b8, type: 2}
-    Match3Block: {fileID: 3607441784381934679, guid: 550fc9dae38442242b6bb60b52eac032, type: 3}
+    Match3Block: {fileID: 3607441784381934679, guid: f084fb78364170d48bbf4670ad464849, type: 3}
+  - attackData: {fileID: 11400000, guid: 5df7a0590b175f54faf78371705840df, type: 2}
+    Match3Block: {fileID: 3607441784381934679, guid: 6c83054f8cd5dd442a70ecc1f36c7516, type: 3}
   _match3BlockPool: {fileID: 6476355683486470653}
 --- !u!114 &6476355683486470653
 MonoBehaviour:
@@ -73,4 +75,5 @@ MonoBehaviour:
   - {fileID: 3607441784381934679, guid: 124ee7686152962418124c2949098302, type: 3}
   - {fileID: 3607441784381934679, guid: 3f87e07ba14233042bbb10e3440cd183, type: 3}
   - {fileID: 3607441784381934679, guid: 5a9b702b216f6074eaf8d386d8e7cf41, type: 3}
-  - {fileID: 3607441784381934679, guid: 550fc9dae38442242b6bb60b52eac032, type: 3}
+  - {fileID: 3607441784381934679, guid: 6c83054f8cd5dd442a70ecc1f36c7516, type: 3}
+  - {fileID: 3607441784381934679, guid: f084fb78364170d48bbf4670ad464849, type: 3}

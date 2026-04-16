@@ -3,7 +3,37 @@ guid: b852dd6ad9c8b244db393928dd9efbd1
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: sheriff
+    second: {fileID: 2100000, guid: 88b2bf2542379044fad780176667b469, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: sheriff.001
+    second: {fileID: 2100000, guid: 88b2bf2542379044fad780176667b469, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: sheriff.002
+    second: {fileID: 2100000, guid: 88b2bf2542379044fad780176667b469, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: sheriff.003
+    second: {fileID: 2100000, guid: 88b2bf2542379044fad780176667b469, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: sheriff.004
+    second: {fileID: 2100000, guid: 88b2bf2542379044fad780176667b469, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: sheriff.005
+    second: {fileID: 2100000, guid: 88b2bf2542379044fad780176667b469, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
