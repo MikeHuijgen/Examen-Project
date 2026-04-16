@@ -16,15 +16,15 @@ public class LevelGrid : MonoBehaviour
     [SerializeField] private LevelGridData levelGridData;
     [SerializeField] private AttackToMatch3Block[] attackToMatch3Blocks;
     [SerializeField] private Match3BlockPool _match3BlockPool;
-    private Dictionary<FakeAttack, Match3Block> _attackToMatch3BlocksDictionary;
+    private Dictionary<BaseAttack, Match3Block> _attackToMatch3BlocksDictionary;
     private GridSystem _gridSystem;
     private MatchDetector _matchDetector;
     private GridHit _beginTouchGridPosition;
     private GridHit? _currentSelectedGridPosition;
-    private List<FakeAttack> _attackKeys;
+    private List<BaseAttack> _attackKeys;
     private List<Tween> _tweens = new List<Tween>();
-    private List<(Match3Block block, FakeAttack attack)> _tiles = new();
-
+    private List<(Match3Block block, BaseAttack attack)> _tiles = new();
+    public static event Action<BaseAttack> OnMatchDestroyed;
     private bool _allowInput = true;
 
 
@@ -39,20 +39,20 @@ public class LevelGrid : MonoBehaviour
         _matchDetector = new MatchDetector();
 
         FillDictionary();
-        _attackKeys = new List<FakeAttack>(_attackToMatch3BlocksDictionary.Keys.ToList());
+        _match3BlockPool.InitializePool(transform);
+        _attackKeys = new List<BaseAttack>(_attackToMatch3BlocksDictionary.Keys.ToList());
         Application.targetFrameRate = 120;
         QualitySettings.vSyncCount = 0;
-        _match3BlockPool.InitializePool(transform);
     }
 
     private void FillDictionary()
     {
-        _attackToMatch3BlocksDictionary = new Dictionary<FakeAttack, Match3Block>();
+        _attackToMatch3BlocksDictionary = new Dictionary<BaseAttack, Match3Block>();
         foreach (var attackToMatch3Block in attackToMatch3Blocks)
         {
-            if (_attackToMatch3BlocksDictionary.ContainsKey(attackToMatch3Block.FakeAttack)) continue;
+            if (_attackToMatch3BlocksDictionary.ContainsKey(attackToMatch3Block.attackData)) continue;
 
-            _attackToMatch3BlocksDictionary.Add(attackToMatch3Block.FakeAttack, attackToMatch3Block.Match3Block);
+            _attackToMatch3BlocksDictionary.Add(attackToMatch3Block.attackData, attackToMatch3Block.Match3Block);
         }
     }
 
@@ -189,7 +189,7 @@ public class LevelGrid : MonoBehaviour
         ReshuffleGrid();
     }
 
-    private bool HasAMatch(HashSet<GridPosition> matchList)
+    private bool HasAMatch(HashSet<Match> matchList)
     {
         if (matchList.Count == 0) return false;
 
@@ -205,20 +205,25 @@ public class LevelGrid : MonoBehaviour
         yield return endGridObject.GetGridMatch3Block.transform.DOMove(newEndGridObjectPosition, levelGridData.VisualSwapSpeed).SetEase(Ease.InOutQuad).WaitForCompletion();
     }
 
-    private IEnumerator DestroyMatches(HashSet<GridPosition> matches)
+    private IEnumerator DestroyMatches(HashSet<Match> matches)
     {
         var grid = _gridSystem.GetGridObjectArray;
+        var lastAttack = default(BaseAttack);
 
-        foreach (var position in matches)
+        foreach (var match in matches)
         {
-            var block = grid[position.X, position.Y].GetGridMatch3Block;
+            foreach (var position in match.GridPositions)
+            {
+                var block = grid[position.X, position.Y].GetGridMatch3Block;
+                if (block == null) continue;
+                _match3BlockPool.ReturnMatch3Block(block);
 
-            if (block == null) continue;
-
-            _match3BlockPool.ReturnMatch3Block(block);
-
-            grid[position.X, position.Y].SetMatch3Block(null);
-            grid[position.X, position.Y].SetAttackData(null);
+                grid[position.X, position.Y].SetMatch3Block(null);
+                grid[position.X, position.Y].SetAttackData(null);
+            }
+            
+            OnMatchDestroyed?.Invoke(match.AttackData);
+            print(match.AttackData);
         }
 
         yield return new WaitForSeconds(.15f);

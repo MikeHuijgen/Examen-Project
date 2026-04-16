@@ -157,4 +157,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc410a7372c166242850c910d03670df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridObjectVisual
-  fakeAttack: {fileID: 11400000, guid: 1a37d9467bf7da544b2b85922d828685, type: 2}
+  attackData: {fileID: 11400000, guid: 8c4fa548b30d1a64789adb0b06d5a0b8, type: 2}

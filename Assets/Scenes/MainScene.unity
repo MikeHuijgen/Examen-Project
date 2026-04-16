@@ -2216,33 +2216,9 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 5713675024628666864, guid: 1f7fe2694c2683a41988f34fe97e3730, type: 3}
-      propertyPath: attackToMatch3Blocks.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 5713675024628666864, guid: 1f7fe2694c2683a41988f34fe97e3730, type: 3}
-      propertyPath: attackToMatch3Blocks.Array.data[4].FakeAttack
-      value: 
-      objectReference: {fileID: 11400000, guid: 0f7cecdcec9a68a42aa00e908b214bf1, type: 2}
-    - target: {fileID: 5713675024628666864, guid: 1f7fe2694c2683a41988f34fe97e3730, type: 3}
-      propertyPath: attackToMatch3Blocks.Array.data[4].Match3Block
-      value: 
-      objectReference: {fileID: 3607441784381934679, guid: f01948741cdd3274da24a64c0d88e836, type: 3}
-    - target: {fileID: 6476355683486470653, guid: 1f7fe2694c2683a41988f34fe97e3730, type: 3}
-      propertyPath: match3BlockPrefabs.Array.size
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 6476355683486470653, guid: 1f7fe2694c2683a41988f34fe97e3730, type: 3}
-      propertyPath: 'match3BlockPrefabs.Array.data[4]'
-      value: 
-      objectReference: {fileID: 3607441784381934679, guid: f01948741cdd3274da24a64c0d88e836, type: 3}
     - target: {fileID: 6636569109232428911, guid: 1f7fe2694c2683a41988f34fe97e3730, type: 3}
       propertyPath: m_Name
       value: PF_Level_Grid
-      objectReference: {fileID: 0}
-    - target: {fileID: 6636569109232428911, guid: 1f7fe2694c2683a41988f34fe97e3730, type: 3}
-      propertyPath: m_Layer
-      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 8638016569917829304, guid: 1f7fe2694c2683a41988f34fe97e3730, type: 3}
       propertyPath: m_LocalPosition.x

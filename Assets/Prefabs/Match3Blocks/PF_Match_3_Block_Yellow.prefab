@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dc410a7372c166242850c910d03670df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridObjectVisual
-  fakeAttack: {fileID: 11400000, guid: fca63e7d77941e14793d5badf2a054ac, type: 2}
+  attackData: {fileID: 11400000, guid: af9de7cebb32ba848a19db356ddf3feb, type: 2}
 --- !u!1001 &957146687291909028
 PrefabInstance:
   m_ObjectHideFlags: 0
