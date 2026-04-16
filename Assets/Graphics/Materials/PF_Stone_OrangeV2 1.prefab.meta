@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Graphics/Materials/PF_Stone_OrangeV2 1.prefab.meta
+guid: d842e2febc9473040b1770748dae37b5
+========
+guid: 550fc9dae38442242b6bb60b52eac032
+>>>>>>>> develop:Assets/Prefabs/Match3Blocks/PF_Match_3_Block_Test.prefab.meta
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
