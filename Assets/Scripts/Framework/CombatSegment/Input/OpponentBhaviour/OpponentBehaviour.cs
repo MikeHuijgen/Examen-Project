@@ -7,6 +7,7 @@ public class OpponentBehaviour : MonoBehaviour
 
     [SerializeField] private List<OpponentAttack> opponentAttacks;
     [SerializeField] private List<GameObject> attackDirectionWarnings;
+
     [SerializeField] private float minAttackDelayTime;
     [SerializeField] private float maxAttackDelayTime;
 
@@ -26,22 +27,16 @@ public class OpponentBehaviour : MonoBehaviour
     {
         if (!attackSystem.IsIdle)
         {
-            if(attackSystem.CurrentAttackDirection() == 0)
+            int direction = attackSystem.CurrentAttackDirection();
+
+            if (direction >= 0 && direction < attackDirectionWarnings.Count)
             {
-                attackDirectionWarnings[0].SetActive(true);
-            }
-            if (attackSystem.CurrentAttackDirection() == 1)
-            {
-                attackDirectionWarnings[1].SetActive(true);
-            }
-            if (attackSystem.CurrentAttackDirection() == 2)
-            {
-                attackDirectionWarnings[2].SetActive(true);
+                attackDirectionWarnings[direction].SetActive(true);
             }
         }
         else
         {
-            attackDirectionWarnings.ForEach(warningObject => warningObject.SetActive(false));
+            attackDirectionWarnings.ForEach(warning => warning.SetActive(false));
             HandleAttackDelay();
         }
     }
