@@ -3,18 +3,6 @@ using UnityEngine;
 
 public class AttackSystem : MonoBehaviour
 {
-    [SerializeField] private PlayerDodgeSystem playerDodgeSystem;
-    [SerializeField] private HealthComponent _playerHealth;
-    [SerializeField] private HealthComponent _opponentHealth;
-
-    private AttackState _state = AttackState.Idle;
-
-    private CountdownTimer _chargeTimer;
-    private CountdownTimer _attackTimer;
-    private TimerManager _timer;
-
-    private BaseAttack _currentAttack;
-
     public bool IsIdle => _state == AttackState.Idle;
 
     public enum AttackState
@@ -23,6 +11,17 @@ public class AttackSystem : MonoBehaviour
         Charging,
         Attacking
     }
+
+    [SerializeField] private PlayerDodgeSystem playerDodgeSystem;
+    [SerializeField] private HealthComponent playerHealth;
+    [SerializeField] private HealthComponent opponentHealth;
+
+    private AttackState _state = AttackState.Idle;
+
+    private CountdownTimer _chargeTimer;
+    private CountdownTimer _attackTimer;
+    private TimerManager _timer;
+    private BaseAttack _currentAttack;
 
     private void Start()
     {
@@ -67,7 +66,7 @@ public class AttackSystem : MonoBehaviour
     {
         if (_currentAttack is not OpponentAttack opponentAttack)
         {
-            _opponentHealth.TakeDamage(_currentAttack.Damage);
+            opponentHealth.TakeDamage(_currentAttack.Damage);
             _state = AttackState.Idle;
             return;
         }
@@ -76,19 +75,15 @@ public class AttackSystem : MonoBehaviour
 
         if (!dodge.isDodging)
         {
-            _playerHealth.TakeDamage(_currentAttack.Damage);
+            playerHealth.TakeDamage(_currentAttack.Damage);
             _state = AttackState.Idle;
         }
 
         SideType requiredDodge = GetRequiredDodge(opponentAttack.Direction);
 
-        if (dodge.dodgeSide == requiredDodge)
+        if (dodge.dodgeSide != requiredDodge)
         {
-            Debug.Log($"Player Dodged {requiredDodge} attack");
-        }
-        else
-        {
-            _playerHealth.TakeDamage(_currentAttack.Damage);
+            playerHealth.TakeDamage(_currentAttack.Damage);
             _state = AttackState.Idle;
         }
     }
