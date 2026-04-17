@@ -34,8 +34,7 @@ public class ComboCounter : MonoBehaviour
         float remainingTime = 1f - (_elapsedTime / comboDepleteTime);
         comboTimerBar.value = remainingTime;
 
-        if (_elapsedTime >= comboDepleteTime && _currentComboCount > 0)
-            OnLoseCombo();
+        if (_elapsedTime >= comboDepleteTime && _currentComboCount > 0) OnLoseCombo();
     }
 
     public void OnSuccessfulHit()
@@ -44,8 +43,7 @@ public class ComboCounter : MonoBehaviour
         _elapsedTime = 0f;
         _isComboActive = true;
 
-        if (_currentComboCount > 1)
-            visuals.SetActive(true);
+        if (_currentComboCount > 1) visuals.SetActive(true);
 
         comboTimerBar.value = 1f;
         comboText.text = $"{_currentComboCount}X";
@@ -85,34 +83,26 @@ public class ComboCounter : MonoBehaviour
         _isComboActive = false;
 
         comboTimerBar.value = 0f;
-        comboText.text = "0";
 
         _shakeTween?.Kill();
 
         visuals.transform.DOKill();
         _shakeTween?.Kill();
 
-        visuals.transform.DORotate(new Vector3(0, 0, 360f), 0.5f, RotateMode.FastBeyond360);
+        visuals.transform.DORotate(new Vector3(0, 0, 360f), 0.5f, RotateMode.FastBeyond360).SetEase(Ease.InQuad);
         visuals.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InQuad)
             .OnComplete(() =>
             {
                 visuals.transform.DOKill();
                 visuals.SetActive(false);
+                comboText.text = "0";
+                visuals.transform.localScale = Vector3.one;
             });
     }
 
-    private void OnEnable()
-    {
-        LevelGrid.OnMatchDestroyed += OnMatch;
-    }
+    private void OnEnable() => LevelGrid.OnMatchDestroyed += OnMatch;
 
-    private void OnDisable()
-    {
-        LevelGrid.OnMatchDestroyed -= OnMatch;
-    }
+    private void OnDisable() => LevelGrid.OnMatchDestroyed -= OnMatch;
 
-    private void OnMatch(object _)
-    {
-        OnSuccessfulHit();
-    }
+    private void OnMatch(object _) => OnSuccessfulHit();
 }
