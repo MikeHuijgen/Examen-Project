@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 50d1a570cc2bbe248b38e7105db71ee1
+guid: b72cad459268a1a42aed5e477c5323d5
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Circle
-    second: {fileID: 2100000, guid: d52e3fff4ba6f2a44a3b7f81ed5e7e1e, type: 2}
+    second: {fileID: 2100000, guid: 058fc695a078b3a4da61275816ca1c18, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
