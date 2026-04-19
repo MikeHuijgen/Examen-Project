@@ -16,14 +16,14 @@ public class LevelGrid : MonoBehaviour
     [SerializeField] private LevelGridData levelGridData;
     [SerializeField] private AttackToMatch3Block[] attackToMatch3Blocks;
     [SerializeField] private Match3BlockPool _match3BlockPool;
-    private Dictionary<BaseAttack, Match3Block> _attackToMatch3BlocksDictionary;
+    private Dictionary<BaseAttack, Match3BlockVisual> _attackToMatch3BlocksDictionary;
     private GridSystem _gridSystem;
     private MatchDetector _matchDetector;
     private GridHit _beginTouchGridPosition;
     private GridHit? _currentSelectedGridPosition;
     private List<BaseAttack> _attackKeys;
     private List<Tween> _tweens = new List<Tween>();
-    private List<(Match3Block block, BaseAttack attack)> _tiles = new();
+    private List<(Match3BlockVisual block, BaseAttack attack)> _tiles = new();
     public static event Action<BaseAttack> OnMatchDestroyed;
     private bool _allowInput = true;
 
@@ -47,7 +47,7 @@ public class LevelGrid : MonoBehaviour
 
     private void FillDictionary()
     {
-        _attackToMatch3BlocksDictionary = new Dictionary<BaseAttack, Match3Block>();
+        _attackToMatch3BlocksDictionary = new Dictionary<BaseAttack, Match3BlockVisual>();
         foreach (var attackToMatch3Block in attackToMatch3Blocks)
         {
             if (_attackToMatch3BlocksDictionary.ContainsKey(attackToMatch3Block.attackData)) continue;

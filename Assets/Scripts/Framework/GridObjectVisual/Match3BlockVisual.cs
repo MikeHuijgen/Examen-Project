@@ -1,7 +1,7 @@
 using UnityEngine;
 using System;
 
-public class Match3Block : MonoBehaviour
+public class Match3BlockVisual : MonoBehaviour
 {
     [SerializeField] private BaseAttack attackData;
 

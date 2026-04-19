@@ -6,15 +6,15 @@ using UnityEngine;
 public class Match3BlockPool : MonoBehaviour
 {
     [SerializeField] private int initialPoolSizePerMatch3Block = 15;
-    [SerializeField] private Match3Block[] match3BlockPrefabs;
+    [SerializeField] private Match3BlockVisual[] match3BlockPrefabs;
 
-    private Dictionary<BaseAttack, Queue<Match3Block>> _pool;
-    private Dictionary<BaseAttack, Match3Block> _prefabMap;
+    private Dictionary<BaseAttack, Queue<Match3BlockVisual>> _pool;
+    private Dictionary<BaseAttack, Match3BlockVisual> _prefabMap;
 
     public void InitializePool(Transform parent)
     {
-        _pool = new Dictionary<BaseAttack, Queue<Match3Block>>();
-        _prefabMap = new Dictionary<BaseAttack, Match3Block>();
+        _pool = new Dictionary<BaseAttack, Queue<Match3BlockVisual>>();
+        _prefabMap = new Dictionary<BaseAttack, Match3BlockVisual>();
 
         foreach (var prefab in match3BlockPrefabs)
         {
@@ -23,7 +23,7 @@ public class Match3BlockPool : MonoBehaviour
             if (_prefabMap.ContainsKey(attack)) continue;
 
             _prefabMap.Add(attack, prefab);
-            _pool.Add(attack, new Queue<Match3Block>());
+            _pool.Add(attack, new Queue<Match3BlockVisual>());
 
             for (int i = 0; i < initialPoolSizePerMatch3Block; i++)
             {
@@ -33,21 +33,21 @@ public class Match3BlockPool : MonoBehaviour
         }
     }
 
-    private Match3Block CreateNewBlock(Match3Block prefab, Transform parent)
+    private Match3BlockVisual CreateNewBlock(Match3BlockVisual prefab, Transform parent)
     {
         var block = Instantiate(prefab, parent);
         block.gameObject.SetActive(false);
         return block;
     }
 
-    public bool GetMatch3BlockByAttackData(BaseAttack attack, out Match3Block result)
+    public bool GetMatch3BlockByAttackData(BaseAttack attack, out Match3BlockVisual result)
     {
         result = null;
         if (!_pool.ContainsKey(attack)) return false;
 
         var queue = _pool[attack];
 
-        Match3Block block;
+        Match3BlockVisual block;
 
         if (queue.Count == 0)
         {
@@ -63,7 +63,7 @@ public class Match3BlockPool : MonoBehaviour
         return true;
     }
 
-    public void ReturnMatch3Block(Match3Block block)
+    public void ReturnMatch3Block(Match3BlockVisual block)
     {
         var attack = block.GetAttackData;
 

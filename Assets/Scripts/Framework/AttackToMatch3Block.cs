@@ -5,5 +5,5 @@ using UnityEngine;
 public struct AttackToMatch3Block
 {
     public BaseAttack attackData;
-    public Match3Block Match3Block;
+    public Match3BlockVisual Match3Block;
 }
