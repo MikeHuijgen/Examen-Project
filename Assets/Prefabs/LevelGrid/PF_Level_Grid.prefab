@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8638016569917829304}
   - component: {fileID: 5713675024628666864}
   - component: {fileID: 6476355683486470653}
+  - component: {fileID: 1732353189968295651}
   m_Layer: 8
   m_Name: PF_Level_Grid
   m_TagString: Untagged
@@ -58,6 +59,8 @@ MonoBehaviour:
   - attackData: {fileID: 11400000, guid: 5df7a0590b175f54faf78371705840df, type: 2}
     Match3Block: {fileID: 3607441784381934679, guid: 6c83054f8cd5dd442a70ecc1f36c7516, type: 3}
   _match3BlockPool: {fileID: 6476355683486470653}
+  match3BlockProfileContainer: {fileID: 11400000, guid: 6e92fbd265f992240b748d77810ddeea, type: 2}
+  blockVisualManager: {fileID: 1732353189968295651}
 --- !u!114 &6476355683486470653
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -77,3 +80,27 @@ MonoBehaviour:
   - {fileID: 3607441784381934679, guid: 5a9b702b216f6074eaf8d386d8e7cf41, type: 3}
   - {fileID: 3607441784381934679, guid: 6c83054f8cd5dd442a70ecc1f36c7516, type: 3}
   - {fileID: 3607441784381934679, guid: f084fb78364170d48bbf4670ad464849, type: 3}
+--- !u!114 &1732353189968295651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6636569109232428911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ae9090bd4de82b48b5772aa75b699b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BlockVisualManager
+  profileToVisuals:
+  - match3BlockProfile: {fileID: 11400000, guid: 42d0848ce558f2c40a5bbdd5428bbbea, type: 2}
+    visual: {fileID: 8827714824386003747, guid: 3f87e07ba14233042bbb10e3440cd183, type: 3}
+  - match3BlockProfile: {fileID: 11400000, guid: 74cc3cfeaa113494f8a0bf7ac91b7f1c, type: 2}
+    visual: {fileID: 8827714824386003747, guid: f084fb78364170d48bbf4670ad464849, type: 3}
+  - match3BlockProfile: {fileID: 11400000, guid: ade9b781860b26847868422fc9bae200, type: 2}
+    visual: {fileID: 8827714824386003747, guid: 6c83054f8cd5dd442a70ecc1f36c7516, type: 3}
+  - match3BlockProfile: {fileID: 11400000, guid: 4c962fbd07afeaf4ba678a7dad590198, type: 2}
+    visual: {fileID: 8827714824386003747, guid: 124ee7686152962418124c2949098302, type: 3}
+  - match3BlockProfile: {fileID: 11400000, guid: 4d7f3c835e6e71f42ab70c3d324a718c, type: 2}
+    visual: {fileID: 8827714824386003747, guid: 5a9b702b216f6074eaf8d386d8e7cf41, type: 3}
+  initialPoolSizePerMatch3Block: 25

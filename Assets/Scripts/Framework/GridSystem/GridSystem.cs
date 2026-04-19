@@ -56,16 +56,7 @@ public class GridSystem
 
     public Vector3 ConvertGridPositionToWorldPosition(GridPosition gridPosition)
     {
-        var gridWidthPx = _width * _cellWidth;
-        var gridHeightPx = _height * _cellHeight;
-
-        var offsetX = -gridWidthPx / 2f;
-        var offsetY = -gridHeightPx / 2f;
-
-        var x = offsetX + gridPosition.X * _cellWidth + _cellWidth * 0.5f;
-        var y = offsetY + gridPosition.Y * _cellHeight + _cellHeight * 0.5f;
-
-        return new Vector3(x, y, 0);
+        return new Vector3(gridPosition.X * _cellWidth + _cellWidth / 2, gridPosition.Y * _cellHeight + _cellHeight / 2, 0);
     }
 
 

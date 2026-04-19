@@ -72,6 +72,7 @@ Assets/Scripts/
    AudioManager.cs
    AudioPool.cs
    SoundData.cs
+  BlockVisualManager.cs
   CameraHolder/CameraHolder.cs
   CombatSegment/AttackSystem/
    AttackListener.cs

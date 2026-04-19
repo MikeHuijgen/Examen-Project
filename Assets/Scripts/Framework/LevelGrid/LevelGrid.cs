@@ -17,6 +17,7 @@ public class LevelGrid : MonoBehaviour
     [SerializeField] private AttackToMatch3Block[] attackToMatch3Blocks;
     [SerializeField] private Match3BlockPool _match3BlockPool;
     [SerializeField] private Match3BlockProfileContainer match3BlockProfileContainer;
+    [SerializeField] private BlockVisualManager blockVisualManager;
     private Dictionary<BaseAttack, Match3BlockVisual> _attackToMatch3BlocksDictionary;
     private GridSystem _gridSystem;
     private MatchDetector _matchDetector;
@@ -40,7 +41,7 @@ public class LevelGrid : MonoBehaviour
         _matchDetector = new MatchDetector();
 
         FillDictionary();
-        _match3BlockPool.InitializePool(transform);
+
         _attackKeys = new List<BaseAttack>(_attackToMatch3BlocksDictionary.Keys.ToList());
         Application.targetFrameRate = 120;
         QualitySettings.vSyncCount = 0;
@@ -145,32 +146,41 @@ public class LevelGrid : MonoBehaviour
             yield break;
         }
 
-        _gridSystem.SwapGridObjectsData(beginGridObject, endGridObject);
-
-        yield return MoveVisuals(beginGridObject, endGridObject);
-
-        var matches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
-
-        if (!HasAMatch(matches))
+        if (!beginGridObject.GetMatch3BlockProfile.HasAction<SwapAction>() || !endGridObject.GetMatch3BlockProfile.HasAction<SwapAction>()) 
         {
-            _gridSystem.SwapGridObjectsData(beginGridObject, endGridObject);
-            yield return MoveVisuals(beginGridObject, endGridObject);
+            print($"Has no swap action by: {beginGridObject.GetMatch3BlockProfile} and {endGridObject.GetMatch3BlockProfile}");
             _allowInput = true;
             yield break;
         }
 
-        while (true)
-        {
-            matches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
+        print("Allow swap");
 
-            if (!HasAMatch(matches)) break;
+        // _gridSystem.SwapGridObjectsData(beginGridObject, endGridObject);
 
-            yield return DestroyMatches(matches);
+        // yield return MoveVisuals(beginGridObject, endGridObject);
 
-            yield return CollapseAndFill();
-        }
+        // var matches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
 
-        CheckForPossibleMoves();
+        // if (!HasAMatch(matches))
+        // {
+        //     _gridSystem.SwapGridObjectsData(beginGridObject, endGridObject);
+        //     yield return MoveVisuals(beginGridObject, endGridObject);
+        //     _allowInput = true;
+        //     yield break;
+        // }
+
+        // while (true)
+        // {
+        //     matches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
+
+        //     if (!HasAMatch(matches)) break;
+
+        //     yield return DestroyMatches(matches);
+
+        //     yield return CollapseAndFill();
+        // }
+
+        // CheckForPossibleMoves();
 
         _allowInput = true;
     }
@@ -236,17 +246,18 @@ public class LevelGrid : MonoBehaviour
         {
             for (int y = 0; y < levelGridData.GridHeight; y++)
             {
+                var newMatch3Profile = match3BlockProfileContainer.GetRandomProfile();
+                if (!blockVisualManager.TryEnableBlockByProfile(newMatch3Profile, new GridPosition(x, y), _gridSystem.ConvertGridPositionToWorldPosition)) continue;
+
                 var randomAttackData = _matchDetector.GetRandomValidAttackData(_attackKeys, grid, x, y);
-                if(!_match3BlockPool.GetMatch3BlockByAttackData(randomAttackData, out var newMatch3Block)) continue;
+                //if(!_match3BlockPool.GetMatch3BlockByAttackData(randomAttackData, out var newMatch3Block)) continue;
 
-                var newBlockPosition = new Vector3(
-                    x * levelGridData.GridCellWidth + levelGridData.GridCellWidth / 2,
-                    y * levelGridData.GridCellHeight + levelGridData.GridCellHeight / 2,
-                    0);
+                //var newBlockPosition = new Vector3(x * levelGridData.GridCellWidth + levelGridData.GridCellWidth / 2, y * levelGridData.GridCellHeight + levelGridData.GridCellHeight / 2, 0);
 
-                newMatch3Block.SetPosition(newBlockPosition);
-                grid[x, y].SetMatch3Block(newMatch3Block);
+                //newMatch3Block.SetPosition(newBlockPosition);
+                //grid[x, y].SetMatch3Block(newMatch3Block);
                 grid[x, y].SetAttackData(randomAttackData);
+                grid[x, y].SetMatch3BlockProfile(newMatch3Profile);
             }
         }
     }
