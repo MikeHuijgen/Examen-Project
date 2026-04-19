@@ -4,4 +4,14 @@ using UnityEngine;
 public class Match3BlockProfile : ScriptableObject
 {
     public Match3BaseAction[] Actions;
+
+    public bool HasAction<T>() where T : Match3BaseAction
+    {
+        foreach (var action in Actions)
+        {
+            if (action is T) return false;
+        }
+
+        return true;
+    }
 }
