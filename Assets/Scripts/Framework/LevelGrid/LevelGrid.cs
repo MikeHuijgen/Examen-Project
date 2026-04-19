@@ -248,15 +248,7 @@ public class LevelGrid : MonoBehaviour
             {
                 var newMatch3Profile = match3BlockProfileContainer.GetRandomProfile();
                 if (!blockVisualManager.TryEnableBlockByProfile(newMatch3Profile, new GridPosition(x, y), _gridSystem.ConvertGridPositionToWorldPosition)) continue;
-
-                var randomAttackData = _matchDetector.GetRandomValidAttackData(_attackKeys, grid, x, y);
-                //if(!_match3BlockPool.GetMatch3BlockByAttackData(randomAttackData, out var newMatch3Block)) continue;
-
-                //var newBlockPosition = new Vector3(x * levelGridData.GridCellWidth + levelGridData.GridCellWidth / 2, y * levelGridData.GridCellHeight + levelGridData.GridCellHeight / 2, 0);
-
-                //newMatch3Block.SetPosition(newBlockPosition);
-                //grid[x, y].SetMatch3Block(newMatch3Block);
-                grid[x, y].SetAttackData(randomAttackData);
+                newMatch3Profile.Init();
                 grid[x, y].SetMatch3BlockProfile(newMatch3Profile);
             }
         }
