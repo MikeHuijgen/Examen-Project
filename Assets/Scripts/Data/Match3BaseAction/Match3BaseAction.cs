@@ -1,13 +1,9 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Match3BlockBaseAction", menuName = "Scriptable Objects/Match3/Blocks/Actions/Action")]
-public class Match3BaseAction : ScriptableObject
+public abstract class Match3BaseAction : ScriptableObject
 {
     public Match3BaseSubAction[] SubActions;
-    public void Execute()
-    {
-        ExecuteSubActions();
-    }
+    public virtual void Execute() {ExecuteSubActions();}
 
     private void ExecuteSubActions()
     {

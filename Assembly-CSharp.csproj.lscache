@@ -58,7 +58,9 @@ Assets/Prefabs/Data/AttackData/ScriptableObjectScripts/
 Assets/Scripts/Data/
  FakeAttack.cs
  LevelGridData/LevelGridData.cs
- Match3BaseAction/Match3BaseAction.cs
+ Match3BaseAction/
+  Match3BaseAction.cs
+  SwapAction.cs
  Match3BaseSubAction/Match3BaseSubAction.cs
  Match3BlockProfile/Match3BlockProfile.cs
  Match3BlockProfileContainer/Match3BlockProfileContainer.cs

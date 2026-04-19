@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c40e332f895f904c88fc099ed3d6958, type: 3}
   m_Name: Match3BlockProfileYellow
   m_EditorClassIdentifier: Assembly-CSharp::Match3BlockProfile
-  Actions: []
+  Actions:
+  - {fileID: 11400000, guid: 7f43bea706ea47949b36fb44e036829c, type: 2}

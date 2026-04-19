@@ -16,6 +16,7 @@ public class LevelGrid : MonoBehaviour
     [SerializeField] private LevelGridData levelGridData;
     [SerializeField] private AttackToMatch3Block[] attackToMatch3Blocks;
     [SerializeField] private Match3BlockPool _match3BlockPool;
+    [SerializeField] private Match3BlockProfileContainer match3BlockProfileContainer;
     private Dictionary<BaseAttack, Match3BlockVisual> _attackToMatch3BlocksDictionary;
     private GridSystem _gridSystem;
     private MatchDetector _matchDetector;
