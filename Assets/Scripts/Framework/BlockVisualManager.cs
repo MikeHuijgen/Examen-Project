@@ -8,7 +8,7 @@ public class BlockVisualManager : MonoBehaviour
     [SerializeField] private int initialPoolSizePerMatch3Block = 15;
     private Dictionary<Match3BlockProfile, GameObject> _profileToVisualsDictionary;
     private Dictionary<Match3BlockProfile, List<GameObject>> _pool;
-    private Dictionary<GridPosition, GameObject> _ActiveBlockVisuals;
+    private Dictionary<GridObject, GameObject> _ActiveBlockVisuals;
 
     void Awake()
     {
@@ -17,7 +17,7 @@ public class BlockVisualManager : MonoBehaviour
 
     private void InitializePool()
     {
-        _ActiveBlockVisuals = new Dictionary<GridPosition, GameObject>();
+        _ActiveBlockVisuals = new Dictionary<GridObject, GameObject>();
         _profileToVisualsDictionary = new Dictionary<Match3BlockProfile, GameObject>();
         _pool = new Dictionary<Match3BlockProfile, List<GameObject>>();
 
@@ -36,7 +36,7 @@ public class BlockVisualManager : MonoBehaviour
         }
     }
 
-    public bool TryEnableBlockByProfile(Match3BlockProfile match3BlockProfile, GridPosition gridPosition, Func<GridPosition, Vector3> GetWorldPos)
+    public bool TryEnableVisualByProfile(Match3BlockProfile match3BlockProfile, GridObject gridObject, Func<GridPosition, Vector3> GetWorldPos)
     {
         if (!_pool.TryGetValue(match3BlockProfile, out var listOfVisuals)) return false;
 
@@ -44,12 +44,21 @@ public class BlockVisualManager : MonoBehaviour
         {
             if (visual.activeInHierarchy) continue;
 
+            _ActiveBlockVisuals.Add(gridObject, visual);
+            visual.transform.position = GetWorldPos(gridObject.GetGridPosition);
             visual.SetActive(true);
-            _ActiveBlockVisuals.Add(gridPosition, visual);
-            visual.transform.position = GetWorldPos(gridPosition);
             break;
         }
 
+        return true;
+    }
+
+    public bool TryDisableVisualOnGridPosition(GridObject gridObject)
+    {
+        if (!_ActiveBlockVisuals.TryGetValue(gridObject, out var visual)) return false;
+        visual.SetActive(false);
+        visual.transform.position = Vector3.zero;
+        _ActiveBlockVisuals.Remove(gridObject);
         return true;
     }
 }

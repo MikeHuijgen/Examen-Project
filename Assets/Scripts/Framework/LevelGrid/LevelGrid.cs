@@ -247,7 +247,7 @@ public class LevelGrid : MonoBehaviour
             for (int y = 0; y < levelGridData.GridHeight; y++)
             {
                 var newMatch3Profile = match3BlockProfileContainer.GetRandomProfile();
-                if (!blockVisualManager.TryEnableBlockByProfile(newMatch3Profile, new GridPosition(x, y), _gridSystem.ConvertGridPositionToWorldPosition)) continue;
+                if (!blockVisualManager.TryEnableVisualByProfile(newMatch3Profile, grid[x, y], _gridSystem.ConvertGridPositionToWorldPosition)) continue;
                 newMatch3Profile.Init();
                 grid[x, y].SetMatch3BlockProfile(newMatch3Profile);
             }
