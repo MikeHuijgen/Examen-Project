@@ -95,6 +95,7 @@ Assets/Scripts/
   Match3BlockPool/Match3BlockPool.cs
   Match3CameraHandler/Match3CameraHandler.cs
   MatchDetector/MatchDetector.cs
+ Intefaces/IActionContext.cs
  Temp/PlayerAttackTest.cs
  Tools/Timer/
   BaseTimer.cs
