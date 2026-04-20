@@ -20,10 +20,7 @@ public class ComboCounter : MonoBehaviour
 
     private Tween _shakeTween;
 
-    private void Awake()
-    {
-        visuals.SetActive(false);
-    }
+    private void Awake() => visuals.SetActive(false);
 
     private void Update()
     {
@@ -71,10 +68,7 @@ public class ComboCounter : MonoBehaviour
             .SetLoops(-1, LoopType.Restart);
     }
 
-    public void OnLoseCombo()
-    {
-        ResetCombo();
-    }
+    public void OnLoseCombo() => ResetCombo();
 
     private void ResetCombo()
     {
