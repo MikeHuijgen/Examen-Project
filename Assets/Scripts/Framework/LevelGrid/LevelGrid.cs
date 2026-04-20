@@ -25,7 +25,7 @@ public class LevelGrid : MonoBehaviour
     private GridHit? _currentSelectedGridPosition;
     private List<BaseAttack> _attackKeys;
     private List<Tween> _tweens = new List<Tween>();
-    private List<(Match3BlockVisual block, BaseAttack attack)> _tiles = new();
+    private List<GridObject> _tiles = new List<GridObject>();
     public static event Action<BaseAttack> OnMatchDestroyed;
     private bool _allowInput = true;
 
@@ -145,6 +145,9 @@ public class LevelGrid : MonoBehaviour
             _allowInput = true;
             yield break;
         }
+        
+        print(beginGridObject.GetMatch3BlockProfile);
+        print(endGridObject.GetMatch3BlockProfile);
 
         if (!beginGridObject.GetMatch3BlockProfile.HasAction<SwapAction>(out var beginSwapAction) || !endGridObject.GetMatch3BlockProfile.HasAction<SwapAction>(out var endSwapAction)) 
         {
@@ -169,18 +172,17 @@ public class LevelGrid : MonoBehaviour
             yield break;
         }
 
-        // while (true)
-        // {
-        //     matches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
+        while (true)
+        {
+            matches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
 
-        //     if (!HasAMatch(matches)) break;
+            if (!HasAMatch(matches)) break;
 
-        //     yield return DestroyMatches(matches);
+            yield return DestroyMatches(matches);
+            yield return CollapseAndFill();
+        }
 
-        //     yield return CollapseAndFill();
-        // }
-
-        // CheckForPossibleMoves();
+        //CheckForPossibleMoves();
 
         _allowInput = true;
     }
@@ -212,31 +214,24 @@ public class LevelGrid : MonoBehaviour
         var newBeginGridObjectPosition = _gridSystem.ConvertGridPositionToWorldPosition(beginGridObject.GetGridPosition);
         var newEndGridObjectPosition = _gridSystem.ConvertGridPositionToWorldPosition(endGridObject.GetGridPosition);
 
-        StartCoroutine(blockVisualManager.MoveVisualWithTween(beginGridObject, newBeginGridObjectPosition, levelGridData.VisualSwapSpeed));
-        yield return blockVisualManager.MoveVisualWithTween(endGridObject, newEndGridObjectPosition, levelGridData.VisualSwapSpeed);
+        StartCoroutine(blockVisualManager.MoveVisualWithTweenRoutine(beginGridObject, newBeginGridObjectPosition, levelGridData.VisualSwapSpeed, Ease.InOutQuad));
+        yield return blockVisualManager.MoveVisualWithTweenRoutine(endGridObject, newEndGridObjectPosition, levelGridData.VisualSwapSpeed, Ease.InOutQuad);
     }
 
     private IEnumerator DestroyMatches(HashSet<Match> matches)
     {
+        // Uiteindelijk even kijken of de data set niet beter kan in een destroy action
         var grid = _gridSystem.GetGridObjectArray;
-        var lastAttack = default(BaseAttack);
-
         foreach (var match in matches)
         {
-            foreach (var position in match.GridPositions)
+            for (int i = 0; i < match.MatchedObjectGroup.Length; i++)
             {
-                var block = grid[position.X, position.Y].GetGridMatch3Block;
-                if (block == null) continue;
-                _match3BlockPool.ReturnMatch3Block(block);
-
-                grid[position.X, position.Y].SetMatch3Block(null);
-                grid[position.X, position.Y].SetAttackData(null);
+                var gridPos = new GridPosition(match.MatchedObjectGroup[i].GetGridPosition.X, match.MatchedObjectGroup[i].GetGridPosition.Y);
+                grid[gridPos.X, gridPos.Y].SetMatch3BlockProfile(null);
             }
-            
-            OnMatchDestroyed?.Invoke(match.AttackData);
         }
 
-        yield return new WaitForSeconds(.15f);
+        yield return blockVisualManager.DestroyMatches(matches);
     }
 
     public void ReshuffleGrid()
@@ -266,33 +261,20 @@ public class LevelGrid : MonoBehaviour
 
             for (var y = 0; y < levelGridData.GridHeight; y++)
             {
-                var block = grid[x, y].GetGridMatch3Block;
-                if (block == null) continue;
+                var match3BlockProfile = grid[x, y].GetMatch3BlockProfile;
+                if (match3BlockProfile == null) continue;
 
-                _tiles.Add((block, grid[x, y].GetAttackData));
-            }
-
-            for (var y = 0; y < levelGridData.GridHeight; y++)
-            {
-                grid[x, y].SetMatch3Block(null);
-                grid[x, y].SetAttackData(null);
+                _tiles.Add(grid[x, y]);
             }
 
             foreach (var tile in _tiles)
             {
                 var targetGrid = grid[x, writeY];
-                var targetPos = new Vector2(
-                x * levelGridData.GridCellWidth + levelGridData.GridCellWidth / 2,
-                writeY * levelGridData.GridCellHeight + levelGridData.GridCellHeight / 2);
 
-
-                targetGrid.SetMatch3Block(tile.block);
-                targetGrid.SetAttackData(tile.attack);
-
-                var tween = tile.block.transform.DOMove(targetGrid.GetWorldPosition(levelGridData.GridCellWidth, levelGridData.GridCellHeight), levelGridData.VisualFallSpeed).SetEase(Ease.OutBounce, .7f);
-
+                targetGrid.SetMatch3BlockProfile(tile.GetMatch3BlockProfile);
+                blockVisualManager.MoveVisualBinding(tile, targetGrid);
+                var tween = blockVisualManager.CreateVisualMoveTween(targetGrid, targetGrid.GetWorldPosition(levelGridData.GridCellWidth, levelGridData.GridCellHeight), levelGridData.VisualFallSpeed, Ease.OutBounce);
                 _tweens.Add(tween);
-
 
                 writeY++;
             }
@@ -303,24 +285,17 @@ public class LevelGrid : MonoBehaviour
             {
                 var y = writeY + i;
 
-                //var attackData = _matchDetector.GetRandomValidMatch3Profile(_attackKeys, grid, x, y);
-
-                //if(!_match3BlockPool.GetMatch3BlockByAttackData(attackData, out var newMatch3Block)) continue;
-
                 var targetGrid = grid[x, y];
-                var targetPos = new Vector2(
-                    x * levelGridData.GridCellWidth + levelGridData.GridCellWidth / 2,
-                    y * levelGridData.GridCellHeight + levelGridData.GridCellHeight / 2);
 
-                var spawnY = targetPos.y + (spawnCount - i) + 5f;
-                //newMatch3Block.transform.position = new Vector3(targetPos.x, spawnY, 0);
+                var spawnY = _gridSystem.ConvertGridPositionToWorldPosition(targetGrid.GetGridPosition).y + (spawnCount - i) + 5f;
 
-                // targetGrid.SetMatch3Block(newMatch3Block);
-                // targetGrid.SetAttackData(attackData);
+                var newMatch3Profile = _matchDetector.GetRandomValidMatch3Profile(match3BlockProfileContainer.match3BlockProfiles, grid, x, y);
+                if (!blockVisualManager.TryEnableVisualByProfile(newMatch3Profile, grid[x, y], _gridSystem.ConvertGridPositionToWorldPosition, spawnY)) continue;
 
-                // var tween = newMatch3Block.transform.DOMove(targetGrid.GetWorldPosition(levelGridData.GridCellWidth, levelGridData.GridCellHeight), levelGridData.VisualFallSpeed).SetEase(Ease.OutBounce, .7f);
+                targetGrid.SetMatch3BlockProfile(newMatch3Profile);
 
-                //_tweens.Add(tween);
+                var tween = blockVisualManager.CreateVisualMoveTween(targetGrid, targetGrid.GetWorldPosition(levelGridData.GridCellWidth, levelGridData.GridCellHeight), levelGridData.VisualFallSpeed, Ease.OutBounce);
+                _tweens.Add(tween);
             }
         }
 

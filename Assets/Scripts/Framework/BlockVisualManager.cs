@@ -38,7 +38,7 @@ public class BlockVisualManager : MonoBehaviour
         }
     }
 
-    public bool TryEnableVisualByProfile(Match3BlockProfile match3BlockProfile, GridObject gridObject, Func<GridPosition, Vector3> GetWorldPos)
+    public bool TryEnableVisualByProfile(Match3BlockProfile match3BlockProfile, GridObject gridObject, Func<GridPosition, Vector3> GetWorldPos, float yOffset = 0)
     {
         if (!_pool.TryGetValue(match3BlockProfile, out var listOfVisuals)) return false;
 
@@ -47,7 +47,9 @@ public class BlockVisualManager : MonoBehaviour
             if (visual.activeInHierarchy) continue;
 
             _ActiveBlockVisuals.Add(gridObject, visual);
-            visual.transform.position = GetWorldPos(gridObject.GetGridPosition);
+            var visualPosition = GetWorldPos(gridObject.GetGridPosition);
+            visualPosition.y = visualPosition.y + yOffset;
+            visual.transform.position = visualPosition;
             visual.SetActive(true);
             break;
         }
@@ -55,21 +57,47 @@ public class BlockVisualManager : MonoBehaviour
         return true;
     }
 
-    public bool TryDisableVisualOnGridPosition(GridObject gridObject)
+    public void TryDisableVisualOnGridObject(GridObject gridObject)
     {
-        if (!_ActiveBlockVisuals.TryGetValue(gridObject, out var visual)) return false;
+        if (!_ActiveBlockVisuals.TryGetValue(gridObject, out var visual)) return;
         visual.SetActive(false);
         visual.transform.position = Vector3.zero;
         _ActiveBlockVisuals.Remove(gridObject);
-        return true;
     }
 
-    public IEnumerator MoveVisualWithTween(GridObject gridObject, Vector3 newPosition, float moveSpeed)
+    public IEnumerator MoveVisualWithTweenRoutine(GridObject gridObject, Vector3 newPosition, float tweenSpeed, Ease ease)
     {
-        // event er voor zorgen dat hij een tween als out krijg kan ik dan gebruiken om net als in de fall en collapse de tween laten afmaken 
         if(!_ActiveBlockVisuals.TryGetValue(gridObject, out var targetVisual)) yield return null;
 
-        yield return targetVisual.transform.DOMove(newPosition, moveSpeed).SetEase(Ease.InOutQuad).WaitForCompletion();
+        yield return targetVisual.transform.DOMove(newPosition, tweenSpeed).SetEase(ease).WaitForCompletion();
+    }
+
+    public Tween CreateVisualMoveTween(GridObject gridObject, Vector3 newPosition, float tweenSpeed, Ease ease)
+    {
+        if(!_ActiveBlockVisuals.TryGetValue(gridObject, out var targetVisual)) return null;
+
+        return targetVisual.transform.DOMove(newPosition, tweenSpeed).SetEase(ease);        
+    }
+
+    public IEnumerator DestroyMatches(HashSet<Match> matches)
+    {
+        foreach (var match in matches)
+        {
+            for (int i = 0; i < match.MatchedObjectGroup.Length; i++)
+            { 
+                TryDisableVisualOnGridObject(match.MatchedObjectGroup[i]);
+            }
+        }
+
+        yield return new WaitForSeconds(.15f);
+    }
+
+    public void MoveVisualBinding(GridObject from, GridObject to)
+    {
+        if (!_ActiveBlockVisuals.TryGetValue(from, out var visual)) return;
+
+        _ActiveBlockVisuals.Remove(from);
+        _ActiveBlockVisuals[to] = visual;
     }
 }
 

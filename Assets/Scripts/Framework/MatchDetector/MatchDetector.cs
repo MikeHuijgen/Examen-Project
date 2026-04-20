@@ -46,17 +46,17 @@ public class MatchDetector
             int matchLength = 1;
             for (int x = 0; x < gridWidth; x++)
             {
+                if (grid[x, y].GetMatch3BlockProfile == null) continue;
                 if (x == gridWidth - 1 || grid[x, y].GetMatch3BlockProfile != grid[x + 1, y].GetMatch3BlockProfile)
                 {
                     if (matchLength >= 3)
                     {
-                        var matchGridPositions = new GridPosition[matchLength];
+                        var matchGridObjectGroup = new GridObject[matchLength];
                         for (int k = 0; k < matchLength; k++)
                         {
-                            matchGridPositions[k] = new GridPosition(x - k, y);
+                            matchGridObjectGroup[k] = grid[x - k, y];
                         }
-
-                        matches.Add(new Match(grid[x,y].GetAttackData, matchGridPositions));
+                        matches.Add(new Match(matchGridObjectGroup));
                     }
                     matchLength = 1;
                 }
@@ -72,17 +72,17 @@ public class MatchDetector
             int matchLength = 1;
             for (int y = 0; y < gridHeight; y++)
             {
+                if (grid[x, y].GetMatch3BlockProfile == null) continue;
                 if (y == gridHeight - 1 || grid[x, y].GetMatch3BlockProfile != grid[x, y + 1].GetMatch3BlockProfile)
                 {
                     if (matchLength >= 3)
                     {
-                        var matchGridPositions = new GridPosition[matchLength];
+                        var matchGridObjectGroup = new GridObject[matchLength];
                         for (int k = 0; k < matchLength; k++)
                         {
-                            matchGridPositions[k] = new GridPosition(x, y - k);
+                            matchGridObjectGroup[k] = grid[x, y - k];
                         }
-
-                        matches.Add(new Match(grid[x, y].GetAttackData, matchGridPositions));
+                        matches.Add(new Match(matchGridObjectGroup));
                     }
                     matchLength = 1;
                 }
@@ -90,6 +90,14 @@ public class MatchDetector
                 {
                     matchLength++;
                 }
+            }
+        }
+
+        foreach (var match in matches)
+        {
+            for (int i = 0; i < match.MatchedObjectGroup.Length; i++)
+            {
+                //Debug.Log(match.MatchedObjectGroup[i].GetMatch3BlockProfile);
             }
         }
 
