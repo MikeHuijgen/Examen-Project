@@ -7,17 +7,25 @@ public class Match3BlockProfile : ScriptableObject
 {
     public Match3BaseAction[] Actions;
 
-    private HashSet<Type> _actionTypes;
+    private Dictionary<Type, Match3BaseAction> _actionTypes;
 
     public void Init()
     {
-        _actionTypes = new HashSet<Type>();
+        _actionTypes = new Dictionary<Type, Match3BaseAction>();
         foreach (var action in Actions)
         {
-            _actionTypes.Add(action.GetType());
+            if (_actionTypes.ContainsKey(action.GetType())) continue;
+            _actionTypes.Add(action.GetType(), action);
         }        
     }
 
-    public bool HasAction<T>() => _actionTypes.Contains(typeof(T));
+    public bool HasAction<T>(out Match3BaseAction result)
+    {
+        result = null;
+        if (!_actionTypes.TryGetValue(typeof(T), out var action)) return false;
+
+        result = action;
+        return true;
+    }
 
 }

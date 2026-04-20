@@ -146,13 +146,14 @@ public class LevelGrid : MonoBehaviour
             yield break;
         }
 
-        if (!beginGridObject.GetMatch3BlockProfile.HasAction<SwapAction>() || !endGridObject.GetMatch3BlockProfile.HasAction<SwapAction>()) 
+        if (!beginGridObject.GetMatch3BlockProfile.HasAction<SwapAction>(out var beginSwapAction) || !endGridObject.GetMatch3BlockProfile.HasAction<SwapAction>(out var endSwapAction)) 
         {
             _allowInput = true;
             yield break;
         }
 
-        //Hier nog de execute aanroepen van de action. Alleen ff zorgen dat ik een out heb van de HasAction anders kan ik niet bij de execute komen
+        beginSwapAction.Execute();
+        endSwapAction.Execute();
 
         _gridSystem.SwapGridObjectsData(beginGridObject, endGridObject);
 
