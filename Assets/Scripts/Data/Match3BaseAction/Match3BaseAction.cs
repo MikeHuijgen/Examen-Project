@@ -1,11 +1,12 @@
+using System.Collections;
 using UnityEngine;
 
 public abstract class Match3BaseAction : ScriptableObject
 {
     public Match3BaseSubAction[] SubActions;
-    public virtual void Execute() {ExecuteSubActions();}
+    public abstract IEnumerator Execute(IActionContext actionContext);
 
-    private void ExecuteSubActions()
+    protected void ExecuteSubActions()
     {
         foreach (var action in SubActions)
         {

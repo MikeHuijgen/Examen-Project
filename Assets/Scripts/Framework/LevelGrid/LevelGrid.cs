@@ -145,9 +145,6 @@ public class LevelGrid : MonoBehaviour
             _allowInput = true;
             yield break;
         }
-        
-        print(beginGridObject.GetMatch3BlockProfile);
-        print(endGridObject.GetMatch3BlockProfile);
 
         if (!beginGridObject.GetMatch3BlockProfile.HasAction<SwapAction>(out var beginSwapAction) || !endGridObject.GetMatch3BlockProfile.HasAction<SwapAction>(out var endSwapAction)) 
         {
@@ -155,10 +152,8 @@ public class LevelGrid : MonoBehaviour
             yield break;
         }
 
-        beginSwapAction.Execute();
-        endSwapAction.Execute();
-
-        _gridSystem.SwapGridObjectsData(beginGridObject, endGridObject);
+        beginSwapAction.Execute(new SwapActionContext(beginGridObject, endGridObject, _gridSystem.SwapGridObjectsData));
+        yield return endSwapAction.Execute(new SwapActionContext(endGridObject, beginGridObject, _gridSystem.SwapGridObjectsData));
 
         yield return MoveVisuals(beginGridObject, endGridObject);
 
@@ -166,7 +161,9 @@ public class LevelGrid : MonoBehaviour
 
         if (!HasAMatch(matches))
         {
-            _gridSystem.SwapGridObjectsData(beginGridObject, endGridObject);
+            beginSwapAction.Execute(new SwapActionContext(beginGridObject, endGridObject, _gridSystem.SwapGridObjectsData));
+            yield return endSwapAction.Execute(new SwapActionContext(endGridObject, beginGridObject, _gridSystem.SwapGridObjectsData));
+
             yield return MoveVisuals(beginGridObject, endGridObject);
             _allowInput = true;
             yield break;
@@ -182,7 +179,7 @@ public class LevelGrid : MonoBehaviour
             yield return CollapseAndFill();
         }
 
-        //CheckForPossibleMoves();
+        CheckForPossibleMoves();
 
         _allowInput = true;
     }
@@ -194,9 +191,8 @@ public class LevelGrid : MonoBehaviour
 
         foreach (var gridObject in grid)
         {
-            _match3BlockPool.ReturnMatch3Block(gridObject.GetGridMatch3Block);
-            gridObject.SetAttackData(null);
-            gridObject.SetMatch3Block(null);
+            blockVisualManager.TryDisableVisualOnGridObject(gridObject);
+            gridObject.SetMatch3BlockProfile(null);
         }
 
         ReshuffleGrid();
@@ -294,7 +290,7 @@ public class LevelGrid : MonoBehaviour
 
                 targetGrid.SetMatch3BlockProfile(newMatch3Profile);
 
-                var tween = blockVisualManager.CreateVisualMoveTween(targetGrid, targetGrid.GetWorldPosition(levelGridData.GridCellWidth, levelGridData.GridCellHeight), levelGridData.VisualFallSpeed, Ease.OutBounce);
+                var tween = blockVisualManager.CreateVisualMoveTween(targetGrid, targetGrid.GetWorldPosition(levelGridData.GridCellWidth, levelGridData.GridCellHeight), levelGridData.VisualFallSpeed, Ease.OutBounce, .7f);
                 _tweens.Add(tween);
             }
         }

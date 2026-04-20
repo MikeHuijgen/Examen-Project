@@ -60,6 +60,7 @@ Assets/Scripts/Data/
  LevelGridData/LevelGridData.cs
  Match3BaseAction/
   Match3BaseAction.cs
+  MatchAction.cs
   SwapAction.cs
  Match3BaseSubAction/
   Match3BaseSubAction.cs
@@ -98,7 +99,9 @@ Assets/Scripts/
   Match3BlockPool/Match3BlockPool.cs
   Match3CameraHandler/Match3CameraHandler.cs
   MatchDetector/MatchDetector.cs
- Intefaces/IActionContext.cs
+ Intefaces/
+  IActionContext.cs
+  SwapActionContext.cs
  Temp/PlayerAttackTest.cs
  Tools/Timer/
   BaseTimer.cs

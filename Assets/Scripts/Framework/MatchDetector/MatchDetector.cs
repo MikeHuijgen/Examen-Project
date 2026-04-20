@@ -46,7 +46,7 @@ public class MatchDetector
             int matchLength = 1;
             for (int x = 0; x < gridWidth; x++)
             {
-                if (grid[x, y].GetMatch3BlockProfile == null) continue;
+                if (grid[x, y].GetMatch3BlockProfile == null || grid[x, y].GetMatch3BlockProfile.HasAction<MatchAction>(out var matchAction)) continue;
                 if (x == gridWidth - 1 || grid[x, y].GetMatch3BlockProfile != grid[x + 1, y].GetMatch3BlockProfile)
                 {
                     if (matchLength >= 3)

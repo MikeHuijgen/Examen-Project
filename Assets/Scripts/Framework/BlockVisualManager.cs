@@ -65,18 +65,18 @@ public class BlockVisualManager : MonoBehaviour
         _ActiveBlockVisuals.Remove(gridObject);
     }
 
-    public IEnumerator MoveVisualWithTweenRoutine(GridObject gridObject, Vector3 newPosition, float tweenSpeed, Ease ease)
+    public IEnumerator MoveVisualWithTweenRoutine(GridObject gridObject, Vector3 newPosition, float tweenSpeed, Ease ease, float tweenStrength = 1)
     {
         if(!_ActiveBlockVisuals.TryGetValue(gridObject, out var targetVisual)) yield return null;
 
         yield return targetVisual.transform.DOMove(newPosition, tweenSpeed).SetEase(ease).WaitForCompletion();
     }
 
-    public Tween CreateVisualMoveTween(GridObject gridObject, Vector3 newPosition, float tweenSpeed, Ease ease)
+    public Tween CreateVisualMoveTween(GridObject gridObject, Vector3 newPosition, float tweenSpeed, Ease ease, float tweenStrength = 1)
     {
         if(!_ActiveBlockVisuals.TryGetValue(gridObject, out var targetVisual)) return null;
 
-        return targetVisual.transform.DOMove(newPosition, tweenSpeed).SetEase(ease);        
+        return targetVisual.transform.DOMove(newPosition, tweenSpeed).SetEase(ease, tweenStrength);        
     }
 
     public IEnumerator DestroyMatches(HashSet<Match> matches)
