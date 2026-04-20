@@ -2,6 +2,7 @@ using System;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class ComboCounter : MonoBehaviour
@@ -11,9 +12,14 @@ public class ComboCounter : MonoBehaviour
     [SerializeField] private float comboDepleteTime = 2f;
     [SerializeField] private GameObject visuals;
 
+    [SerializeField] private float shakeTweenDuration = 0.5f;
     [SerializeField] private float baseShakeStrength = 10f;
     [SerializeField] private float maxShakeStrength = 40f;
 
+    [SerializeField] private float addComboTweenDuratin = 0.2f;
+    [SerializeField] private float resetTweenDuration = 0.5f;
+
+    
     private int _currentComboCount;
     private float _elapsedTime;
     private bool _isComboActive;
@@ -46,7 +52,7 @@ public class ComboCounter : MonoBehaviour
         comboText.text = $"{_currentComboCount}X";
 
         visuals.transform.DOKill();
-        visuals.transform.DOPunchScale(Vector3.one * 0.3f, 0.2f, 10, 1);
+        visuals.transform.DOPunchScale(Vector3.one * 0.3f, addComboTweenDuratin, 10, 1);
 
         HandleShake();
     }
@@ -63,8 +69,8 @@ public class ComboCounter : MonoBehaviour
         strength = Mathf.Clamp(strength, baseShakeStrength, maxShakeStrength);
 
         _shakeTween?.Kill();
-
-        _shakeTween = visuals.transform.DOShakePosition(0.5f, strength, 20, 90, false, false)
+        
+        _shakeTween = visuals.transform.DOShakePosition(shakeTweenDuration, strength, 20, 90, false, false)
             .SetLoops(-1, LoopType.Restart);
     }
 
@@ -83,8 +89,8 @@ public class ComboCounter : MonoBehaviour
         visuals.transform.DOKill();
         _shakeTween?.Kill();
 
-        visuals.transform.DORotate(new Vector3(0, 0, 360f), 0.5f, RotateMode.FastBeyond360).SetEase(Ease.InQuad);
-        visuals.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InQuad)
+        visuals.transform.DORotate(new Vector3(0, 0, 360f), resetTweenDuration, RotateMode.FastBeyond360).SetEase(Ease.InQuad);
+        visuals.transform.DOScale(Vector3.zero, resetTweenDuration).SetEase(Ease.InQuad)
             .OnComplete(() =>
             {
                 visuals.transform.DOKill();
