@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b180f956a14ef649a211900e6de7db4, type: 3}
-  m_Name: SwapAction
-  m_EditorClassIdentifier: Assembly-CSharp::SwapAction
-  SubActions:
-  - {fileID: 11400000, guid: 456383f7aa79c944c9f81c2166ee2fbf, type: 2}
+  m_Script: {fileID: 11500000, guid: a6c2a0a40d75000438b45927a7c89289, type: 3}
+  m_Name: PlaySwapAudio
+  m_EditorClassIdentifier: Assembly-CSharp::PlaySoundSubAction
+  AudioString: Dodge

@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Match3BlockProfileContainer", menuName = "Scriptable Objects/Match3/Blocks/Container")]
+[CreateAssetMenu(fileName = "Match3BlockProfileContainer", menuName = "Scriptable Objects/Match3/Container")]
 public class Match3BlockProfileContainer : ScriptableObject
 {
     public Match3BlockProfile[] match3BlockProfiles;
