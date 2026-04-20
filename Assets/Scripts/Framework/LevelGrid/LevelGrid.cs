@@ -223,7 +223,6 @@ public class LevelGrid : MonoBehaviour
             }
             
             OnMatchDestroyed?.Invoke(match.AttackData);
-            print(match.AttackData);
         }
 
         yield return new WaitForSeconds(.15f);

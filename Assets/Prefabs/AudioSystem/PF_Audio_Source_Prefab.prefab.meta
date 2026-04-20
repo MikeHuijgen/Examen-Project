@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Graphics/Materials/PF_Stone_GreenV2 1.prefab.meta
+guid: 7ae705852f7598f4284c876993542937
+========
 guid: dccc168208389674da3104080dab092a
+>>>>>>>> develop:Assets/Prefabs/AudioSourcePrefab.prefab.meta
 PrefabImporter:
   externalObjects: {}
   userData: 
