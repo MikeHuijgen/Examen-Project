@@ -1,0 +1,11 @@
+fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Graphics/Materials/PF_Stone_PurpleV2 1.prefab.meta
+guid: a1d6c5af43116e840bdf3eb69b6a85bd
+========
+guid: c87fa271d8d2e104fb3bee581092dcbf
+>>>>>>>> develop:Assets/Scripts/Environment props/Big props/PF_Chair.prefab.meta
+PrefabImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
