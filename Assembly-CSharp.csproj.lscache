@@ -56,9 +56,13 @@ Assets/Scripts/Data/
  FakeAttack.cs
  LevelGridData/LevelGridData.cs
 Assets/Scripts/
- FPSCounter.cs
+ Debug/FPSCounter.cs
  Framework/
   AttackToMatch3Block.cs
+  AudioSystem/
+   AudioManager.cs
+   AudioPool.cs
+   SoundData.cs
   CameraHolder/CameraHolder.cs
   Character/
    AttackSystem.cs
@@ -73,14 +77,12 @@ Assets/Scripts/
   GridSystem/GridSystem.cs
   HealthComponent/HealthComponent.cs
   LevelGrid/LevelGrid.cs
-  Match/Match.cs
   Match3BlockPool/Match3BlockPool.cs
+  Match3CameraHandler/Match3CameraHandler.cs
   MatchDetector/MatchDetector.cs
  UI/
-  GridObjectRootUI/GridObjectRootUI.cs
-  GridObjectVisualUI/GridObjectVisualUI.cs
+  GridTileVisual/GridTileVisual.cs
   HealthBar.cs
-  Match3Canvas/Match3Canvas.cs
 Temp/obj/Assembly-CSharp/.NETStandard,Version=v2.1.AssemblyAttributes.cs
 
 [metadataReferences]

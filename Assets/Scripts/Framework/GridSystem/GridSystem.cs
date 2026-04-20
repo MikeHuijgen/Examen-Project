@@ -1,23 +1,19 @@
-using System;
 using System.Collections.Generic;
-using NUnit.Framework.Constraints;
 using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class GridSystem
 {
-    public static event Action<Transform> OnNewGridObjectCreated;
-
     private int _width;
     private int _height;
-    private int _cellWidth;
-    private int _cellHeight;
-    private RectTransform _gridRectTransform;
+    private float _cellWidth;
+    private float _cellHeight;
 
     private GridObject[,] _gridObjectArray;
 
-    public GridSystem(int width, int height, int cellWidth, int cellHeight)
+    Dictionary<GridPosition, GridTileVisual> _gridTileVisuals = new Dictionary<GridPosition, GridTileVisual>();
+
+    public GridSystem(int width, int height, float cellWidth, float cellHeight)
     {
         _width = width;
         _height = height;
@@ -25,9 +21,8 @@ public class GridSystem
         _cellHeight = cellHeight;
     }
 
-    public void SetRectTransform(RectTransform rect) => _gridRectTransform = rect;
-    public bool IsValidGridPosition(gridObject gridPosition) => gridPosition.X >= 0 && gridPosition.Y >= 0 && gridPosition.X < _width && gridPosition.Y < _height;
-    public GridObject GetGridObjectByGridPosition(gridObject gridPosition) => IsValidGridPosition(gridPosition) ? _gridObjectArray[gridPosition.X, gridPosition.Y] : null;
+    public bool IsValidGridPosition(GridPosition gridPosition) => gridPosition.X >= 0 && gridPosition.Y >= 0 && gridPosition.X < _width && gridPosition.Y < _height;
+    public GridObject GetGridObjectByGridPosition(GridPosition gridPosition) => IsValidGridPosition(gridPosition) ? _gridObjectArray[gridPosition.X, gridPosition.Y] : null;
 
     public GridObject[,] GetGridObjectArray => _gridObjectArray;
 
@@ -39,34 +34,27 @@ public class GridSystem
         {
             for (int y = 0; y < _height; y++)
             {
-                var newGridPosition = new gridObject(x, y);
+                var newGridPosition = new GridPosition(x, y);
                 var newGridObject = new GridObject(newGridPosition);
                 _gridObjectArray[x, y] = newGridObject;
             }
         }
     }
 
-    public void CreateGridObjectVisualUIs(GridObjectVisualUI gridObjectVisualUI)
+    public void CreateGridTileVisuals(GridTileVisual gridTileVisual)
     {
         for (var x = 0; x < _width; x++)
         {
             for (int y = 0; y < _height; y++)
             {
-                var newGridObjectVisualUI = GameObject.Instantiate(gridObjectVisualUI);
-
-                newGridObjectVisualUI.Initialize(_gridObjectArray[x, y], _cellWidth, _cellHeight, ConvertGridPositionToWorldPosition);
-
-                _gridObjectArray[x, y].SetGridObjectVisualUI(newGridObjectVisualUI);
-
-                OnNewGridObjectCreated?.Invoke(newGridObjectVisualUI.transform);
-
-                var rect = newGridObjectVisualUI.GetComponent<RectTransform>();
-                rect.anchoredPosition = ConvertGridPositionToWorldPosition(new gridObject(x, y));
+                var newTileVisual = GameObject.Instantiate(gridTileVisual, new Vector3(x * _cellWidth, y * _cellHeight, 0), quaternion.identity);
+                newTileVisual.transform.localScale = new Vector3(_cellWidth, _cellHeight, 0);
+                _gridTileVisuals[new GridPosition(x,y)] = newTileVisual;
             }
         }
     }
 
-    public Vector3 ConvertGridPositionToWorldPosition(gridObject gridPosition)
+    public Vector3 ConvertGridPositionToWorldPosition(GridPosition gridPosition)
     {
         var gridWidthPx = _width * _cellWidth;
         var gridHeightPx = _height * _cellHeight;
@@ -81,28 +69,17 @@ public class GridSystem
     }
 
 
-    public GridHit ConvertWorldPositionToGridHit(Vector2 worldPosition)
+    public GridHit ConvertScreenPositionToGridHit(Vector2 worldPosition)
     {
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            _gridRectTransform,
-            worldPosition,
-            CameraHolder.Match3Camera,
-            out var localPos
-        );
+        var localPos = CameraHolder.Match3Camera.ScreenToWorldPoint(worldPosition);
 
-        var gridWidthPx = _width * _cellWidth;
-        var gridHeightPx = _height * _cellHeight;
-
-        var offsetX = -gridWidthPx / 2f;
-        var offsetY = -gridHeightPx / 2f;
-
-        var rawX = (localPos.x - offsetX) / _cellWidth;
-        var rawY = (localPos.y - offsetY) / _cellHeight;
+        var rawX = localPos.x / _cellWidth;
+        var rawY = localPos.y / _cellHeight;
 
         var gridX = Mathf.FloorToInt(rawX);
         var gridY = Mathf.FloorToInt(rawY);
 
-        return new GridHit(new gridObject(gridX, gridY), rawX, rawY, localPos);
+        return new GridHit(new GridPosition(gridX, gridY), rawX, rawY, localPos);
     }
 
     public void SwapGridObjectsData(GridObject gridObjectA, GridObject gridObjectB)
@@ -117,7 +94,7 @@ public class GridSystem
         gridObjectB.SetGridPosition(gridPositionA);
     }
 
-    public gridObject CalculateClickedEndGridPosition(gridObject beginGridPosition, float rawX, float rawY, float clickTolerance)
+    public GridPosition CalculateClickedEndGridPosition(GridPosition beginGridPosition, float rawX, float rawY, float clickTolerance)
     {
         var startX = beginGridPosition.X;
         var startY = beginGridPosition.Y;
@@ -134,10 +111,10 @@ public class GridSystem
         if (Mathf.Abs(distanceX) == 0 && Mathf.Abs(distanceY) == 0) return beginGridPosition;
 
 
-        if (distanceX == 1) return new gridObject(startX + 1, startY);
-        if (distanceX == -1) return new gridObject(startX - 1, startY);
-        if (distanceY == 1) return new gridObject(startX, startY + 1);
-        if (distanceY == -1) return new gridObject(startX, startY - 1);
+        if (distanceX == 1) return new GridPosition(startX + 1, startY);
+        if (distanceX == -1) return new GridPosition(startX - 1, startY);
+        if (distanceY == 1) return new GridPosition(startX, startY + 1);
+        if (distanceY == -1) return new GridPosition(startX, startY - 1);
 
         if (Mathf.Abs(deltaX) > Mathf.Abs(deltaY))
         {
@@ -155,7 +132,7 @@ public class GridSystem
             var newGridPositionX = Mathf.FloorToInt(rawX);
             distanceX = newGridPositionX - startX;
 
-            if (distanceX >= 2) return new gridObject(startX, startY);
+            if (distanceX >= 2) return new GridPosition(startX, startY);
             return new(startX + 1, startY);
 
         }
@@ -165,7 +142,7 @@ public class GridSystem
             var newGridPositionX = Mathf.FloorToInt(rawX);
             distanceX = newGridPositionX - startX;
 
-            if (distanceX <= -2) return new gridObject(startX, startY);
+            if (distanceX <= -2) return new GridPosition(startX, startY);
             return new(startX - 1, startY);
         }
 
@@ -175,7 +152,7 @@ public class GridSystem
             var newGridPositionY = Mathf.FloorToInt(rawY);
             distanceY = newGridPositionY - startY;
 
-            if (distanceY >= 2) return new gridObject(startX, startY);
+            if (distanceY >= 2) return new GridPosition(startX, startY);
             return new(startX, startY + 1);
         }
         else if (rawY < startY)
@@ -184,14 +161,14 @@ public class GridSystem
             var newGridPositionY = Mathf.FloorToInt(rawY);
             distanceY = newGridPositionY - startY;
 
-            if (distanceY <= -2) return new gridObject(startX, startY);
+            if (distanceY <= -2) return new GridPosition(startX, startY);
             return new(startX, startY - 1);
         }
 
         return beginGridPosition;
     }
 
-    public gridObject CalculateSwipeEndGridPosition(GridHit beginHit, GridHit endHit, float swipeDirectionTolerance, float swipeMaxDiagonalDeviation)
+    public GridPosition CalculateSwipeEndGridPosition(GridHit beginHit, GridHit endHit, float swipeDirectionTolerance, float swipeMaxDiagonalDeviation)
     {
         var delta = endHit.localPos - beginHit.localPos;
 
@@ -214,17 +191,17 @@ public class GridSystem
         if (horizontal)
         {
             var dir = delta.x > 0 ? 1 : -1;
-            return new gridObject(beginHit.hitGridPosition.X + dir, beginHit.hitGridPosition.Y);
+            return new GridPosition(beginHit.hitGridPosition.X + dir, beginHit.hitGridPosition.Y);
         }
         else
         {
             var dir = delta.y > 0 ? 1 : -1;
-            return new gridObject(beginHit.hitGridPosition.X, beginHit.hitGridPosition.Y + dir);
+            return new GridPosition(beginHit.hitGridPosition.X, beginHit.hitGridPosition.Y + dir);
         }
 
     }
 
-    public bool IsDiagonalMove(gridObject beginGridPosition, gridObject endGridPosition)
+    public bool IsDiagonalMove(GridPosition beginGridPosition, GridPosition endGridPosition)
     {
         var deltaGridX = Mathf.Abs(beginGridPosition.X - endGridPosition.X);
         var deltaGridY = Mathf.Abs(beginGridPosition.Y - endGridPosition.Y);
@@ -232,10 +209,22 @@ public class GridSystem
         return deltaGridX >= 1 && deltaGridY >= 1;
     }
 
-    public gridObject CheckGridBounds(gridObject pos)
+    public GridPosition CheckGridBounds(GridPosition pos)
     {
         var x = Mathf.Clamp(pos.X, 0, _width - 1);
         var y = Mathf.Clamp(pos.Y, 0, _height - 1);
-        return new gridObject(x, y);
+        return new GridPosition(x, y);
+    }
+
+    public void SelectTileByGridPosition(GridPosition targetGridPosition)
+    {
+       if(!_gridTileVisuals.TryGetValue(targetGridPosition, out var gridTileVisual)) return;
+       gridTileVisual.OnTileSelected();
+    }
+
+    public void DeselectTileByGridPosition(GridPosition targetGridPosition)
+    {
+       if(!_gridTileVisuals.TryGetValue(targetGridPosition, out var gridTileVisual)) return;
+       gridTileVisual.OnTileDeselected();
     }
 }

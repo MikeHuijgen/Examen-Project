@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: BasicLevelData
   m_EditorClassIdentifier: Assembly-CSharp::LevelGridData
   GridWidth: 7
-  GridHeight: 7
-  GridCellWidth: 110
-  GridCellHeight: 110
+  GridHeight: 8
+  GridCellWidth: 2.5
+  GridCellHeight: 2.5
   ClickTolerance: 0.4
   SwipeDirectionTolerance: 0.5
   SwipeMaxDiagonalDeviation: 1
   VisualSwapSpeed: 0.15
   VisualFallSpeed: 0.7
-  GridObjectDebugVisual: {fileID: 5472091287612878839, guid: 1acc3aecdb8173843bededdfa2bf75ec, type: 3}
+  GridTileVisual: {fileID: 8059167982047488199, guid: 988c68d02bc3d7b43901a9d3771a5d5d, type: 3}
