@@ -3,38 +3,38 @@ using UnityEngine;
 
 public class MatchDetector
 {
-    public BaseAttack GetRandomValidAttackData(List<BaseAttack> attackDataList, GridObject[,] gridArray, int x, int y)
+    public Match3BlockProfile GetRandomValidMatch3Profile(Match3BlockProfile[] profiles, GridObject[,] gridArray, int x, int y)
     {
-        List<BaseAttack> possibleAttackData = new List<BaseAttack>();
+        var possibleProfiles = new List<Match3BlockProfile>();
 
-        for (int i = 0; i < attackDataList.Count; i++)
+        for (int i = 0; i < profiles.Length; i++)
         {
-            possibleAttackData.Add(attackDataList[i]);
+            possibleProfiles.Add(profiles[i]);
         }
 
         if (x >= 2)
         {
-            var left = gridArray[x - 1, y].GetAttackData;
-            var left2 = gridArray[x - 2, y].GetAttackData;
+            var left = gridArray[x - 1, y].GetMatch3BlockProfile;
+            var left2 = gridArray[x - 2, y].GetMatch3BlockProfile;
 
             if (left == left2)
             {
-                possibleAttackData.Remove(left);
+                possibleProfiles.Remove(left);
             }
         }
 
         if (y >= 2)
         {
-            var down = gridArray[x, y - 1].GetAttackData;
-            var down2 = gridArray[x, y - 2].GetAttackData;
+            var down = gridArray[x, y - 1].GetMatch3BlockProfile;
+            var down2 = gridArray[x, y - 2].GetMatch3BlockProfile;
 
             if (down == down2)
             {
-                possibleAttackData.Remove(down);
+                possibleProfiles.Remove(down);
             }
         }
 
-        return possibleAttackData[Random.Range(0, possibleAttackData.Count)];
+        return possibleProfiles[Random.Range(0, possibleProfiles.Count)];
     }
 
     public HashSet<Match> CheckForAllMatches(GridObject[,] grid, int gridWidth, int gridHeight)
@@ -46,7 +46,7 @@ public class MatchDetector
             int matchLength = 1;
             for (int x = 0; x < gridWidth; x++)
             {
-                if (x == gridWidth - 1 || grid[x, y].GetAttackData != grid[x + 1, y].GetAttackData)
+                if (x == gridWidth - 1 || grid[x, y].GetMatch3BlockProfile != grid[x + 1, y].GetMatch3BlockProfile)
                 {
                     if (matchLength >= 3)
                     {
@@ -72,7 +72,7 @@ public class MatchDetector
             int matchLength = 1;
             for (int y = 0; y < gridHeight; y++)
             {
-                if (y == gridHeight - 1 || grid[x, y].GetAttackData != grid[x, y + 1].GetAttackData)
+                if (y == gridHeight - 1 || grid[x, y].GetMatch3BlockProfile != grid[x, y + 1].GetMatch3BlockProfile)
                 {
                     if (matchLength >= 3)
                     {

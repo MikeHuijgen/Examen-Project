@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Collections;
+using DG.Tweening;
 using UnityEngine;
 
 public class BlockVisualManager : MonoBehaviour
@@ -60,6 +62,14 @@ public class BlockVisualManager : MonoBehaviour
         visual.transform.position = Vector3.zero;
         _ActiveBlockVisuals.Remove(gridObject);
         return true;
+    }
+
+    public IEnumerator MoveVisualWithTween(GridObject gridObject, Vector3 newPosition, float moveSpeed)
+    {
+        // event er voor zorgen dat hij een tween als out krijg kan ik dan gebruiken om net als in de fall en collapse de tween laten afmaken 
+        if(!_ActiveBlockVisuals.TryGetValue(gridObject, out var targetVisual)) yield return null;
+
+        yield return targetVisual.transform.DOMove(newPosition, moveSpeed).SetEase(Ease.InOutQuad).WaitForCompletion();
     }
 }
 

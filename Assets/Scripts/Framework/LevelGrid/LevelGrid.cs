@@ -148,26 +148,25 @@ public class LevelGrid : MonoBehaviour
 
         if (!beginGridObject.GetMatch3BlockProfile.HasAction<SwapAction>() || !endGridObject.GetMatch3BlockProfile.HasAction<SwapAction>()) 
         {
-            print($"Has no swap action by: {beginGridObject.GetMatch3BlockProfile} and {endGridObject.GetMatch3BlockProfile}");
             _allowInput = true;
             yield break;
         }
 
-        print("Allow swap");
+        //Hier nog de execute aanroepen van de action. Alleen ff zorgen dat ik een out heb van de HasAction anders kan ik niet bij de execute komen
 
-        // _gridSystem.SwapGridObjectsData(beginGridObject, endGridObject);
+        _gridSystem.SwapGridObjectsData(beginGridObject, endGridObject);
 
-        // yield return MoveVisuals(beginGridObject, endGridObject);
+        yield return MoveVisuals(beginGridObject, endGridObject);
 
-        // var matches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
+        var matches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
 
-        // if (!HasAMatch(matches))
-        // {
-        //     _gridSystem.SwapGridObjectsData(beginGridObject, endGridObject);
-        //     yield return MoveVisuals(beginGridObject, endGridObject);
-        //     _allowInput = true;
-        //     yield break;
-        // }
+        if (!HasAMatch(matches))
+        {
+            _gridSystem.SwapGridObjectsData(beginGridObject, endGridObject);
+            yield return MoveVisuals(beginGridObject, endGridObject);
+            _allowInput = true;
+            yield break;
+        }
 
         // while (true)
         // {
@@ -209,11 +208,11 @@ public class LevelGrid : MonoBehaviour
 
     private IEnumerator MoveVisuals(GridObject beginGridObject, GridObject endGridObject)
     {
-        var newBeginGridObjectPosition = beginGridObject.GetWorldPosition(levelGridData.GridCellWidth, levelGridData.GridCellHeight);
-        var newEndGridObjectPosition = endGridObject.GetWorldPosition(levelGridData.GridCellWidth, levelGridData.GridCellHeight);
+        var newBeginGridObjectPosition = _gridSystem.ConvertGridPositionToWorldPosition(beginGridObject.GetGridPosition);
+        var newEndGridObjectPosition = _gridSystem.ConvertGridPositionToWorldPosition(endGridObject.GetGridPosition);
 
-        beginGridObject.GetGridMatch3Block.transform.DOMove(newBeginGridObjectPosition, levelGridData.VisualSwapSpeed).SetEase(Ease.InOutQuad);
-        yield return endGridObject.GetGridMatch3Block.transform.DOMove(newEndGridObjectPosition, levelGridData.VisualSwapSpeed).SetEase(Ease.InOutQuad).WaitForCompletion();
+        StartCoroutine(blockVisualManager.MoveVisualWithTween(beginGridObject, newBeginGridObjectPosition, levelGridData.VisualSwapSpeed));
+        yield return blockVisualManager.MoveVisualWithTween(endGridObject, newEndGridObjectPosition, levelGridData.VisualSwapSpeed);
     }
 
     private IEnumerator DestroyMatches(HashSet<Match> matches)
@@ -246,7 +245,7 @@ public class LevelGrid : MonoBehaviour
         {
             for (int y = 0; y < levelGridData.GridHeight; y++)
             {
-                var newMatch3Profile = match3BlockProfileContainer.GetRandomProfile();
+                var newMatch3Profile = _matchDetector.GetRandomValidMatch3Profile(match3BlockProfileContainer.match3BlockProfiles, grid, x, y);
                 if (!blockVisualManager.TryEnableVisualByProfile(newMatch3Profile, grid[x, y], _gridSystem.ConvertGridPositionToWorldPosition)) continue;
                 newMatch3Profile.Init();
                 grid[x, y].SetMatch3BlockProfile(newMatch3Profile);
@@ -303,9 +302,9 @@ public class LevelGrid : MonoBehaviour
             {
                 var y = writeY + i;
 
-                var attackData = _matchDetector.GetRandomValidAttackData(_attackKeys, grid, x, y);
+                //var attackData = _matchDetector.GetRandomValidMatch3Profile(_attackKeys, grid, x, y);
 
-                if(!_match3BlockPool.GetMatch3BlockByAttackData(attackData, out var newMatch3Block)) continue;
+                //if(!_match3BlockPool.GetMatch3BlockByAttackData(attackData, out var newMatch3Block)) continue;
 
                 var targetGrid = grid[x, y];
                 var targetPos = new Vector2(
@@ -313,14 +312,14 @@ public class LevelGrid : MonoBehaviour
                     y * levelGridData.GridCellHeight + levelGridData.GridCellHeight / 2);
 
                 var spawnY = targetPos.y + (spawnCount - i) + 5f;
-                newMatch3Block.transform.position = new Vector3(targetPos.x, spawnY, 0);
+                //newMatch3Block.transform.position = new Vector3(targetPos.x, spawnY, 0);
 
-                targetGrid.SetMatch3Block(newMatch3Block);
-                targetGrid.SetAttackData(attackData);
+                // targetGrid.SetMatch3Block(newMatch3Block);
+                // targetGrid.SetAttackData(attackData);
 
-                var tween = newMatch3Block.transform.DOMove(targetGrid.GetWorldPosition(levelGridData.GridCellWidth, levelGridData.GridCellHeight), levelGridData.VisualFallSpeed).SetEase(Ease.OutBounce, .7f);
+                // var tween = newMatch3Block.transform.DOMove(targetGrid.GetWorldPosition(levelGridData.GridCellWidth, levelGridData.GridCellHeight), levelGridData.VisualFallSpeed).SetEase(Ease.OutBounce, .7f);
 
-                _tweens.Add(tween);
+                //_tweens.Add(tween);
             }
         }
 
