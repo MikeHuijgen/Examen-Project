@@ -56,7 +56,6 @@ Assets/Prefabs/Data/AttackData/ScriptableObjectScripts/
  BaseAttack.cs
  OpponentAttack.cs
 Assets/Scripts/Data/
- FakeAttack.cs
  LevelGridData/LevelGridData.cs
  Match3BaseAction/
   Match3BaseAction.cs
@@ -69,12 +68,11 @@ Assets/Scripts/Data/
  Match3BlockProfileContainer/Match3BlockProfileContainer.cs
 Assets/Scripts/
  Debug/FPSCounter.cs
+ Framework/AudioSystem/
+  AudioManager.cs
+  AudioPool.cs
+  SoundData.cs
  Framework/
-  AttackToMatch3Block.cs
-  AudioSystem/
-   AudioManager.cs
-   AudioPool.cs
-   SoundData.cs
   BlockVisualManager.cs
   CameraHolder/CameraHolder.cs
   CombatSegment/AttackSystem/
@@ -90,13 +88,11 @@ Assets/Scripts/
   CombatSegment/TimingManagement/TimerManager.cs
   GridHit/GridHit.cs
   GridObject/GridObject.cs
-  GridObjectVisual/Match3BlockVisual.cs
   GridPosition/GridPosition.cs
   GridSystem/GridSystem.cs
   HealthComponent/HealthComponent.cs
   LevelGrid/LevelGrid.cs
   Match.cs
-  Match3BlockPool/Match3BlockPool.cs
   Match3CameraHandler/Match3CameraHandler.cs
   MatchDetector/MatchDetector.cs
  Intefaces/

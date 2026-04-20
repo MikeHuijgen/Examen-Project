@@ -14,16 +14,12 @@ public class LevelGrid : MonoBehaviour
     };
 
     [SerializeField] private LevelGridData levelGridData;
-    [SerializeField] private AttackToMatch3Block[] attackToMatch3Blocks;
-    [SerializeField] private Match3BlockPool _match3BlockPool;
     [SerializeField] private Match3BlockProfileContainer match3BlockProfileContainer;
     [SerializeField] private BlockVisualManager blockVisualManager;
-    private Dictionary<BaseAttack, Match3BlockVisual> _attackToMatch3BlocksDictionary;
     private GridSystem _gridSystem;
     private MatchDetector _matchDetector;
     private GridHit _beginTouchGridPosition;
     private GridHit? _currentSelectedGridPosition;
-    private List<BaseAttack> _attackKeys;
     private List<Tween> _tweens = new List<Tween>();
     private List<GridObject> _tiles = new List<GridObject>();
     public static event Action<BaseAttack> OnMatchDestroyed;
@@ -40,22 +36,8 @@ public class LevelGrid : MonoBehaviour
 
         _matchDetector = new MatchDetector();
 
-        FillDictionary();
-
-        _attackKeys = new List<BaseAttack>(_attackToMatch3BlocksDictionary.Keys.ToList());
         Application.targetFrameRate = 120;
         QualitySettings.vSyncCount = 0;
-    }
-
-    private void FillDictionary()
-    {
-        _attackToMatch3BlocksDictionary = new Dictionary<BaseAttack, Match3BlockVisual>();
-        foreach (var attackToMatch3Block in attackToMatch3Blocks)
-        {
-            if (_attackToMatch3BlocksDictionary.ContainsKey(attackToMatch3Block.attackData)) continue;
-
-            _attackToMatch3BlocksDictionary.Add(attackToMatch3Block.attackData, attackToMatch3Block.Match3Block);
-        }
     }
 
     private void Start()
@@ -269,7 +251,7 @@ public class LevelGrid : MonoBehaviour
 
                 targetGrid.SetMatch3BlockProfile(tile.GetMatch3BlockProfile);
                 blockVisualManager.MoveVisualBinding(tile, targetGrid);
-                var tween = blockVisualManager.CreateVisualMoveTween(targetGrid, targetGrid.GetWorldPosition(levelGridData.GridCellWidth, levelGridData.GridCellHeight), levelGridData.VisualFallSpeed, Ease.OutBounce);
+                var tween = blockVisualManager.CreateVisualMoveTween(targetGrid, targetGrid.GetWorldPosition(levelGridData.GridCellWidth, levelGridData.GridCellHeight), levelGridData.VisualFallSpeed, Ease.OutBounce, .7f);
                 _tweens.Add(tween);
 
                 writeY++;

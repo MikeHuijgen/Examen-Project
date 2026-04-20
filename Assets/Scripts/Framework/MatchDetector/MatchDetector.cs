@@ -93,23 +93,13 @@ public class MatchDetector
             }
         }
 
-        foreach (var match in matches)
-        {
-            for (int i = 0; i < match.MatchedObjectGroup.Length; i++)
-            {
-                //Debug.Log(match.MatchedObjectGroup[i].GetMatch3BlockProfile);
-            }
-        }
-
         return matches;
     }
 
     public bool HasMatchAt(GridObject[,] grid, int x, int y)
     {
-        var block = grid[x, y].GetGridMatch3Block;
-        if (block == null) return false;
-
-        var blockType = block.GetAttackData;
+        var match3BlockProfile = grid[x, y].GetMatch3BlockProfile;
+        if (match3BlockProfile == null) return false;
 
         int width = grid.GetLength(0);
         int height = grid.GetLength(1);
@@ -118,15 +108,15 @@ public class MatchDetector
 
         for (var i = x - 1; i >= 0; i--)
         {
-            var leftBlock = grid[i, y].GetGridMatch3Block;
-            if (leftBlock != null && leftBlock.GetAttackData == blockType) count++;
+            var leftBlock = grid[i, y].GetMatch3BlockProfile;
+            if (leftBlock != null && leftBlock == match3BlockProfile) count++;
             else break;
         }
 
         for (var i = x + 1; i < width; i++)
         {
-            var rightBlock = grid[i, y].GetGridMatch3Block;
-            if (rightBlock != null && rightBlock.GetAttackData == blockType) count++;
+            var rightBlock = grid[i, y].GetMatch3BlockProfile;
+            if (rightBlock != null && rightBlock == match3BlockProfile) count++;
             else break;
         }
 
@@ -136,15 +126,15 @@ public class MatchDetector
 
         for (var i = y - 1; i >= 0; i--)
         {
-            var downBlock = grid[x, i].GetGridMatch3Block;
-            if (downBlock != null && downBlock.GetAttackData == blockType) count++;
+            var downBlock = grid[x, i].GetMatch3BlockProfile;
+            if (downBlock != null && downBlock == match3BlockProfile) count++;
             else break;
         }
 
         for (int i = y + 1; i < height; i++)
         {
-            var upBlock = grid[x, i].GetGridMatch3Block;
-            if (upBlock != null && upBlock.GetAttackData == blockType) count++;
+            var upBlock = grid[x, i].GetMatch3BlockProfile;
+            if (upBlock != null && upBlock == match3BlockProfile) count++;
             else break;
         }
 
