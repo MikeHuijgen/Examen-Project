@@ -17,6 +17,7 @@ public class ComboCounter : MonoBehaviour
     [SerializeField] private float maxShakeStrength = 40f;
 
     [SerializeField] private float addComboTweenDuratin = 0.2f;
+    [SerializeField] private float addComboScaleAmount = 0.3f;
     [SerializeField] private float resetTweenDuration = 0.5f;
 
     
@@ -52,7 +53,7 @@ public class ComboCounter : MonoBehaviour
         comboText.text = $"{_currentComboCount}X";
 
         visuals.transform.DOKill();
-        visuals.transform.DOPunchScale(Vector3.one * 0.3f, addComboTweenDuratin, 10, 1);
+        visuals.transform.DOPunchScale(Vector3.one * addComboScaleAmount, addComboTweenDuratin, 10, 1);
 
         HandleShake();
     }
@@ -69,8 +70,11 @@ public class ComboCounter : MonoBehaviour
         strength = Mathf.Clamp(strength, baseShakeStrength, maxShakeStrength);
 
         _shakeTween?.Kill();
+
+        var vibrato = 20;
+        var randomness = 90;
         
-        _shakeTween = visuals.transform.DOShakePosition(shakeTweenDuration, strength, 20, 90, false, false)
+        _shakeTween = visuals.transform.DOShakePosition(shakeTweenDuration, strength, vibrato, randomness, false, false)
             .SetLoops(-1, LoopType.Restart);
     }
 
