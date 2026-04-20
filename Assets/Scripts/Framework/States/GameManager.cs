@@ -1,14 +1,13 @@
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.Events;
+using System.Collections;
 public class GameManager : MonoBehaviour
 {
-    private GameStates currentGameStates;
+    public GameStates currentGameStates;
     private AudioSource musicScource;
     private Animator animator;
 
-    public UnityEvent won = new UnityEvent();
-    public UnityEvent lose = new UnityEvent();
     [SerializeField] GameObject _playerInput;
 
     private void Awake()
@@ -16,34 +15,36 @@ public class GameManager : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
-    private void FreezeGame()
+    private IEnumerator FreezeGame()
     {
-        Time.timeScale = 0f;
         _playerInput.SetActive(false);
+        yield return new WaitForSeconds(0.5f); 
+        Time.timeScale = 0f;
         musicScource.ignoreListenerPause = true;
         animator.updateMode = AnimatorUpdateMode.UnscaledTime;
     }
-    public void ChancheGameStates(GameStates gameState)
+
+    private void ActiveGame()
     {
-      currentGameStates = gameState;
+        Time.timeScale = 1f;
+        _playerInput.SetActive(true);
+        musicScource.ignoreListenerPause =false;
+    }
+    public void ChancheGameStates(int enumValue)
+    {
+      currentGameStates = (GameStates)enumValue;
         switch (currentGameStates)
         {
             case GameStates.start:
-                Time.timeScale = 1f;
+                ActiveGame();
                 break;
 
             case GameStates.pause:
-                FreezeGame();             
-                break;
-
-            case GameStates.victory:
-                FreezeGame();
-                won?.Invoke();
+                StartCoroutine(FreezeGame());     
                 break;
 
             case GameStates.death:
-                FreezeGame();
-                lose?.Invoke();
+                StartCoroutine(FreezeGame()); 
                 break;
         }
     }
