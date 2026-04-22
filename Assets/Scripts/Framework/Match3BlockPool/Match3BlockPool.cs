@@ -8,17 +8,17 @@ public class Match3BlockPool : MonoBehaviour
     [SerializeField] private int initialPoolSizePerMatch3Block = 15;
     [SerializeField] private Match3Block[] match3BlockPrefabs;
 
-    private Dictionary<FakeAttack, Queue<Match3Block>> _pool;
-    private Dictionary<FakeAttack, Match3Block> _prefabMap;
+    private Dictionary<BaseAttack, Queue<Match3Block>> _pool;
+    private Dictionary<BaseAttack, Match3Block> _prefabMap;
 
     public void InitializePool(Transform parent)
     {
-        _pool = new Dictionary<FakeAttack, Queue<Match3Block>>();
-        _prefabMap = new Dictionary<FakeAttack, Match3Block>();
+        _pool = new Dictionary<BaseAttack, Queue<Match3Block>>();
+        _prefabMap = new Dictionary<BaseAttack, Match3Block>();
 
         foreach (var prefab in match3BlockPrefabs)
         {
-            var attack = prefab.GetFakeAttack;
+            var attack = prefab.GetAttackData;
 
             if (_prefabMap.ContainsKey(attack)) continue;
 
@@ -40,9 +40,10 @@ public class Match3BlockPool : MonoBehaviour
         return block;
     }
 
-    public Match3Block GetMatch3BlockByAttackData(FakeAttack attack, Transform parent = null)
+    public bool GetMatch3BlockByAttackData(BaseAttack attack, out Match3Block result)
     {
-        if (!_pool.ContainsKey(attack)) return null;
+        result = null;
+        if (!_pool.ContainsKey(attack)) return false;
 
         var queue = _pool[attack];
 
@@ -50,7 +51,7 @@ public class Match3BlockPool : MonoBehaviour
 
         if (queue.Count == 0)
         {
-            block = CreateNewBlock(_prefabMap[attack], parent ?? transform);
+            block = CreateNewBlock(_prefabMap[attack], transform);
         }
         else
         {
@@ -58,12 +59,13 @@ public class Match3BlockPool : MonoBehaviour
         }
 
         block.gameObject.SetActive(true);
-        return block;
+        result = block;
+        return true;
     }
 
     public void ReturnMatch3Block(Match3Block block)
     {
-        var attack = block.GetFakeAttack;
+        var attack = block.GetAttackData;
 
         if (!_pool.ContainsKey(attack))
         {
