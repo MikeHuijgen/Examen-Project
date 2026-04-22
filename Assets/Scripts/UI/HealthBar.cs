@@ -19,7 +19,16 @@ public class HealthBar : MonoBehaviour
 
     private float _currentDelayTime;
 
-    private void Start() => _currentDelayTime = delayTimer;
+    private void Start()
+    {
+        _currentDelayTime = delayTimer;
+
+        healthSlider.interactable = false;
+        delaySlider.interactable = false;
+
+        healthSlider.handleRect.gameObject.SetActive(false);
+        delaySlider.handleRect.gameObject.SetActive(false);
+    }
 
     private void Update()
     {
