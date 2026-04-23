@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 public class GameOver : MonoBehaviour
 {
+    public static event Action OnGameOver;
     [SerializeField] GameObject _gameOverScreen;
     [SerializeField] GameObject _victoryScreen;
 
@@ -14,10 +15,12 @@ public class GameOver : MonoBehaviour
     public void PlayerDead()
     {
         _gameOverScreen.SetActive(true);
+        OnGameOver?.Invoke();
     }
 
     public void EnemyDead()
     {
         _victoryScreen?.SetActive(true);
+        OnGameOver?.Invoke();
     }
 }

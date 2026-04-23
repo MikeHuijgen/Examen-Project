@@ -16,6 +16,7 @@ public class CharacterInput : MonoBehaviour
     [SerializeField] private PlayerAttackTest _playerAttackTest;
     [SerializeField] private PlayerInput _playerInput;
     private bool _finishedTutorial;
+    private bool _gameOver;
 
     private readonly Dictionary<string, SideType> _dodgeBindings = new()
     {
@@ -51,6 +52,7 @@ public class CharacterInput : MonoBehaviour
         Touch.onFingerDown += OnFingerDown;
         Touch.onFingerUp += OnFingerUp;
         TutorialManager.OnTutorialFinished += () => _finishedTutorial = true;
+        GameOver.OnGameOver += () => _gameOver = true;
     }
 
     private void OnDisable()
@@ -61,6 +63,7 @@ public class CharacterInput : MonoBehaviour
         Touch.onFingerDown -= OnFingerDown;
         Touch.onFingerUp -= OnFingerUp;
         TutorialManager.OnTutorialFinished -= () => _finishedTutorial = true;
+        GameOver.OnGameOver += () => _gameOver = true;
     }
 
     private void Bind(string actionName, Action<InputAction.CallbackContext> handler) => _playerInput.actions[actionName].performed += handler;
@@ -69,19 +72,19 @@ public class CharacterInput : MonoBehaviour
 
     public void OnDodgeInputDetected(SideType dodgeSide)
     {
-        if (!_finishedTutorial) return;
+        if (!_finishedTutorial || _gameOver) return;
         OnDodgeInput?.Invoke(dodgeSide);
     }
     
     private void OnFingerDown(Finger finger)
     {
-        if (!_finishedTutorial) return;
+        if (!_finishedTutorial || _gameOver) return;
         OnNewFingerDownInput?.Invoke(finger.screenPosition);
     }
 
     private void OnFingerUp(Finger finger)
     {
-        if (!_finishedTutorial) return;
+        if (!_finishedTutorial || _gameOver) return;
         OnNewFingerUpInput?.Invoke(finger.screenPosition);
     }
 }

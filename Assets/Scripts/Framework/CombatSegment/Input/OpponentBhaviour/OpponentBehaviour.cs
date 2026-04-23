@@ -16,6 +16,7 @@ public class OpponentBehaviour : MonoBehaviour
 
     private float _currentDelay;
     private bool _finishedTutorial;
+    private bool _gameOver;
 
     private void Start()
     {
@@ -24,12 +25,20 @@ public class OpponentBehaviour : MonoBehaviour
         SetNewDelay();
     }
 
-    private void OnEnable() => TutorialManager.OnTutorialFinished += () => _finishedTutorial = true;
-    private void OnDisable() => TutorialManager.OnTutorialFinished -= () => _finishedTutorial = true;
+    private void OnEnable()
+    {
+        TutorialManager.OnTutorialFinished += () => _finishedTutorial = true;
+        GameOver.OnGameOver += () => _gameOver = true;
+    }
+    private void OnDisable()
+    {
+        TutorialManager.OnTutorialFinished -= () => _finishedTutorial = true;
+        GameOver.OnGameOver -= () => _gameOver = true;
+    }
 
     private void Update()
     {
-        if (!_finishedTutorial) return;
+        if (!_finishedTutorial || _gameOver) return;
 
         if (!attackSystem.IsIdle)
         {
