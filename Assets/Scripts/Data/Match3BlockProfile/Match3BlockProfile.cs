@@ -19,11 +19,5 @@ public class Match3BlockProfile : ScriptableObject
         }        
     }
 
-    public bool HasAction<T>()
-    {
-        if (!_actionTypes.ContainsKey(typeof(T))) return false;
-
-        return true;
-    }
-
+    public bool HasAction<T>() => _actionTypes.ContainsKey(typeof(T));
 }
