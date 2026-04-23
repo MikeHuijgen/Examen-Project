@@ -507,7 +507,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4265832499130711869, guid: bfe9cf2fcf4f76d4ca3be9838c715900, type: 3}
       propertyPath: m_Name
-      value: Canvas
+      value: StartScreenCanvas
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
