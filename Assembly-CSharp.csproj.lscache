@@ -87,12 +87,16 @@ Assets/Scripts/
   Match.cs
   Match3CameraHandler/Match3CameraHandler.cs
   MatchDetector/MatchDetector.cs
+  States/
+   GameManager.cs
+   GameStates.cs
  Temp/PlayerAttackTest.cs
  Tools/Timer/
   BaseTimer.cs
   CountdownTimer.cs
   DurationTimer.cs
  UI/
+  GameOver.cs
   GridTileVisual/GridTileVisual.cs
   HealthBar.cs
   SceneTransition/SceneLoader.cs
