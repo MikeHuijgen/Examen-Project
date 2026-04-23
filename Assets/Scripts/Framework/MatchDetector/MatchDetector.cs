@@ -1,8 +1,14 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MatchDetector
 {
+    private static readonly Vector2Int[] Directions =
+    {
+        Vector2Int.right,
+        Vector2Int.up
+    };
     public Match3BlockProfile GetRandomValidMatch3Profile(Match3BlockProfile[] profiles, GridObject[,] gridArray, int x, int y)
     {
         var possibleProfiles = new List<Match3BlockProfile>();
@@ -34,7 +40,7 @@ public class MatchDetector
             }
         }
 
-        return possibleProfiles[Random.Range(0, possibleProfiles.Count)];
+        return possibleProfiles[UnityEngine.Random.Range(0, possibleProfiles.Count)];
     }
 
     public HashSet<Match> CheckForAllMatches(GridObject[,] grid, int gridWidth, int gridHeight)
@@ -140,6 +146,37 @@ public class MatchDetector
 
         if (count >= 3) return true;
 
+        return false;
+    }
+
+    public bool PlayerHasPossibleMoves(GridObject[,] grid, Action<GridObject, GridObject> swapGridData)
+    {
+        var width = grid.GetLength(0);
+        var height = grid.GetLength(1);
+
+        for (var x = 0; x < width; x++)
+        {
+            for (var y = 0; y < height; y++)
+            {
+                foreach (var dir in Directions)
+                {
+                    var nx = x + dir.x;
+                    var ny = y + dir.y;
+
+                    if (nx >= width || ny >= height) continue;
+
+                    swapGridData(grid[x, y], grid[nx, ny]);
+
+                    if (HasMatchAt(grid, x, y) || HasMatchAt(grid, nx, ny))
+                    {
+                        swapGridData(grid[x, y], grid[nx, ny]);
+                        return true;
+                    }
+
+                    swapGridData(grid[x, y], grid[nx, ny]);
+                }
+            }
+        }
         return false;
     }
 }

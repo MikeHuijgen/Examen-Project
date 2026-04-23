@@ -7,12 +7,6 @@ using UnityEngine;
 
 public class LevelGrid : MonoBehaviour
 {
-    private static readonly Vector2Int[] Directions =
-    {
-        Vector2Int.right,
-        Vector2Int.up
-    };
-
     [SerializeField] private LevelGridData levelGridData;
     [SerializeField] private Match3BlockProfileContainer match3BlockProfileContainer;
     [SerializeField] private BlockVisualManager blockVisualManager;
@@ -165,7 +159,7 @@ public class LevelGrid : MonoBehaviour
     private void CheckForPossibleMoves()
     {
         var grid = _gridSystem.GetGridObjectArray;
-        if (PlayerHasPossibleMoves(grid)) return;
+        if (_matchDetector.PlayerHasPossibleMoves(grid, _gridSystem.SwapGridObjectsData)) return;
 
         foreach (var gridObject in grid)
         {
@@ -271,36 +265,4 @@ public class LevelGrid : MonoBehaviour
             yield return seq.WaitForCompletion();
         }
     }
-
-    private bool PlayerHasPossibleMoves(GridObject[,] grid)
-    {
-        var width = grid.GetLength(0);
-        var height = grid.GetLength(1);
-
-        for (var x = 0; x < width; x++)
-        {
-            for (var y = 0; y < height; y++)
-            {
-                foreach (var dir in Directions)
-                {
-                    var nx = x + dir.x;
-                    var ny = y + dir.y;
-
-                    if (nx >= width || ny >= height) continue;
-
-                    _gridSystem.SwapGridObjectsData(grid[x, y], grid[nx, ny]);
-
-                    if (_matchDetector.HasMatchAt(grid, x, y) || _matchDetector.HasMatchAt(grid, nx, ny))
-                    {
-                        _gridSystem.SwapGridObjectsData(grid[x, y], grid[nx, ny]);
-                        return true;
-                    }
-
-                    _gridSystem.SwapGridObjectsData(grid[x, y], grid[nx, ny]);
-                }
-            }
-        }
-        return false;
-    }
-
 }
