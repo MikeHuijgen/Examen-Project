@@ -2,12 +2,10 @@ version=1
 
 # This file caches language service data to improve the performance of C# Dev Kit.
 # It is not intended for manual editing. It can safely be deleted and will be
-# regenerated automatically.
+# regenerated automatically. For more information, see https://aka.ms/lscache
 #
-# To exclude from version control, add *.lscache to your .gitignore file.
-#
-# To disable caching, add the following to your VS Code settings:
-#   "dotnet.projectsystem.enableLanguageServiceCache": false
+# To control where cache files are stored, use the following VS Code setting:
+#   "dotnet.projectsystem.cacheInProjectFolder": true
 
 [project]
 language=C#
@@ -58,9 +56,9 @@ Assets/Prefabs/Data/AttackData/ScriptableObjectScripts/
 Assets/Scripts/Data/
  LevelGridData/LevelGridData.cs
  Match3BaseAction/
-  Match3BaseAction.cs
-  MatchAction.cs
-  SwapAction.cs
+  Match3BaseActionSO.cs
+  MatchActionSO.cs
+  SwapActionSO.cs
  Match3BaseSubAction/
   Match3BaseSubAction.cs
   PlaySoundSubAction.cs
@@ -68,11 +66,12 @@ Assets/Scripts/Data/
  Match3BlockProfileContainer/Match3BlockProfileContainer.cs
 Assets/Scripts/
  Debug/FPSCounter.cs
- Framework/AudioSystem/
-  AudioManager.cs
-  AudioPool.cs
-  SoundData.cs
  Framework/
+  ActionProcessor.cs
+  AudioSystem/
+   AudioManager.cs
+   AudioPool.cs
+   SoundData.cs
   BlockVisualManager.cs
   CameraHolder/CameraHolder.cs
   CombatSegment/AttackSystem/
@@ -93,6 +92,7 @@ Assets/Scripts/
   HealthComponent/HealthComponent.cs
   LevelGrid/LevelGrid.cs
   Match.cs
+  Match3BaseAction.cs
   Match3CameraHandler/Match3CameraHandler.cs
   MatchDetector/MatchDetector.cs
  Intefaces/

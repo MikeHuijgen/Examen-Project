@@ -12,8 +12,7 @@ public class GridSystem
 
     private GridObject[,] _gridObjectArray;
 
-    Dictionary<GridPosition, GridTileVisual> _gridTileVisuals = new Dictionary<GridPosition, GridTileVisual>();
-
+    private Dictionary<GridPosition, GridTileVisual> _gridTileVisuals = new Dictionary<GridPosition, GridTileVisual>();
 
     public GridSystem(int width, int height, float cellWidth, float cellHeight)
     {

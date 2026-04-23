@@ -18,6 +18,7 @@ public class LevelGrid : MonoBehaviour
     [SerializeField] private BlockVisualManager blockVisualManager;
     private GridSystem _gridSystem;
     private MatchDetector _matchDetector;
+    private ActionProcessor _actionProcessor;
     private GridHit _beginTouchGridPosition;
     private GridHit? _currentSelectedGridPosition;
     private List<Tween> _tweens = new List<Tween>();
@@ -28,13 +29,13 @@ public class LevelGrid : MonoBehaviour
 
     private void Awake()
     {
+        _matchDetector = new MatchDetector();
+        _actionProcessor = new ActionProcessor();
         _gridSystem = new GridSystem(
             levelGridData.GridWidth,
             levelGridData.GridHeight,
             levelGridData.GridCellWidth,
             levelGridData.GridCellHeight);
-
-        _matchDetector = new MatchDetector();
 
         Application.targetFrameRate = 120;
         QualitySettings.vSyncCount = 0;
@@ -128,7 +129,7 @@ public class LevelGrid : MonoBehaviour
             yield break;
         }
 
-        if (!beginGridObject.GetMatch3BlockProfile.HasAction<SwapAction>(out var beginSwapAction) || !endGridObject.GetMatch3BlockProfile.HasAction<SwapAction>(out var endSwapAction)) 
+        if (!beginGridObject.GetMatch3BlockProfile.HasAction<SwapActionSO>(out var beginSwapAction) || !endGridObject.GetMatch3BlockProfile.HasAction<SwapActionSO>(out var endSwapAction)) 
         {
             _allowInput = true;
             yield break;
@@ -198,7 +199,6 @@ public class LevelGrid : MonoBehaviour
 
     private IEnumerator DestroyMatches(HashSet<Match> matches)
     {
-        // Uiteindelijk even kijken of de data set niet beter kan in een destroy action
         var grid = _gridSystem.GetGridObjectArray;
         foreach (var match in matches)
         {
