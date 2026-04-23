@@ -56,6 +56,7 @@ Assets/Prefabs/Data/AttackData/ScriptableObjectScripts/
 Assets/Scripts/Data/
  LevelGridData/LevelGridData.cs
  Match3BaseAction/
+  FallActionSO.cs
   Match3BaseActionSO.cs
   MatchActionSO.cs
   SwapActionSO.cs

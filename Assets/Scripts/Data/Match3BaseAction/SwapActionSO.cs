@@ -5,9 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SwapAction", menuName = "Scriptable Objects/Match3/Actions/SwapAction")]
 public class SwapActionSO : Match3BaseActionSO
 {
-    public override IEnumerator Execute()
+    public override void Execute()
     {
         ExecuteSubActions();
-        yield return null;
     }
 }

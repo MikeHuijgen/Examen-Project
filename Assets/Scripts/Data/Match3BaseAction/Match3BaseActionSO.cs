@@ -5,7 +5,7 @@ using UnityEngine;
 public abstract class Match3BaseActionSO : ScriptableObject
 {
     public Match3BaseSubAction[] SubActions;
-    public abstract IEnumerator Execute();
+    public abstract void Execute();
 
     protected void ExecuteSubActions()
     {

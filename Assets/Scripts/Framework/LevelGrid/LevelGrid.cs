@@ -133,7 +133,7 @@ public class LevelGrid : MonoBehaviour
 
         var matches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
 
-        if (!HasAMatch(matches))
+        if (!_matchDetector.HasAMatch(matches))
         {
             _gridSystem.SwapGridObjectsData(beginGridObject, endGridObject);
             yield return MoveVisuals(beginGridObject, endGridObject);
@@ -145,7 +145,7 @@ public class LevelGrid : MonoBehaviour
         {
             matches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
 
-            if (!HasAMatch(matches)) break;
+            if (!!_matchDetector.HasAMatch(matches)) break;
 
             yield return DestroyMatches(matches);
             yield return CollapseAndFill();
@@ -168,13 +168,6 @@ public class LevelGrid : MonoBehaviour
         }
 
         ReshuffleGrid();
-    }
-
-    private bool HasAMatch(HashSet<Match> matchList)
-    {
-        if (matchList.Count == 0) return false;
-
-        return true;
     }
 
     private IEnumerator MoveVisuals(GridObject beginGridObject, GridObject endGridObject)
