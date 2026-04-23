@@ -199,17 +199,8 @@ public class LevelGrid : MonoBehaviour
 
     private IEnumerator DestroyMatches(HashSet<Match> matches)
     {
-        var grid = _gridSystem.GetGridObjectArray;
-        foreach (var match in matches)
-        {
-            for (int i = 0; i < match.MatchedObjectGroup.Length; i++)
-            {
-                var gridPos = new GridPosition(match.MatchedObjectGroup[i].GetGridPosition.X, match.MatchedObjectGroup[i].GetGridPosition.Y);
-                grid[gridPos.X, gridPos.Y].SetMatch3BlockProfile(null);
-            }
-        }
-
-        yield return blockVisualManager.DestroyMatches(matches);
+        _gridSystem.DisposeMatchData(matches);
+        yield return blockVisualManager.DisableMatchesVisuals(matches);
     }
 
     public void ReshuffleGrid()

@@ -219,4 +219,16 @@ public class GridSystem
        if(!_gridTileVisuals.TryGetValue(targetGridPosition, out var gridTileVisual)) return;
        gridTileVisual.OnTileDeselected();
     }
+
+    public void DisposeMatchData(HashSet<Match> matches)
+    {
+        foreach (var match in matches)
+        {
+            for (int i = 0; i < match.MatchedObjectGroup.Length; i++)
+            {
+                var gridPos = new GridPosition(match.MatchedObjectGroup[i].GetGridPosition.X, match.MatchedObjectGroup[i].GetGridPosition.Y);
+                _gridObjectArray[gridPos.X, gridPos.Y].SetMatch3BlockProfile(null);
+            }
+        }
+    }
 }

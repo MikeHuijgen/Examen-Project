@@ -79,7 +79,7 @@ public class BlockVisualManager : MonoBehaviour
         return targetVisual.transform.DOMove(newPosition, tweenSpeed).SetEase(ease, tweenStrength);        
     }
 
-    public IEnumerator DestroyMatches(HashSet<Match> matches)
+    public IEnumerator DisableMatchesVisuals(HashSet<Match> matches)
     {
         foreach (var match in matches)
         {
