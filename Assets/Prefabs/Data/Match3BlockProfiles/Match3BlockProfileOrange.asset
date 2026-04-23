@@ -12,7 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c40e332f895f904c88fc099ed3d6958, type: 3}
   m_Name: Match3BlockProfileOrange
   m_EditorClassIdentifier: Assembly-CSharp::Match3BlockProfile
-  Actions:
-  - {fileID: 11400000, guid: 7f43bea706ea47949b36fb44e036829c, type: 2}
-  - {fileID: 11400000, guid: 5ce85d5f38af5904197bf7b20e111bb0, type: 2}
-  - {fileID: 11400000, guid: fcdcaa74f78488541ad217cfdbbb4833, type: 2}
+  Attack: {fileID: 11400000, guid: 8c4fa548b30d1a64789adb0b06d5a0b8, type: 2}

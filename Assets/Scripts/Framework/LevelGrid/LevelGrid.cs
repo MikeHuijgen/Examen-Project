@@ -175,6 +175,11 @@ public class LevelGrid : MonoBehaviour
 
     private IEnumerator DestroyMatches(HashSet<Match> matches)
     {
+        foreach (var match in matches)
+        {
+            OnMatchDestroyed?.Invoke(match.MatchAttack);
+        }
+
         _gridSystem.DisposeMatchData(matches);
         yield return blockVisualManager.DisableMatchesVisuals(matches);
     }
