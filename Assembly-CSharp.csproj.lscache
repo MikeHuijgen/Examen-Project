@@ -2,12 +2,10 @@ version=1
 
 # This file caches language service data to improve the performance of C# Dev Kit.
 # It is not intended for manual editing. It can safely be deleted and will be
-# regenerated automatically.
+# regenerated automatically. For more information, see https://aka.ms/lscache
 #
-# To exclude from version control, add *.lscache to your .gitignore file.
-#
-# To disable caching, add the following to your VS Code settings:
-#   "dotnet.projectsystem.enableLanguageServiceCache": false
+# To control where cache files are stored, use the following VS Code setting:
+#   "dotnet.projectsystem.cacheInProjectFolder": true
 
 [project]
 language=C#
@@ -52,6 +50,9 @@ TemporaryDependencyNodeTargetIdentifier=netstandard2.1
 /warnaserror+:NU1605
 
 [sourceFiles]
+Assets/Prefabs/Data/AttackData/ScriptableObjectScripts/
+ BaseAttack.cs
+ OpponentAttack.cs
 Assets/Scripts/Data/
  FakeAttack.cs
  LevelGridData/LevelGridData.cs
@@ -64,12 +65,17 @@ Assets/Scripts/
    AudioPool.cs
    SoundData.cs
   CameraHolder/CameraHolder.cs
-  Character/
+  CombatSegment/AttackSystem/
+   AttackListener.cs
    AttackSystem.cs
-   CharacterInput.cs
+  CombatSegment/Dodging/
    DodgeSwipeInput.cs
    PlayerDodgeSystem.cs
    SideType.cs
+  CombatSegment/Input/
+   CharacterInput.cs
+   OpponentBhaviour/OpponentBehaviour.cs
+  CombatSegment/TimingManagement/TimerManager.cs
   GridHit/GridHit.cs
   GridObject/GridObject.cs
   GridObjectVisual/Match3Block.cs
@@ -77,10 +83,20 @@ Assets/Scripts/
   GridSystem/GridSystem.cs
   HealthComponent/HealthComponent.cs
   LevelGrid/LevelGrid.cs
+  Match.cs
   Match3BlockPool/Match3BlockPool.cs
   Match3CameraHandler/Match3CameraHandler.cs
   MatchDetector/MatchDetector.cs
+  States/
+   GameManager.cs
+   GameStates.cs
+ Temp/PlayerAttackTest.cs
+ Tools/Timer/
+  BaseTimer.cs
+  CountdownTimer.cs
+  DurationTimer.cs
  UI/
+  GameOver.cs
   GridTileVisual/GridTileVisual.cs
   HealthBar.cs
 Temp/obj/Assembly-CSharp/.NETStandard,Version=v2.1.AssemblyAttributes.cs
