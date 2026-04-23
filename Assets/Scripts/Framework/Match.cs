@@ -4,12 +4,12 @@ using UnityEngine;
 
 public struct Match
 {
-    public GridPosition[] GridPositions;
-    public BaseAttack AttackData;
+    public GridObject[] MatchedObjectGroup;
+    public BaseAttack MatchAttack;
 
-    public Match(BaseAttack attackData, GridPosition[] gridPositions)
+    public Match(GridObject[] matchedObjectGroup, BaseAttack attack)
     {
-        GridPositions = gridPositions;
-        AttackData = attackData;
+        MatchedObjectGroup = matchedObjectGroup;
+        MatchAttack = attack;
     }
 }
