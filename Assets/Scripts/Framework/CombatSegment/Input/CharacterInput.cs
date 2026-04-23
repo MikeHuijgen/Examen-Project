@@ -15,6 +15,7 @@ public class CharacterInput : MonoBehaviour
 
     [SerializeField] private PlayerAttackTest _playerAttackTest;
     [SerializeField] private PlayerInput _playerInput;
+    private bool _finishedTutorial;
 
     private readonly Dictionary<string, SideType> _dodgeBindings = new()
     {
@@ -49,6 +50,7 @@ public class CharacterInput : MonoBehaviour
         EnhancedTouchSupport.Enable();
         Touch.onFingerDown += OnFingerDown;
         Touch.onFingerUp += OnFingerUp;
+        TutorialManager.OnTutorialFinished += () => _finishedTutorial = true;
     }
 
     private void OnDisable()
@@ -58,15 +60,28 @@ public class CharacterInput : MonoBehaviour
         EnhancedTouchSupport.Disable();
         Touch.onFingerDown -= OnFingerDown;
         Touch.onFingerUp -= OnFingerUp;
+        TutorialManager.OnTutorialFinished -= () => _finishedTutorial = true;
     }
 
     private void Bind(string actionName, Action<InputAction.CallbackContext> handler) => _playerInput.actions[actionName].performed += handler;
 
     private void Unbind(string actionName, Action<InputAction.CallbackContext> handler) => _playerInput.actions[actionName].performed -= handler;
 
-    public void OnDodgeInputDetected(SideType dodgeSide) => OnDodgeInput?.Invoke(dodgeSide);
+    public void OnDodgeInputDetected(SideType dodgeSide)
+    {
+        if (!_finishedTutorial) return;
+        OnDodgeInput?.Invoke(dodgeSide);
+    }
     
-    private void OnFingerDown(Finger finger) => OnNewFingerDownInput?.Invoke(finger.screenPosition);
+    private void OnFingerDown(Finger finger)
+    {
+        if (!_finishedTutorial) return;
+        OnNewFingerDownInput?.Invoke(finger.screenPosition);
+    }
 
-    private void OnFingerUp(Finger finger) => OnNewFingerUpInput?.Invoke(finger.screenPosition);
+    private void OnFingerUp(Finger finger)
+    {
+        if (!_finishedTutorial) return;
+        OnNewFingerUpInput?.Invoke(finger.screenPosition);
+    }
 }

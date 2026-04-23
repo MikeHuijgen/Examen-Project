@@ -15,6 +15,7 @@ public class OpponentBehaviour : MonoBehaviour
     private TimerManager _timer;
 
     private float _currentDelay;
+    private bool _finishedTutorial;
 
     private void Start()
     {
@@ -23,8 +24,13 @@ public class OpponentBehaviour : MonoBehaviour
         SetNewDelay();
     }
 
+    private void OnEnable() => TutorialManager.OnTutorialFinished += () => _finishedTutorial = true;
+    private void OnDisable() => TutorialManager.OnTutorialFinished -= () => _finishedTutorial = true;
+
     private void Update()
     {
+        if (!_finishedTutorial) return;
+
         if (!attackSystem.IsIdle)
         {
             int direction = attackSystem.CurrentAttackDirection();
