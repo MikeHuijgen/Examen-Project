@@ -96,6 +96,8 @@ Assets/Scripts/
   GridTileVisual/GridTileVisual.cs
   HealthBar.cs
   SceneTransition/SceneLoader.cs
+  TopCanvasEnabler.cs
+  TutorialManager.cs
 Temp/obj/Assembly-CSharp/.NETStandard,Version=v2.1.AssemblyAttributes.cs
 
 [metadataReferences]
