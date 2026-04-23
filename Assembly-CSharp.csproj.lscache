@@ -77,6 +77,7 @@ Assets/Scripts/
    CharacterInput.cs
    OpponentBhaviour/OpponentBehaviour.cs
   CombatSegment/TimingManagement/TimerManager.cs
+  ComboCounter.cs
   GridHit/GridHit.cs
   GridObject/GridObject.cs
   GridPosition/GridPosition.cs
@@ -369,6 +370,8 @@ Library/PackageCache/
  com.unity.visualscripting@191c0d7e3b69/Runtime/VisualScripting.Flow/Dependencies/NCalc/Unity.VisualScripting.Antlr3.Runtime.dll
 Library/ScriptAssemblies/
  PPv2URPConverters.dll
+ Unity.2D.Sprite.AIIntegration.Editor.dll
+ Unity.2D.Sprite.Editor.dll
  Unity.AI.Navigation.dll
  Unity.AI.Navigation.Editor.ConversionSystem.dll
  Unity.AI.Navigation.Editor.dll
