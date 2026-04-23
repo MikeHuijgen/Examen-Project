@@ -121,12 +121,6 @@ public class LevelGrid : MonoBehaviour
             yield break;
         }
 
-        if (!beginGridObject.GetMatch3BlockProfile.HasAction<SwapActionSO>() || !endGridObject.GetMatch3BlockProfile.HasAction<SwapActionSO>()) 
-        {
-            _allowInput = true;
-            yield break;
-        }
-
         _gridSystem.SwapGridObjectsData(beginGridObject, endGridObject);
 
         yield return MoveVisuals(beginGridObject, endGridObject);
@@ -145,7 +139,7 @@ public class LevelGrid : MonoBehaviour
         {
             matches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
 
-            if (!!_matchDetector.HasAMatch(matches)) break;
+            if (!_matchDetector.HasAMatch(matches)) break;
 
             yield return DestroyMatches(matches);
             yield return CollapseAndFill();
@@ -194,7 +188,6 @@ public class LevelGrid : MonoBehaviour
             {
                 var newMatch3Profile = _matchDetector.GetRandomValidMatch3Profile(match3BlockProfileContainer.match3BlockProfiles, grid, x, y);
                 if (!blockVisualManager.TryEnableVisualByProfile(newMatch3Profile, grid[x, y], _gridSystem.ConvertGridPositionToWorldPosition)) continue;
-                newMatch3Profile.Init();
                 grid[x, y].SetMatch3BlockProfile(newMatch3Profile);
             }
         }

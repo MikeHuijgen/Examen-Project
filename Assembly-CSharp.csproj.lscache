@@ -55,14 +55,6 @@ Assets/Prefabs/Data/AttackData/ScriptableObjectScripts/
  OpponentAttack.cs
 Assets/Scripts/Data/
  LevelGridData/LevelGridData.cs
- Match3BaseAction/
-  FallActionSO.cs
-  Match3BaseActionSO.cs
-  MatchActionSO.cs
-  SwapActionSO.cs
- Match3BaseSubAction/
-  Match3BaseSubAction.cs
-  PlaySoundSubAction.cs
  Match3BlockProfile/Match3BlockProfile.cs
  Match3BlockProfileContainer/Match3BlockProfileContainer.cs
 Assets/Scripts/
