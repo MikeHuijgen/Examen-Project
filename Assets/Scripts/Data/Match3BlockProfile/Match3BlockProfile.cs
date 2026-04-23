@@ -19,12 +19,10 @@ public class Match3BlockProfile : ScriptableObject
         }        
     }
 
-    public bool HasAction<T>(out Match3BaseActionSO result)
+    public bool HasAction<T>()
     {
-        result = null;
-        if (!_actionTypes.TryGetValue(typeof(T), out var action)) return false;
+        if (!_actionTypes.ContainsKey(typeof(T))) return false;
 
-        result = action;
         return true;
     }
 

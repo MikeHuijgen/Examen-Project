@@ -18,7 +18,6 @@ public class LevelGrid : MonoBehaviour
     [SerializeField] private BlockVisualManager blockVisualManager;
     private GridSystem _gridSystem;
     private MatchDetector _matchDetector;
-    private ActionProcessor _actionProcessor;
     private GridHit _beginTouchGridPosition;
     private GridHit? _currentSelectedGridPosition;
     private List<Tween> _tweens = new List<Tween>();
@@ -30,7 +29,6 @@ public class LevelGrid : MonoBehaviour
     private void Awake()
     {
         _matchDetector = new MatchDetector();
-        _actionProcessor = new ActionProcessor();
         _gridSystem = new GridSystem(
             levelGridData.GridWidth,
             levelGridData.GridHeight,
@@ -129,14 +127,13 @@ public class LevelGrid : MonoBehaviour
             yield break;
         }
 
-        if (!beginGridObject.GetMatch3BlockProfile.HasAction<SwapActionSO>(out var beginSwapAction) || !endGridObject.GetMatch3BlockProfile.HasAction<SwapActionSO>(out var endSwapAction)) 
+        if (!beginGridObject.GetMatch3BlockProfile.HasAction<SwapActionSO>() || !endGridObject.GetMatch3BlockProfile.HasAction<SwapActionSO>()) 
         {
             _allowInput = true;
             yield break;
         }
 
-        beginSwapAction.Execute(new SwapActionContext(beginGridObject, endGridObject, _gridSystem.SwapGridObjectsData));
-        yield return endSwapAction.Execute(new SwapActionContext(endGridObject, beginGridObject, _gridSystem.SwapGridObjectsData));
+        _gridSystem.SwapGridObjectsData(beginGridObject, endGridObject);
 
         yield return MoveVisuals(beginGridObject, endGridObject);
 
@@ -144,9 +141,7 @@ public class LevelGrid : MonoBehaviour
 
         if (!HasAMatch(matches))
         {
-            beginSwapAction.Execute(new SwapActionContext(beginGridObject, endGridObject, _gridSystem.SwapGridObjectsData));
-            yield return endSwapAction.Execute(new SwapActionContext(endGridObject, beginGridObject, _gridSystem.SwapGridObjectsData));
-
+            _gridSystem.SwapGridObjectsData(beginGridObject, endGridObject);
             yield return MoveVisuals(beginGridObject, endGridObject);
             _allowInput = true;
             yield break;
