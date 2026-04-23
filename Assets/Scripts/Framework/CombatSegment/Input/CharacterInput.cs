@@ -12,8 +12,6 @@ public class CharacterInput : MonoBehaviour
     public event Action<Vector2> OnNewFingerDownInput;
     public event Action<Vector2> OnNewFingerUpInput;
     public event Action<SideType> OnDodgeInput;
-    
-    public event Action<int> OnPlayerAttack;
 
     [SerializeField] private PlayerAttackTest _playerAttackTest;
     [SerializeField] private PlayerInput _playerInput;
@@ -25,17 +23,7 @@ public class CharacterInput : MonoBehaviour
         { "DodgeDown", SideType.Down }
     };
 
-    private readonly Dictionary<string, int> _attackBindings = new()
-    {
-        { "firstAttack", 1 },
-        { "secondAttack", 2 },
-        { "thirdAttack", 3 },
-        { "fourthAttack", 4 },
-        { "fifthAttack", 5 }
-    };
-
     private readonly Dictionary<string, Action<InputAction.CallbackContext>> _dodgeHandlers = new();
-    private readonly Dictionary<string, Action<InputAction.CallbackContext>> _attackHandlers = new();
 
     private void Awake()
     {
@@ -52,19 +40,11 @@ public class CharacterInput : MonoBehaviour
             var side = pair.Value;
             _dodgeHandlers[pair.Key] = ctx => OnDodgeInputDetected(side);
         }
-
-        foreach (var pair in _attackBindings)
-        {
-            int attackIndex = pair.Value;
-            _attackHandlers[pair.Key] = ctx => OnAttackInputDetected(attackIndex);
-        }
     }
 
     private void OnEnable()
     {
         foreach (var pair in _dodgeHandlers) Bind(pair.Key, pair.Value);
-
-        foreach (var pair in _attackHandlers) Bind(pair.Key, pair.Value);
 
         EnhancedTouchSupport.Enable();
         Touch.onFingerDown += OnFingerDown;
@@ -75,8 +55,6 @@ public class CharacterInput : MonoBehaviour
     {
         foreach (var pair in _dodgeHandlers) Unbind(pair.Key, pair.Value);
 
-        foreach (var pair in _attackHandlers) Unbind(pair.Key, pair.Value);
-
         EnhancedTouchSupport.Disable();
         Touch.onFingerDown -= OnFingerDown;
         Touch.onFingerUp -= OnFingerUp;
@@ -86,14 +64,7 @@ public class CharacterInput : MonoBehaviour
 
     private void Unbind(string actionName, Action<InputAction.CallbackContext> handler) => _playerInput.actions[actionName].performed -= handler;
 
-    // Public for external calls
     public void OnDodgeInputDetected(SideType dodgeSide) => OnDodgeInput?.Invoke(dodgeSide);
-    
-    public void OnAttackInputDetected(int attackIndex)
-    {
-        _playerAttackTest.TriggerAttack(attackIndex);
-        OnPlayerAttack?.Invoke(attackIndex);
-    }
     
     private void OnFingerDown(Finger finger) => OnNewFingerDownInput?.Invoke(finger.screenPosition);
 
