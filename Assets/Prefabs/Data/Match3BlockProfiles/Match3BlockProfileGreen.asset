@@ -9,6 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 743fc43949a97834b81fc117bb2f6a6f, type: 3}
-  m_Name: Attack2
-  m_EditorClassIdentifier: Assembly-CSharp::FakeAttack
+  m_Script: {fileID: 11500000, guid: 3c40e332f895f904c88fc099ed3d6958, type: 3}
+  m_Name: Match3BlockProfileGreen
+  m_EditorClassIdentifier: Assembly-CSharp::Match3BlockProfile
+  Attack: {fileID: 11400000, guid: 3ff87686a0af11244a18e1fb63ed4819, type: 2}

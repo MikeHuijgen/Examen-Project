@@ -2,12 +2,10 @@ version=1
 
 # This file caches language service data to improve the performance of C# Dev Kit.
 # It is not intended for manual editing. It can safely be deleted and will be
-# regenerated automatically.
+# regenerated automatically. For more information, see https://aka.ms/lscache
 #
-# To exclude from version control, add *.lscache to your .gitignore file.
-#
-# To disable caching, add the following to your VS Code settings:
-#   "dotnet.projectsystem.enableLanguageServiceCache": false
+# To control where cache files are stored, use the following VS Code setting:
+#   "dotnet.projectsystem.cacheInProjectFolder": true
 
 [project]
 language=C#
@@ -52,34 +50,48 @@ TemporaryDependencyNodeTargetIdentifier=netstandard2.1
 /warnaserror+:NU1605
 
 [sourceFiles]
+Assets/Prefabs/Data/AttackData/ScriptableObjectScripts/
+ BaseAttack.cs
+ OpponentAttack.cs
 Assets/Scripts/Data/
- FakeAttack.cs
  LevelGridData/LevelGridData.cs
+ Match3BlockProfile/Match3BlockProfile.cs
+ Match3BlockProfileContainer/Match3BlockProfileContainer.cs
 Assets/Scripts/
  Debug/FPSCounter.cs
+ Framework/AudioSystem/
+  AudioManager.cs
+  AudioPool.cs
+  SoundData.cs
  Framework/
-  AttackToMatch3Block.cs
-  AudioSystem/
-   AudioManager.cs
-   AudioPool.cs
-   SoundData.cs
+  BlockVisualManager.cs
   CameraHolder/CameraHolder.cs
-  Character/
+  CombatSegment/AttackSystem/
+   AttackListener.cs
    AttackSystem.cs
-   CharacterInput.cs
+  CombatSegment/Dodging/
    DodgeSwipeInput.cs
    PlayerDodgeSystem.cs
    SideType.cs
+  CombatSegment/Input/
+   CharacterInput.cs
+   OpponentBhaviour/OpponentBehaviour.cs
+  CombatSegment/TimingManagement/TimerManager.cs
+  ComboCounter.cs
   GridHit/GridHit.cs
   GridObject/GridObject.cs
-  GridObjectVisual/Match3Block.cs
   GridPosition/GridPosition.cs
   GridSystem/GridSystem.cs
   HealthComponent/HealthComponent.cs
   LevelGrid/LevelGrid.cs
-  Match3BlockPool/Match3BlockPool.cs
+  Match.cs
   Match3CameraHandler/Match3CameraHandler.cs
   MatchDetector/MatchDetector.cs
+ Temp/PlayerAttackTest.cs
+ Tools/Timer/
+  BaseTimer.cs
+  CountdownTimer.cs
+  DurationTimer.cs
  UI/
   GridTileVisual/GridTileVisual.cs
   HealthBar.cs
@@ -358,6 +370,8 @@ Library/PackageCache/
  com.unity.visualscripting@191c0d7e3b69/Runtime/VisualScripting.Flow/Dependencies/NCalc/Unity.VisualScripting.Antlr3.Runtime.dll
 Library/ScriptAssemblies/
  PPv2URPConverters.dll
+ Unity.2D.Sprite.AIIntegration.Editor.dll
+ Unity.2D.Sprite.Editor.dll
  Unity.AI.Navigation.dll
  Unity.AI.Navigation.Editor.ConversionSystem.dll
  Unity.AI.Navigation.Editor.dll

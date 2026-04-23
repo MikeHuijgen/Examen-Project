@@ -45,7 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21a9a51523663e54698a4dcb59fc9e90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TemporaryCharacterInput
-  playerInput: {fileID: 2287925830614108618}
+  _playerAttackTest: {fileID: 0}
+  _playerInput: {fileID: 2287925830614108618}
 --- !u!114 &2287925830614108618
 MonoBehaviour:
   m_ObjectHideFlags: 0

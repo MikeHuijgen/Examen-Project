@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3672682101605212365}
-  - component: {fileID: 3607441784381934679}
   m_Layer: 8
   m_Name: PF_Match_3_Block_Orange
   m_TagString: Untagged
@@ -33,19 +32,6 @@ Transform:
   - {fileID: 4017380456428354363}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3607441784381934679
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8827714824386003747}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dc410a7372c166242850c910d03670df, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::GridObjectVisual
-  attackData: {fileID: 11400000, guid: 8c4fa548b30d1a64789adb0b06d5a0b8, type: 2}
 --- !u!1001 &3479632420011990224
 PrefabInstance:
   m_ObjectHideFlags: 0
