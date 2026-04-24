@@ -3,6 +3,15 @@ using UnityEngine;
 public class TopCanvasEnabler : MonoBehaviour
 {
     [SerializeField] private GameObject container;
-    private void OnEnable() => TutorialManager.OnTutorialFinished += () => container.SetActive(true);
-    private void OnDisable() => TutorialManager.OnTutorialFinished -=  () => container.SetActive(true);
+    [SerializeField] private TutorialManager tutorialManager;
+    private void OnEnable()
+    {
+        tutorialManager.OnTutorialFinished += () => container.SetActive(true);
+        GameOver.OnGameOver += () => container.SetActive(false);
+    }
+    private void OnDisable()
+    {
+        tutorialManager.OnTutorialFinished -=  () => container.SetActive(true);
+        GameOver.OnGameOver -= () => container.SetActive(false);
+    }
 }

@@ -15,6 +15,7 @@ public class CharacterInput : MonoBehaviour
 
     [SerializeField] private PlayerAttackTest _playerAttackTest;
     [SerializeField] private PlayerInput _playerInput;
+    [SerializeField] private TutorialManager tutorialManager;
     private bool _finishedTutorial;
     private bool _gameOver;
 
@@ -51,7 +52,7 @@ public class CharacterInput : MonoBehaviour
         EnhancedTouchSupport.Enable();
         Touch.onFingerDown += OnFingerDown;
         Touch.onFingerUp += OnFingerUp;
-        TutorialManager.OnTutorialFinished += () => _finishedTutorial = true;
+        tutorialManager.OnTutorialFinished += () => _finishedTutorial = true;
         GameOver.OnGameOver += () => _gameOver = true;
     }
 
@@ -62,8 +63,8 @@ public class CharacterInput : MonoBehaviour
         EnhancedTouchSupport.Disable();
         Touch.onFingerDown -= OnFingerDown;
         Touch.onFingerUp -= OnFingerUp;
-        TutorialManager.OnTutorialFinished -= () => _finishedTutorial = true;
-        GameOver.OnGameOver += () => _gameOver = true;
+        tutorialManager.OnTutorialFinished -= () => _finishedTutorial = true;
+        GameOver.OnGameOver -= () => _gameOver = true;
     }
 
     private void Bind(string actionName, Action<InputAction.CallbackContext> handler) => _playerInput.actions[actionName].performed += handler;
