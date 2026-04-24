@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 public class GameOver : MonoBehaviour
 {
-    public static event Action OnGameOver;
+    public event Action OnGameOver;
     [SerializeField] GameObject _gameOverScreen;
     [SerializeField] GameObject _victoryScreen;
 

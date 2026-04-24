@@ -11,6 +11,7 @@ public class OpponentBehaviour : MonoBehaviour
     [SerializeField] private float minAttackDelayTime;
     [SerializeField] private float maxAttackDelayTime;
     [SerializeField] private TutorialManager tutorialManager;
+    [SerializeField] private GameOver gameOver;
 
     private CountdownTimer _idleTimer;
     private TimerManager _timer;
@@ -29,12 +30,12 @@ public class OpponentBehaviour : MonoBehaviour
     private void OnEnable()
     {
         tutorialManager.OnTutorialFinished += () => _finishedTutorial = true;
-        GameOver.OnGameOver += () => _gameOver = true;
+        gameOver.OnGameOver += () => _gameOver = true;
     }
     private void OnDisable()
     {
         tutorialManager.OnTutorialFinished -= () => _finishedTutorial = true;
-        GameOver.OnGameOver -= () => _gameOver = true;
+        gameOver.OnGameOver -= () => _gameOver = true;
     }
 
     private void Update()

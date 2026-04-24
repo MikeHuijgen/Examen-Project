@@ -16,7 +16,7 @@ public class LevelGrid : MonoBehaviour
     private GridHit? _currentSelectedGridPosition;
     private List<Tween> _tweens = new List<Tween>();
     private List<GridObject> _tiles = new List<GridObject>();
-    public static event Action<BaseAttack> OnMatchDestroyed;
+    public event Action<BaseAttack> OnMatchDestroyed;
     private bool _allowInput = true;
 
 

@@ -19,6 +19,7 @@ public class ComboCounter : MonoBehaviour
     [SerializeField] private float addComboTweenDuratin = 0.2f;
     [SerializeField] private float addComboScaleAmount = 0.3f;
     [SerializeField] private float resetTweenDuration = 0.5f;
+    [SerializeField] private LevelGrid levelGrid;
 
     
     private int _currentComboCount;
@@ -104,9 +105,9 @@ public class ComboCounter : MonoBehaviour
             });
     }
 
-    private void OnEnable() => LevelGrid.OnMatchDestroyed += OnMatch;
+    private void OnEnable() => levelGrid.OnMatchDestroyed += OnMatch;
 
-    private void OnDisable() => LevelGrid.OnMatchDestroyed -= OnMatch;
+    private void OnDisable() => levelGrid.OnMatchDestroyed -= OnMatch;
 
     private void OnMatch(object _) => OnSuccessfulHit();
 }

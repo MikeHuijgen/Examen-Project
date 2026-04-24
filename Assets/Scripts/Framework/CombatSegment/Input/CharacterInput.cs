@@ -16,6 +16,7 @@ public class CharacterInput : MonoBehaviour
     [SerializeField] private PlayerAttackTest _playerAttackTest;
     [SerializeField] private PlayerInput _playerInput;
     [SerializeField] private TutorialManager tutorialManager;
+    [SerializeField] private GameOver gameOver;
     private bool _finishedTutorial;
     private bool _gameOver;
 
@@ -53,7 +54,7 @@ public class CharacterInput : MonoBehaviour
         Touch.onFingerDown += OnFingerDown;
         Touch.onFingerUp += OnFingerUp;
         tutorialManager.OnTutorialFinished += () => _finishedTutorial = true;
-        GameOver.OnGameOver += () => _gameOver = true;
+        gameOver.OnGameOver += () => _gameOver = true;
     }
 
     private void OnDisable()
@@ -64,7 +65,7 @@ public class CharacterInput : MonoBehaviour
         Touch.onFingerDown -= OnFingerDown;
         Touch.onFingerUp -= OnFingerUp;
         tutorialManager.OnTutorialFinished -= () => _finishedTutorial = true;
-        GameOver.OnGameOver -= () => _gameOver = true;
+        gameOver.OnGameOver -= () => _gameOver = true;
     }
 
     private void Bind(string actionName, Action<InputAction.CallbackContext> handler) => _playerInput.actions[actionName].performed += handler;

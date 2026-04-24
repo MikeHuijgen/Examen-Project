@@ -3,14 +3,15 @@ using UnityEngine;
 public class AttackListener : MonoBehaviour
 {
     [SerializeField] private AttackSystem attackSystem;
+    [SerializeField] private LevelGrid levelGrid;
     private void OnEnable()
     {
-        LevelGrid.OnMatchDestroyed += HandleMatchDestroyed;
+        levelGrid.OnMatchDestroyed += HandleMatchDestroyed;
     }
 
     private void OnDisable()
     {
-        LevelGrid.OnMatchDestroyed -= HandleMatchDestroyed;
+        levelGrid.OnMatchDestroyed -= HandleMatchDestroyed;
     }
 
     private void HandleMatchDestroyed(BaseAttack attack)
