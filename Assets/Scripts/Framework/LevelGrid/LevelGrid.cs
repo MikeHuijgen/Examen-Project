@@ -7,6 +7,7 @@ using UnityEngine;
 
 public class LevelGrid : MonoBehaviour
 {
+    [SerializeField] private Transform tileVisualHolder;
     [SerializeField] private LevelGridData levelGridData;
     [SerializeField] private Match3BlockProfileContainer match3BlockProfileContainer;
     [SerializeField] private BlockVisualManager blockVisualManager;
@@ -36,7 +37,7 @@ public class LevelGrid : MonoBehaviour
     private void Start()
     {
         _gridSystem.GenerateGrid();
-        _gridSystem.CreateGridTileVisuals(levelGridData.GridTileVisual);
+        _gridSystem.CreateGridTileVisuals(levelGridData.GridTileVisual, tileVisualHolder);
         ReshuffleGrid();
 
         CharacterInput.Instance.OnNewFingerDownInput += OnNewFingerDownInput;
