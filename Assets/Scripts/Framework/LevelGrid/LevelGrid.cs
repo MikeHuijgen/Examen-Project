@@ -141,13 +141,20 @@ public class LevelGrid : MonoBehaviour
 
         var matches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
 
-        // if (!_matchDetector.HasAMatch(matches))
-        // {
-        //     _gridSystem.SwapGridObjectsData(beginGridObject, endGridObject);
-        //     yield return MoveVisuals(beginGridObject, endGridObject);
-        //     _allowInput = true;
-        //     yield break;
-        // }
+        if (!_matchDetector.HasAMatch(matches))
+        {
+            await new SwapAction().Execute(new SwapActionParameters
+            {   
+                from = beginGridObject, 
+                to = endGridObject, 
+                dataSwapCallback = _gridSystem.SwapGridObjectsData,
+                tweenSwapSpeed = levelGridData.VisualSwapSpeed,
+                visualSwapCallback = blockVisualManager.MoveVisualWithTweenRoutineAsync,
+                GetWorldPositionCallback = _gridSystem.ConvertGridPositionToWorldPosition
+            });
+            _allowInput = true;
+            return;
+        }
 
         // while (true)
         // {

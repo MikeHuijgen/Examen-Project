@@ -13,3 +13,5 @@ MonoBehaviour:
   m_Name: Match3BlockProfileOrange
   m_EditorClassIdentifier: Assembly-CSharp::Match3BlockProfile
   Attack: {fileID: 11400000, guid: 8c4fa548b30d1a64789adb0b06d5a0b8, type: 2}
+  ruleFlags:
+  - {fileID: 11400000, guid: e156632abacb22940843ca9171ed4623, type: 2}
