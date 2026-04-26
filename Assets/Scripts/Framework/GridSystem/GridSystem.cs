@@ -84,6 +84,7 @@ public class GridSystem
 
         gridObjectA.SetGridPosition(gridPositionB);
         gridObjectB.SetGridPosition(gridPositionA);
+        Debug.Log($"{gridPositionA} and {gridPositionB} has been swapped");
     }
 
     public GridPosition CalculateClickedEndGridPosition(GridPosition beginGridPosition, float rawX, float rawY, float clickTolerance)

@@ -65,6 +65,7 @@ Assets/Scripts/
   AudioPool.cs
   SoundData.cs
  Framework/
+  BaseAction.cs
   BlockVisualManager.cs
   CameraHolder/CameraHolder.cs
   CombatSegment/AttackSystem/
@@ -79,15 +80,19 @@ Assets/Scripts/
    OpponentBhaviour/OpponentBehaviour.cs
   CombatSegment/TimingManagement/TimerManager.cs
   ComboCounter.cs
+  GridActionProcessor.cs
   GridHit/GridHit.cs
   GridObject/GridObject.cs
   GridPosition/GridPosition.cs
   GridSystem/GridSystem.cs
   HealthComponent/HealthComponent.cs
+  IActionParameters.cs
   LevelGrid/LevelGrid.cs
   Match.cs
   Match3CameraHandler/Match3CameraHandler.cs
   MatchDetector/MatchDetector.cs
+  SwapAction.cs
+  SwapActionParameters.cs
  Temp/PlayerAttackTest.cs
  Tools/Timer/
   BaseTimer.cs

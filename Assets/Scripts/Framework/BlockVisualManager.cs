@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections;
 using DG.Tweening;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public class BlockVisualManager : MonoBehaviour
 {
@@ -65,11 +66,26 @@ public class BlockVisualManager : MonoBehaviour
         _ActiveBlockVisuals.Remove(gridObject);
     }
 
-    public IEnumerator MoveVisualWithTweenRoutine(GridObject gridObject, Vector3 newPosition, float tweenSpeed, Ease ease, float tweenStrength = 1)
+    public IEnumerator MoveVisualWithTweenRoutine(GridObject gridObject, Vector3 newPosition, float tweenSpeed, Ease ease)
     {
         if(!_ActiveBlockVisuals.TryGetValue(gridObject, out var targetVisual)) yield return null;
 
         yield return targetVisual.transform.DOMove(newPosition, tweenSpeed).SetEase(ease).WaitForCompletion();
+    }
+
+    public async Task MoveVisualWithTweenRoutineAsync(GridObject gridObjectA, GridObject gridObjectB, Func<GridPosition, Vector3> GetWorldPosition , float tweenSpeed, Ease ease)
+    {
+        if(!_ActiveBlockVisuals.TryGetValue(gridObjectA, out var targetVisualA) || !_ActiveBlockVisuals.TryGetValue(gridObjectB, out var targetVisualB)) 
+        {
+            Debug.LogWarning("One or both of the grid objects are not a active block visual");
+            return;
+        }
+
+        var newPositionA = GetWorldPosition(gridObjectA.GetGridPosition);
+        var newPositionB = GetWorldPosition(gridObjectB.GetGridPosition);
+
+        targetVisualA.transform.DOMove(newPositionA, tweenSpeed).SetEase(ease);
+        await targetVisualB.transform.DOMove(newPositionB, tweenSpeed).SetEase(ease).AsyncWaitForCompletion();
     }
 
     public Tween CreateVisualMoveTween(GridObject gridObject, Vector3 newPosition, float tweenSpeed, Ease ease, float tweenStrength = 1)
