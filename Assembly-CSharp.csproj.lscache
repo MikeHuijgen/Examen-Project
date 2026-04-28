@@ -90,6 +90,8 @@ Assets/Scripts/
   LevelGrid/LevelGrid.cs
   Match.cs
   Match3CameraHandler/Match3CameraHandler.cs
+  MatchAction.cs
+  MatchActionParameters.cs
   MatchDetector/MatchDetector.cs
   SwapAction.cs
   SwapActionParameters.cs

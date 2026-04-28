@@ -12,6 +12,7 @@ public class LevelGrid : MonoBehaviour
     [SerializeField] private LevelGridData levelGridData;
     [SerializeField] private Match3BlockProfileContainer match3BlockProfileContainer;
     [SerializeField] private BlockVisualManager blockVisualManager;
+    [SerializeField] private GridActionProcessor gridActionProcessor;
     private GridSystem _gridSystem;
     private MatchDetector _matchDetector;
     private GridHit _beginTouchGridPosition;
@@ -129,7 +130,7 @@ public class LevelGrid : MonoBehaviour
             return; 
         }
 
-        await new SwapAction().Execute(new SwapActionParameters
+        var swapParameters = new SwapActionParameters
         {   
             from = beginGridObject, 
             to = endGridObject, 
@@ -137,21 +138,15 @@ public class LevelGrid : MonoBehaviour
             tweenSwapSpeed = levelGridData.VisualSwapSpeed,
             visualSwapCallback = blockVisualManager.MoveVisualWithTweenRoutineAsync,
             GetWorldPositionCallback = _gridSystem.ConvertGridPositionToWorldPosition
-        });
+        };
+
+        await gridActionProcessor.TryProcessSwapAction(swapParameters);
 
         var matches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
 
         if (!_matchDetector.HasAMatch(matches))
         {
-            await new SwapAction().Execute(new SwapActionParameters
-            {   
-                from = beginGridObject, 
-                to = endGridObject, 
-                dataSwapCallback = _gridSystem.SwapGridObjectsData,
-                tweenSwapSpeed = levelGridData.VisualSwapSpeed,
-                visualSwapCallback = blockVisualManager.MoveVisualWithTweenRoutineAsync,
-                GetWorldPositionCallback = _gridSystem.ConvertGridPositionToWorldPosition
-            });
+            await gridActionProcessor.TryProcessSwapAction(swapParameters);
             _allowInput = true;
             return;
         }
@@ -183,15 +178,6 @@ public class LevelGrid : MonoBehaviour
         }
 
         ReshuffleGrid();
-    }
-
-    private IEnumerator MoveVisuals(GridObject beginGridObject, GridObject endGridObject)
-    {
-        var newBeginGridObjectPosition = _gridSystem.ConvertGridPositionToWorldPosition(beginGridObject.GetGridPosition);
-        var newEndGridObjectPosition = _gridSystem.ConvertGridPositionToWorldPosition(endGridObject.GetGridPosition);
-
-        StartCoroutine(blockVisualManager.MoveVisualWithTweenRoutine(beginGridObject, newBeginGridObjectPosition, levelGridData.VisualSwapSpeed, Ease.InOutQuad));
-        yield return blockVisualManager.MoveVisualWithTweenRoutine(endGridObject, newEndGridObjectPosition, levelGridData.VisualSwapSpeed, Ease.InOutQuad);
     }
 
     private IEnumerator DestroyMatches(HashSet<Match> matches)

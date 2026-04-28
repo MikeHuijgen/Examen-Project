@@ -66,13 +66,6 @@ public class BlockVisualManager : MonoBehaviour
         _ActiveBlockVisuals.Remove(gridObject);
     }
 
-    public IEnumerator MoveVisualWithTweenRoutine(GridObject gridObject, Vector3 newPosition, float tweenSpeed, Ease ease)
-    {
-        if(!_ActiveBlockVisuals.TryGetValue(gridObject, out var targetVisual)) yield return null;
-
-        yield return targetVisual.transform.DOMove(newPosition, tweenSpeed).SetEase(ease).WaitForCompletion();
-    }
-
     public async Task MoveVisualWithTweenRoutineAsync(GridObject gridObjectA, GridObject gridObjectB, Func<GridPosition, Vector3> GetWorldPosition , float tweenSpeed, Ease ease)
     {
         if(!_ActiveBlockVisuals.TryGetValue(gridObjectA, out var targetVisualA) || !_ActiveBlockVisuals.TryGetValue(gridObjectB, out var targetVisualB)) 

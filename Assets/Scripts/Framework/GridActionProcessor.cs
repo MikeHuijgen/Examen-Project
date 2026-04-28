@@ -2,36 +2,23 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using DG.Tweening;
 
 public class GridActionProcessor : MonoBehaviour
 {
-    [SerializeField] private RuleToAction[] ruleToActions;
-
-    private Dictionary<RuleFlag, BaseAction> _ruleToActionDictionary;
-
-    void Awake()
+    public async Task TryProcessSwapAction(SwapActionParameters parameters)
     {
-        FillDictionary();
-    }
-
-    private void FillDictionary()
-    {
-        foreach (var ruleToAction in ruleToActions)
+        if (parameters.from == null || 
+        parameters.to == null || 
+        parameters.dataSwapCallback == null || 
+        parameters.visualSwapCallback == null || 
+        parameters.GetWorldPositionCallback == null||
+        parameters.tweenSwapSpeed == 0)
         {
-            if (_ruleToActionDictionary.ContainsKey(ruleToAction.ruleFlag)) continue;
-            _ruleToActionDictionary.Add(ruleToAction.ruleFlag, ruleToAction.action);
+            Debug.LogWarning("One of the parameters are null");
+            return;
         }
-    }
 
-    public async Task TryProcessSwapAction(SwapAction action)
-    {
-        
+        await new SwapAction().Execute(parameters);
     }
-}
-
-[Serializable]
-public struct RuleToAction
-{
-    public RuleFlag ruleFlag;
-    public BaseAction action;
 }

@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4647997688803986639}
+  - component: {fileID: 2713751634848182634}
   m_Layer: 8
   m_Name: GirdActionProcessor
   m_TagString: Untagged
@@ -31,6 +32,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8638016569917829304}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2713751634848182634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5667233285847825231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7dac39a32e71a8409413cc2f7d53974, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GridActionProcessor
 --- !u!1 &6636569109232428911
 GameObject:
   m_ObjectHideFlags: 0
@@ -82,6 +95,7 @@ MonoBehaviour:
   levelGridData: {fileID: 11400000, guid: da93712b4c00a884db11c382cad2ddb1, type: 2}
   match3BlockProfileContainer: {fileID: 11400000, guid: 6e92fbd265f992240b748d77810ddeea, type: 2}
   blockVisualManager: {fileID: 5685688798039318685}
+  gridActionProcessor: {fileID: 2713751634848182634}
 --- !u!1 &6739843607555039926
 GameObject:
   m_ObjectHideFlags: 0
