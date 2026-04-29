@@ -17,76 +17,8 @@ public class CollapseAndFillAction : BaseAction<CollapseAndFillActionParameters>
 
         for (int x = 0; x < parameters.GridWidth; x++)
         {
-            var emptySpotCount = 0;
-            var fallables = new List<(GridObject tile, Match3BlockProfile profile)>();
-
-            for (int y = 0; y < parameters.GridHeight; y++)
-            {
-                var tile = grid[x, y];
-                var profile = tile.GetMatch3BlockProfile;
-
-                if (profile == null)
-                {
-                    emptySpotCount++;
-                    continue;
-                }
-
-                if(!profile.HasRule("CollapseAndFill")) continue;
-
-                fallables.Add((tile, profile)); 
-                tile.SetMatch3BlockProfile(null);
-            }
-
-            int fallIndex = 0;
-
-            for (int y = 0; y < parameters.GridHeight; y++)
-            {
-                var targetGridObject = grid[x, y];
-
-                if (targetGridObject.GetMatch3BlockProfile != null) continue;
-
-                if (fallIndex >= fallables.Count) break;
-
-                var tile = fallables[fallIndex];
-
-                targetGridObject.SetMatch3BlockProfile(tile.profile);
-
-                parameters.MoveVisualBindingCallback(tile.tile, targetGridObject);
-
-                var tween = parameters.CreateVisualMoveTweenCallback(
-                    targetGridObject,
-                    targetGridObject.GetWorldPosition(parameters.GridCellWidth, parameters.GridCellHeight),
-                    parameters.VisualFallSpeed,
-                    Ease.OutBounce,
-                    .7f
-                );
-
-                _tweens.Add(tween);
-
-                fallIndex++;
-            }
-
-            var spawnCount = parameters.GridHeight - emptySpotCount;
-
-            for (var i = 0; i < spawnCount; i++)
-            {
-                for (int y = 0; y < parameters.GridHeight; y++)
-                {  
-                    var targetGrid = grid[x, y];
-                    if (targetGrid.GetMatch3BlockProfile != null) continue;
-
-                    var spawnY = parameters.GetWorldPositionCallback(targetGrid.GetGridPosition).y + (spawnCount - i) + _spawnOffset;
-
-                    var newMatch3Profile = parameters.GetRandomValidMatch3BlockCallBack(parameters.Match3BlockProfiles, grid, x, y);
-                    if (!parameters.TryEnableVisualByProfileCallback(newMatch3Profile, grid[x, y], parameters.GetWorldPositionCallback, spawnY)) continue;
-                    newMatch3Profile.Init();
-                    targetGrid.SetMatch3BlockProfile(newMatch3Profile);
-
-                    var tween = parameters.CreateVisualMoveTweenCallback(targetGrid, targetGrid.GetWorldPosition(parameters.GridCellWidth, parameters.GridCellHeight), parameters.VisualFallSpeed, Ease.OutBounce, .7f);
-                    _tweens.Add(tween);
-                }
-
-            }
+            HandleCollapse(grid, x);
+            HandleFill(grid, x);
         }
 
         if (_tweens.Count > 0)
@@ -95,6 +27,70 @@ public class CollapseAndFillAction : BaseAction<CollapseAndFillActionParameters>
             foreach (var t in _tweens) seq.Join(t);
 
             await Task.WhenAll(seq.AsyncWaitForCompletion());
+        }
+    }
+
+    private void HandleCollapse(GridObject[,] grid, int x)
+    {
+        var fallables = new List<(GridObject tile, Match3BlockProfile profile)>();
+
+        for (var y = 0; y < parameters.GridHeight; y++)
+        {
+            var tile = grid[x, y];
+            var profile = tile.GetMatch3BlockProfile;
+
+            if (profile == null || !profile.HasRule("CollapseAndFill")) continue;
+
+            fallables.Add((tile, profile));
+            tile.SetMatch3BlockProfile(null);
+        }
+
+        var fallIndex = 0;
+
+        for (var y = 0; y < parameters.GridHeight; y++)
+        {
+            var targetGridObject = grid[x, y];
+
+            if (targetGridObject.GetMatch3BlockProfile != null) continue;
+
+            if (fallIndex >= fallables.Count) break;
+
+            var tile = fallables[fallIndex];
+
+            targetGridObject.SetMatch3BlockProfile(tile.profile);
+
+            parameters.MoveVisualBindingCallback(tile.tile, targetGridObject);
+
+            var tween = parameters.CreateVisualMoveTweenCallback(
+                targetGridObject,
+                targetGridObject.GetWorldPosition(parameters.GridCellWidth, parameters.GridCellHeight),
+                parameters.VisualFallSpeed,
+                Ease.OutBounce,
+                .2f
+            );
+
+            _tweens.Add(tween);
+
+            fallIndex++;
+        }
+    }
+
+    private void HandleFill(GridObject[,] grid, int x)
+    {
+        for (var y = 0; y < parameters.GridHeight; y++)
+        {
+            var targetGrid = grid[x, y];
+            if (targetGrid.GetMatch3BlockProfile != null) continue;
+
+            var spawnY = parameters.GetWorldPositionCallback(targetGrid.GetGridPosition).y + _spawnOffset;
+
+            var newMatch3Profile = parameters.GetRandomValidMatch3BlockCallBack(parameters.Match3BlockProfiles, grid, x, y);
+            if (!parameters.TryEnableVisualByProfileCallback(newMatch3Profile, grid[x, y], parameters.GetWorldPositionCallback, spawnY)) continue;
+            newMatch3Profile.Init();
+            targetGrid.SetMatch3BlockProfile(newMatch3Profile);
+
+            var tween = parameters.CreateVisualMoveTweenCallback(targetGrid, targetGrid.GetWorldPosition(parameters.GridCellWidth, parameters.GridCellHeight), parameters.VisualFallSpeed, Ease.OutBounce, .2f);
+            _tweens.Add(tween);
         }
     }
 }

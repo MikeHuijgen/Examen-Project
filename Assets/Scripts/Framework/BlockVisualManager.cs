@@ -81,7 +81,7 @@ public class BlockVisualManager : MonoBehaviour
         await targetVisualB.transform.DOMove(newPositionB, tweenSpeed).SetEase(ease).AsyncWaitForCompletion();
     }
 
-    public Tween CreateVisualMoveTween(GridObject gridObject, Vector3 newPosition, float tweenSpeed, Ease ease, float tweenStrength = 1)
+    public Tween CreateVisualMoveTween(GridObject gridObject, Vector3 newPosition, float tweenSpeed, Ease ease, float tweenStrength)
     {
         if(!_ActiveBlockVisuals.TryGetValue(gridObject, out var targetVisual)) return null;
 
