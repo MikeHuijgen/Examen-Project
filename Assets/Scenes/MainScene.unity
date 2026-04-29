@@ -2240,6 +2240,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 5685688798039318685, guid: 1f7fe2694c2683a41988f34fe97e3730, type: 3}
+      propertyPath: profileToVisuals.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5685688798039318685, guid: 1f7fe2694c2683a41988f34fe97e3730, type: 3}
+      propertyPath: profileToVisuals.Array.data[5].visual
+      value: 
+      objectReference: {fileID: 862445274262784794, guid: 503af063a48fbaf49aea768e1ae4dd5d, type: 3}
+    - target: {fileID: 5685688798039318685, guid: 1f7fe2694c2683a41988f34fe97e3730, type: 3}
+      propertyPath: profileToVisuals.Array.data[5].match3BlockProfile
+      value: 
+      objectReference: {fileID: 11400000, guid: e80d69dc32950d1488f563df703ded5e, type: 2}
     - target: {fileID: 6636569109232428911, guid: 1f7fe2694c2683a41988f34fe97e3730, type: 3}
       propertyPath: m_Name
       value: PF_Level_Grid

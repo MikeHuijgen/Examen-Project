@@ -8,6 +8,6 @@ public class MatchAction : BaseAction<MatchActionParameters>
     {
         var matches = parameters.Matches;
         parameters.DisposeMatchDataCallback(matches);
-        parameters.DisableMatchesVisualsCallback(matches);
+        await parameters.DisableMatchesVisualsCallback(matches);
     }
 }
