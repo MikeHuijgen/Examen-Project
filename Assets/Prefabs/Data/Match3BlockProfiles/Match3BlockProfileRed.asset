@@ -15,3 +15,4 @@ MonoBehaviour:
   Attack: {fileID: 11400000, guid: 705d221ffb1a0fa4a9caa1252e033103, type: 2}
   ruleFlags:
   - {fileID: 11400000, guid: e156632abacb22940843ca9171ed4623, type: 2}
+  - {fileID: 11400000, guid: e61a984f565912d43a97eb063a570328, type: 2}

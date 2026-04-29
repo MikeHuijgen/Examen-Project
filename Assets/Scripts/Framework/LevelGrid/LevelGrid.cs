@@ -124,7 +124,7 @@ public class LevelGrid : MonoBehaviour
             return;
         }
 
-        if (!beginGridObject.GetMatch3BlockProfile.HasRule("Swap") && !endGridObject.GetMatch3BlockProfile.HasRule("Swap"))
+        if (!beginGridObject.GetMatch3BlockProfile.HasRule("Swap") || !endGridObject.GetMatch3BlockProfile.HasRule("Swap"))
         {
             _allowInput = true;
             return; 
