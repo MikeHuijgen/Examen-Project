@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "MatchAttackEffect", menuName = "Scriptable Objects/MatchAttackEffect")]

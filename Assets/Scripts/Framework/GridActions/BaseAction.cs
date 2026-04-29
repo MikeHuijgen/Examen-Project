@@ -1,6 +1,4 @@
 using System.Threading.Tasks;
-using UnityEngine;
-
 public abstract class BaseAction<Tparameters>
 {
     protected Tparameters parameters {get; private set;}

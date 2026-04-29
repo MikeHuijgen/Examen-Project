@@ -1,9 +1,5 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using DG.Tweening;
 using UnityEngine;
 
 public class LevelGrid : MonoBehaviour
@@ -17,8 +13,6 @@ public class LevelGrid : MonoBehaviour
     private MatchDetector _matchDetector;
     private GridHit _beginTouchGridPosition;
     private GridHit? _currentSelectedGridPosition;
-    private List<Tween> _tweens = new List<Tween>();
-    private List<GridObject> _tiles = new List<GridObject>();
     public static event Action<BaseAttack> OnMatchDestroyed;
     private bool _allowInput = true;
 
