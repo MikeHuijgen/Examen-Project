@@ -140,26 +140,27 @@ public class LevelGrid : MonoBehaviour
             GetWorldPositionCallback = _gridSystem.ConvertGridPositionToWorldPosition
         };
 
-        await gridActionProcessor.TryProcessSwapAction(swapParameters);
+        await gridActionProcessor.TryProcessAction(new SwapAction(swapParameters));
 
-        var matches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
+        var currentMatches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
 
-        if (!_matchDetector.HasAMatch(matches))
+        if (!_matchDetector.HasAMatch(currentMatches))
         {
-            await gridActionProcessor.TryProcessSwapAction(swapParameters);
+            await gridActionProcessor.TryProcessAction(new SwapAction(swapParameters));
             _allowInput = true;
             return;
         }
 
-        // while (true)
-        // {
-        //     matches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
+        while (true)
+        {
+            currentMatches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
 
-        //     if (!_matchDetector.HasAMatch(matches)) break;
+            if (!_matchDetector.HasAMatch(currentMatches)) break;
 
-        //     yield return DestroyMatches(matches);
-        //     yield return CollapseAndFill();
-        // }
+            await gridActionProcessor.TryProcessAction(new MatchAction(new MatchActionParameters {Matches = currentMatches, DisposeMatchDataCallback = _gridSystem.DisposeMatchData, DisableMatchesVisualsCallback = blockVisualManager.DisableMatchesVisuals}));
+            //yield return DestroyMatches(matches);
+            // yield return CollapseAndFill();
+        }
 
         // CheckForPossibleMoves();
 
@@ -180,7 +181,7 @@ public class LevelGrid : MonoBehaviour
         ReshuffleGrid();
     }
 
-    private IEnumerator DestroyMatches(HashSet<Match> matches)
+    private async Task DestroyMatches(HashSet<Match> matches)
     {
         foreach (var match in matches)
         {
@@ -188,7 +189,7 @@ public class LevelGrid : MonoBehaviour
         }
 
         _gridSystem.DisposeMatchData(matches);
-        yield return blockVisualManager.DisableMatchesVisuals(matches);
+        blockVisualManager.DisableMatchesVisuals(matches);
     }
 
     public void ReshuffleGrid()

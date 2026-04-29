@@ -1,7 +1,13 @@
 using System.Threading.Tasks;
 using UnityEngine;
 
-public abstract class BaseAction : MonoBehaviour
+public abstract class BaseAction<Tparameters>
 {
-    public virtual async Task Execute(IActionParameters actionParameters){}
+    protected Tparameters parameters {get; private set;}
+    public BaseAction(Tparameters parameters)
+    {
+        this.parameters = parameters;
+    }
+
+    public virtual async Task Execute(){}
 }

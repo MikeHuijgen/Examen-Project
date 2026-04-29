@@ -88,7 +88,7 @@ public class BlockVisualManager : MonoBehaviour
         return targetVisual.transform.DOMove(newPosition, tweenSpeed).SetEase(ease, tweenStrength);        
     }
 
-    public IEnumerator DisableMatchesVisuals(HashSet<Match> matches)
+    public void DisableMatchesVisuals(HashSet<Match> matches)
     {
         foreach (var match in matches)
         {
@@ -97,8 +97,6 @@ public class BlockVisualManager : MonoBehaviour
                 TryDisableVisualOnGridObject(match.MatchedObjectGroup[i]);
             }
         }
-
-        yield return new WaitForSeconds(.15f);
     }
 
     public void MoveVisualBinding(GridObject from, GridObject to)

@@ -1,16 +1,13 @@
+using System.Threading.Tasks;
 using UnityEngine;
 
-public class MatchAction : MonoBehaviour
+public class MatchAction : BaseAction<MatchActionParameters>
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public MatchAction(MatchActionParameters parameters) : base(parameters){}
+    public override async Task Execute()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        var matches = parameters.Matches;
+        parameters.DisableMatchesVisualsCallback(matches);
+        parameters.DisposeMatchDataCallback(matches);
     }
 }

@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62657935793c04846bde9cf5f1325104, type: 3}
   m_Name: MatchRuleFlag
   m_EditorClassIdentifier: Assembly-CSharp::RuleFlag
-  RuleId: 
+  RuleId: Match

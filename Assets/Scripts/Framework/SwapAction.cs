@@ -3,9 +3,11 @@ using System.Threading.Tasks;
 using DG.Tweening;
 using UnityEngine;
 
-public struct SwapAction
+public class SwapAction : BaseAction<SwapActionParameters>
 {
-    public async Task Execute(SwapActionParameters parameters)
+    public SwapAction(SwapActionParameters parameters) : base(parameters){}
+
+    public override async Task Execute()
     {
         var from = parameters.from;
         var to = parameters.to;
