@@ -105,7 +105,7 @@ public class MatchDetector
     public bool HasMatchAt(GridObject[,] grid, int x, int y)
     {
         var match3BlockProfile = grid[x, y].GetMatch3BlockProfile;
-        if (match3BlockProfile == null) return false;
+        if (match3BlockProfile == null || !match3BlockProfile.HasRule("Match")) return false;
 
         int width = grid.GetLength(0);
         int height = grid.GetLength(1);
@@ -164,7 +164,7 @@ public class MatchDetector
                     var ny = y + dir.y;
 
                     if (nx >= width || ny >= height) continue;
-
+                    if (!grid[x, y].GetMatch3BlockProfile.HasRule("Swap") || !grid[nx, ny].GetMatch3BlockProfile.HasRule("Swap")) continue;
                     swapGridData(grid[x, y], grid[nx, ny]);
 
                     if (HasMatchAt(grid, x, y) || HasMatchAt(grid, nx, ny))

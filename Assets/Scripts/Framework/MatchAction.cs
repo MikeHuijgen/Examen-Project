@@ -7,7 +7,7 @@ public class MatchAction : BaseAction<MatchActionParameters>
     public override async Task Execute()
     {
         var matches = parameters.Matches;
-        parameters.DisableMatchesVisualsCallback(matches);
         parameters.DisposeMatchDataCallback(matches);
+        parameters.DisableMatchesVisualsCallback(matches);
     }
 }
