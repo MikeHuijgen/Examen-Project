@@ -68,6 +68,8 @@ Assets/Scripts/
   BaseAction.cs
   BlockVisualManager.cs
   CameraHolder/CameraHolder.cs
+  CollapseAndFillAction.cs
+  CollapseAndFillActionParameters.cs
   CombatSegment/AttackSystem/
    AttackListener.cs
    AttackSystem.cs

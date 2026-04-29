@@ -53,7 +53,7 @@ public class LevelGrid : MonoBehaviour
         _beginTouchGridPosition = newGridHit;
     }
 
-    private void OnNewFingerUpInput(Vector2 fingerPosition)
+    private async void OnNewFingerUpInput(Vector2 fingerPosition)
     {
         if (!_allowInput) return;
         var newGridHit = _gridSystem.ConvertScreenPositionToGridHit(fingerPosition);
@@ -89,7 +89,7 @@ public class LevelGrid : MonoBehaviour
             }
 
 
-            HandleMove(_currentSelectedGridPosition.Value.hitGridPosition, endGridPosition);
+            await HandleMove(_currentSelectedGridPosition.Value.hitGridPosition, endGridPosition);
         }
         else
         {
@@ -97,7 +97,7 @@ public class LevelGrid : MonoBehaviour
 
             endGridPosition = _gridSystem.CheckGridBounds(endGridPosition);
 
-            HandleMove(_beginTouchGridPosition.hitGridPosition, endGridPosition);
+            await HandleMove(_beginTouchGridPosition.hitGridPosition, endGridPosition);
         }
 
         _currentSelectedGridPosition = null;
@@ -158,8 +158,21 @@ public class LevelGrid : MonoBehaviour
             if (!_matchDetector.HasAMatch(currentMatches)) break;
 
             await gridActionProcessor.TryProcessAction(new MatchAction(new MatchActionParameters {Matches = currentMatches, DisposeMatchDataCallback = _gridSystem.DisposeMatchData, DisableMatchesVisualsCallback = blockVisualManager.DisableMatchesVisuals}));
-            //yield return DestroyMatches(matches);
-            // yield return CollapseAndFill();
+            await gridActionProcessor.TryProcessAction(new CollapseAndFillAction(new CollapseAndFillActionParameters
+            {
+                Grid = _gridSystem.GetGridObjectArray,
+                VisualFallSpeed = levelGridData.VisualFallSpeed,
+                GridHeight = levelGridData.GridHeight,
+                GridWidth = levelGridData.GridWidth,
+                GridCellHeight = levelGridData.GridCellHeight,
+                GridCellWidth = levelGridData.GridCellWidth,
+                GetWorldPositionCallback = _gridSystem.ConvertGridPositionToWorldPosition,
+                CreateVisualMoveTweenCallback = blockVisualManager.CreateVisualMoveTween,
+                GetRandomValidMatch3BlockCallBack = _matchDetector.GetRandomValidMatch3Profile,
+                Match3BlockProfiles = match3BlockProfileContainer.match3BlockProfiles,
+                MoveVisualBindingCallback = blockVisualManager.MoveVisualBinding,
+                TryEnableVisualByProfileCallback = blockVisualManager.TryEnableVisualByProfile
+            }));
         }
 
         // CheckForPossibleMoves();
@@ -181,17 +194,6 @@ public class LevelGrid : MonoBehaviour
         ReshuffleGrid();
     }
 
-    private async Task DestroyMatches(HashSet<Match> matches)
-    {
-        foreach (var match in matches)
-        {
-            OnMatchDestroyed?.Invoke(match.MatchAttack);
-        }
-
-        _gridSystem.DisposeMatchData(matches);
-        blockVisualManager.DisableMatchesVisuals(matches);
-    }
-
     public void ReshuffleGrid()
     {
         var grid = _gridSystem.GetGridObjectArray;
@@ -204,65 +206,6 @@ public class LevelGrid : MonoBehaviour
                 newMatch3Profile.Init();
                 grid[x, y].SetMatch3BlockProfile(newMatch3Profile);
             }
-        }
-    }
-
-    private IEnumerator CollapseAndFill()
-    {
-        var grid = _gridSystem.GetGridObjectArray;
-        _tweens.Clear();
-
-        for (int x = 0; x < levelGridData.GridWidth; x++)
-        {
-            var writeY = 0;
-            _tiles.Clear();
-
-            for (var y = 0; y < levelGridData.GridHeight; y++)
-            {
-                var match3BlockProfile = grid[x, y].GetMatch3BlockProfile;
-                if (match3BlockProfile == null) continue;
-
-                _tiles.Add(grid[x, y]);
-            }
-
-            foreach (var tile in _tiles)
-            {
-                var targetGrid = grid[x, writeY];
-
-                targetGrid.SetMatch3BlockProfile(tile.GetMatch3BlockProfile);
-                blockVisualManager.MoveVisualBinding(tile, targetGrid);
-                var tween = blockVisualManager.CreateVisualMoveTween(targetGrid, targetGrid.GetWorldPosition(levelGridData.GridCellWidth, levelGridData.GridCellHeight), levelGridData.VisualFallSpeed, Ease.OutBounce, .7f);
-                _tweens.Add(tween);
-
-                writeY++;
-            }
-
-            var spawnCount = levelGridData.GridHeight - writeY;
-
-            for (var i = 0; i < spawnCount; i++)
-            {
-                var y = writeY + i;
-
-                var targetGrid = grid[x, y];
-
-                var spawnY = _gridSystem.ConvertGridPositionToWorldPosition(targetGrid.GetGridPosition).y + (spawnCount - i) + 5f;
-
-                var newMatch3Profile = _matchDetector.GetRandomValidMatch3Profile(match3BlockProfileContainer.match3BlockProfiles, grid, x, y);
-                if (!blockVisualManager.TryEnableVisualByProfile(newMatch3Profile, grid[x, y], _gridSystem.ConvertGridPositionToWorldPosition, spawnY)) continue;
-                newMatch3Profile.Init();
-                targetGrid.SetMatch3BlockProfile(newMatch3Profile);
-
-                var tween = blockVisualManager.CreateVisualMoveTween(targetGrid, targetGrid.GetWorldPosition(levelGridData.GridCellWidth, levelGridData.GridCellHeight), levelGridData.VisualFallSpeed, Ease.OutBounce, .7f);
-                _tweens.Add(tween);
-            }
-        }
-
-        if (_tweens.Count > 0)
-        {
-            var seq = DOTween.Sequence();
-            foreach (var t in _tweens) seq.Join(t);
-
-            yield return seq.WaitForCompletion();
         }
     }
 }
