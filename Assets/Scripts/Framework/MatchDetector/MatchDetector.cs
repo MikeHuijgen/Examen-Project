@@ -62,7 +62,7 @@ public class MatchDetector
                         {
                             matchGridObjectGroup[k] = grid[x - k, y];
                         }
-                        matches.Add(new Match(matchGridObjectGroup, grid[x, y].GetMatch3BlockProfile.Attack));
+                        matches.Add(new Match(matchGridObjectGroup, matchGridObjectGroup[0].GetMatch3BlockProfile.matchEffect));
                     }
                     matchLength = 1;
                 }
@@ -88,7 +88,7 @@ public class MatchDetector
                         {
                             matchGridObjectGroup[k] = grid[x, y - k];
                         }
-                        matches.Add(new Match(matchGridObjectGroup, grid[x, y].GetMatch3BlockProfile.Attack));
+                        matches.Add(new Match(matchGridObjectGroup, matchGridObjectGroup[0].GetMatch3BlockProfile.matchEffect));
                     }
                     matchLength = 1;
                 }

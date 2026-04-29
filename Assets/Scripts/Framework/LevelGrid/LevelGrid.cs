@@ -207,5 +207,7 @@ public class LevelGrid : MonoBehaviour
                 grid[x, y].SetMatch3BlockProfile(newMatch3Profile);
             }
         }
+
+        CheckForPossibleMoves();
     }
 }

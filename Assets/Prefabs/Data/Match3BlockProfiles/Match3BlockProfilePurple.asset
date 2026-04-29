@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c40e332f895f904c88fc099ed3d6958, type: 3}
   m_Name: Match3BlockProfilePurple
   m_EditorClassIdentifier: Assembly-CSharp::Match3BlockProfile
-  Attack: {fileID: 11400000, guid: 5df7a0590b175f54faf78371705840df, type: 2}
+  matchEffect: {fileID: 11400000, guid: 47f0e18d8f6a9ca48823a05f367658e1, type: 2}
   ruleFlags:
   - {fileID: 11400000, guid: e156632abacb22940843ca9171ed4623, type: 2}
   - {fileID: 11400000, guid: e61a984f565912d43a97eb063a570328, type: 2}

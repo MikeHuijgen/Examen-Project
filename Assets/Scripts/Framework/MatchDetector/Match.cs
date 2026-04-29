@@ -5,11 +5,11 @@ using UnityEngine;
 public struct Match
 {
     public GridObject[] MatchedObjectGroup;
-    public BaseAttack MatchAttack;
+    public BaseMatchEffect MatchEffect;
 
-    public Match(GridObject[] matchedObjectGroup, BaseAttack attack)
+    public Match(GridObject[] matchedObjectGroup, BaseMatchEffect matchEffect)
     {
         MatchedObjectGroup = matchedObjectGroup;
-        MatchAttack = attack;
+        MatchEffect = matchEffect;
     }
 }

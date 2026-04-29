@@ -57,6 +57,13 @@ Assets/Scripts/Data/
  LevelGridData/LevelGridData.cs
  Match3BlockProfile/Match3BlockProfile.cs
  Match3BlockProfileContainer/Match3BlockProfileContainer.cs
+ MatchEffectChannels/
+  MatchAttackEffectChannel.cs
+  MatchDoubleDamageEffectChannel.cs
+ MatchEffects/
+  BaseMatchEffect.cs
+  MatchAttackEffect.cs
+  MatchDoubleDamageEffect.cs
  RuleFlag/RuleFlag.cs
 Assets/Scripts/
  Debug/FPSCounter.cs
@@ -65,11 +72,8 @@ Assets/Scripts/
   AudioPool.cs
   SoundData.cs
  Framework/
-  BaseAction.cs
-  BlockVisualManager.cs
+  BlockVisualManager/BlockVisualManager.cs
   CameraHolder/CameraHolder.cs
-  CollapseAndFillAction.cs
-  CollapseAndFillActionParameters.cs
   CombatSegment/AttackSystem/
    AttackListener.cs
    AttackSystem.cs
@@ -82,21 +86,26 @@ Assets/Scripts/
    OpponentBhaviour/OpponentBehaviour.cs
   CombatSegment/TimingManagement/TimerManager.cs
   ComboCounter.cs
-  GridActionProcessor.cs
+  GridActionProcessor/GridActionProcessor.cs
+  GridActions/
+   BaseAction.cs
+   CollapseAndFillAction.cs
+   MatchAction.cs
+   Parameters/
+    CollapseAndFillActionParameters.cs
+    MatchActionParameters.cs
+    SwapActionParameters.cs
+   SwapAction.cs
   GridHit/GridHit.cs
   GridObject/GridObject.cs
   GridPosition/GridPosition.cs
   GridSystem/GridSystem.cs
   HealthComponent/HealthComponent.cs
-  IActionParameters.cs
   LevelGrid/LevelGrid.cs
-  Match.cs
   Match3CameraHandler/Match3CameraHandler.cs
-  MatchAction.cs
-  MatchActionParameters.cs
-  MatchDetector/MatchDetector.cs
-  SwapAction.cs
-  SwapActionParameters.cs
+  MatchDetector/
+   Match.cs
+   MatchDetector.cs
  Temp/PlayerAttackTest.cs
  Tools/Timer/
   BaseTimer.cs
