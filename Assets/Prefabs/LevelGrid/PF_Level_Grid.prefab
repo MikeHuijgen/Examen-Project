@@ -1,5 +1,49 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5667233285847825231
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4647997688803986639}
+  - component: {fileID: 2713751634848182634}
+  m_Layer: 8
+  m_Name: GirdActionProcessor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4647997688803986639
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5667233285847825231}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8638016569917829304}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2713751634848182634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5667233285847825231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7dac39a32e71a8409413cc2f7d53974, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GridActionProcessor
 --- !u!1 &6636569109232428911
 GameObject:
   m_ObjectHideFlags: 0
@@ -10,7 +54,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8638016569917829304}
   - component: {fileID: 5713675024628666864}
-  - component: {fileID: 1732353189968295651}
   m_Layer: 8
   m_Name: PF_Level_Grid
   m_TagString: Untagged
@@ -30,7 +73,10 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 7111977752419130358}
+  - {fileID: 5032308193894093746}
+  - {fileID: 4647997688803986639}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5713675024628666864
@@ -45,16 +91,81 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae53a33ba6c10db4bb5cfe1f4efc8d93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::LevelGrid
+  tileVisualHolder: {fileID: 5032308193894093746}
   levelGridData: {fileID: 11400000, guid: da93712b4c00a884db11c382cad2ddb1, type: 2}
   match3BlockProfileContainer: {fileID: 11400000, guid: 6e92fbd265f992240b748d77810ddeea, type: 2}
-  blockVisualManager: {fileID: 1732353189968295651}
---- !u!114 &1732353189968295651
+  blockVisualManager: {fileID: 5685688798039318685}
+  gridActionProcessor: {fileID: 2713751634848182634}
+--- !u!1 &6739843607555039926
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5032308193894093746}
+  m_Layer: 8
+  m_Name: TileVisualHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5032308193894093746
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6739843607555039926}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8638016569917829304}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &9021142594204302451
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7111977752419130358}
+  - component: {fileID: 5685688798039318685}
+  m_Layer: 8
+  m_Name: BlockVisualManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7111977752419130358
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9021142594204302451}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8638016569917829304}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5685688798039318685
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6636569109232428911}
+  m_GameObject: {fileID: 9021142594204302451}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0ae9090bd4de82b48b5772aa75b699b5, type: 3}
@@ -64,9 +175,9 @@ MonoBehaviour:
   - match3BlockProfile: {fileID: 11400000, guid: 42d0848ce558f2c40a5bbdd5428bbbea, type: 2}
     visual: {fileID: 8827714824386003747, guid: 3f87e07ba14233042bbb10e3440cd183, type: 3}
   - match3BlockProfile: {fileID: 11400000, guid: 74cc3cfeaa113494f8a0bf7ac91b7f1c, type: 2}
-    visual: {fileID: 8827714824386003747, guid: f084fb78364170d48bbf4670ad464849, type: 3}
+    visual: {fileID: 1628469159817635507, guid: 9cce1f4b783dcc443b37e06dcf11a479, type: 3}
   - match3BlockProfile: {fileID: 11400000, guid: ade9b781860b26847868422fc9bae200, type: 2}
-    visual: {fileID: 8827714824386003747, guid: 6c83054f8cd5dd442a70ecc1f36c7516, type: 3}
+    visual: {fileID: 4607427555636074916, guid: bb963d43da0ce654d9275b42c4838079, type: 3}
   - match3BlockProfile: {fileID: 11400000, guid: 4c962fbd07afeaf4ba678a7dad590198, type: 2}
     visual: {fileID: 8827714824386003747, guid: 124ee7686152962418124c2949098302, type: 3}
   - match3BlockProfile: {fileID: 11400000, guid: 4d7f3c835e6e71f42ab70c3d324a718c, type: 2}

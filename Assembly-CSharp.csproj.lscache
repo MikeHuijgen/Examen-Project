@@ -57,6 +57,14 @@ Assets/Scripts/Data/
  LevelGridData/LevelGridData.cs
  Match3BlockProfile/Match3BlockProfile.cs
  Match3BlockProfileContainer/Match3BlockProfileContainer.cs
+ MatchEffectChannels/
+  MatchAttackEffectChannel.cs
+  MatchDoubleDamageEffectChannel.cs
+ MatchEffects/
+  BaseMatchEffect.cs
+  MatchAttackEffect.cs
+  MatchDoubleDamageEffect.cs
+ RuleFlag/RuleFlag.cs
 Assets/Scripts/
  Debug/FPSCounter.cs
  Framework/AudioSystem/
@@ -64,7 +72,7 @@ Assets/Scripts/
   AudioPool.cs
   SoundData.cs
  Framework/
-  BlockVisualManager.cs
+  BlockVisualManager/BlockVisualManager.cs
   CameraHolder/CameraHolder.cs
   CombatSegment/AttackSystem/
    AttackListener.cs
@@ -78,15 +86,26 @@ Assets/Scripts/
    OpponentBhaviour/OpponentBehaviour.cs
   CombatSegment/TimingManagement/TimerManager.cs
   ComboCounter.cs
+  GridActionProcessor/GridActionProcessor.cs
+  GridActions/
+   BaseAction.cs
+   CollapseAndFillAction.cs
+   MatchAction.cs
+   Parameters/
+    CollapseAndFillActionParameters.cs
+    MatchActionParameters.cs
+    SwapActionParameters.cs
+   SwapAction.cs
   GridHit/GridHit.cs
   GridObject/GridObject.cs
   GridPosition/GridPosition.cs
   GridSystem/GridSystem.cs
   HealthComponent/HealthComponent.cs
   LevelGrid/LevelGrid.cs
-  Match.cs
   Match3CameraHandler/Match3CameraHandler.cs
-  MatchDetector/MatchDetector.cs
+  MatchDetector/
+   Match.cs
+   MatchDetector.cs
  Temp/PlayerAttackTest.cs
  Tools/Timer/
   BaseTimer.cs
@@ -431,7 +450,7 @@ Temp/bin/Debug/Assembly-CSharp-firstpass.dll
  Unity.Properties.SourceGenerator.dll
  Unity.SourceGenerators.dll
  Unity.UIToolkit.SourceGenerator.dll
-../../../../.vscode/extensions/visualstudiotoolsforunity.vstuc-1.2.1/Analyzers/Microsoft.Unity.Analyzers.dll
+../../../../.vscode/extensions/visualstudiotoolsforunity.vstuc-1.2.2/Analyzers/Microsoft.Unity.Analyzers.dll
 
 [analyzerConfigFiles]
 Temp/obj/Assembly-CSharp/Assembly-CSharp.GeneratedMSBuildEditorConfig.editorconfig

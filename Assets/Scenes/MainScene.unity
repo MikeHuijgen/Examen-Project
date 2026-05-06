@@ -2346,15 +2346,7 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 912468357}
     - target: {fileID: 6226588983716817444, guid: e7c3c0592067b714a980a0c6ecb429e6, type: 3}
-      propertyPath: _playerHealth
-      value: 
-      objectReference: {fileID: 912468357}
-    - target: {fileID: 6226588983716817444, guid: e7c3c0592067b714a980a0c6ecb429e6, type: 3}
       propertyPath: opponentHealth
-      value: 
-      objectReference: {fileID: 233823401}
-    - target: {fileID: 6226588983716817444, guid: e7c3c0592067b714a980a0c6ecb429e6, type: 3}
-      propertyPath: _opponentHealth
       value: 
       objectReference: {fileID: 233823401}
     - target: {fileID: 6226588983716817444, guid: e7c3c0592067b714a980a0c6ecb429e6, type: 3}
