@@ -103,6 +103,10 @@ Assets/Scripts/
   HealthComponent/HealthComponent.cs
   LevelGrid/LevelGrid.cs
   Match3CameraHandler/Match3CameraHandler.cs
+  MatchDetector/MatchDetector.cs
+  States/
+   GameManager.cs
+   GameStates.cs
   MatchDetector/
    Match.cs
    MatchDetector.cs
@@ -112,6 +116,7 @@ Assets/Scripts/
   CountdownTimer.cs
   DurationTimer.cs
  UI/
+  GameOver.cs
   GridTileVisual/GridTileVisual.cs
   HealthBar.cs
   SceneTransition/SceneLoader.cs
