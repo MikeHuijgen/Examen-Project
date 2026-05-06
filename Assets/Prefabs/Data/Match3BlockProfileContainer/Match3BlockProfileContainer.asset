@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9109f13bee809ff41b350667081d9d7c, type: 3}
+  m_Name: Match3BlockProfileContainer
+  m_EditorClassIdentifier: Assembly-CSharp::Match3BlockProfileContainer
+  match3BlockProfiles:
+  - {fileID: 11400000, guid: 42d0848ce558f2c40a5bbdd5428bbbea, type: 2}
+  - {fileID: 11400000, guid: 74cc3cfeaa113494f8a0bf7ac91b7f1c, type: 2}
+  - {fileID: 11400000, guid: ade9b781860b26847868422fc9bae200, type: 2}
+  - {fileID: 11400000, guid: 4c962fbd07afeaf4ba678a7dad590198, type: 2}
+  - {fileID: 11400000, guid: 4d7f3c835e6e71f42ab70c3d324a718c, type: 2}

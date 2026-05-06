@@ -20,6 +20,6 @@ public class Match3CameraHandler : MonoBehaviour
     private void AdjustCamera()
     {
         float aspectRatio = (float)Screen.width / Screen.height;
-        CameraHolder.Match3Camera.orthographicSize = levelGridData.GridWidth * levelGridData.GridCellWidth / aspectRatio / 3f + 1f;
+        CameraHolder.Match3Camera.orthographicSize = levelGridData.GridWidth * levelGridData.GridCellWidth / aspectRatio / 3f + 1.5f;
     }
 }
