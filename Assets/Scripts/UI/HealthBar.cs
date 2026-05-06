@@ -25,9 +25,6 @@ public class HealthBar : MonoBehaviour
 
         healthSlider.interactable = false;
         delaySlider.interactable = false;
-
-        healthSlider.handleRect.gameObject.SetActive(false);
-        delaySlider.handleRect.gameObject.SetActive(false);
     }
 
     private void Update()
