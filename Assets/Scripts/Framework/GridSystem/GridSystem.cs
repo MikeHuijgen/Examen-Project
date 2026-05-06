@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
@@ -42,13 +41,13 @@ public class GridSystem
         }
     }
 
-    public void CreateGridTileVisuals(GridTileVisual gridTileVisual)
+    public void CreateGridTileVisuals(GridTileVisual gridTileVisual, Transform parent)
     {
         for (var x = 0; x < _width; x++)
         {
             for (int y = 0; y < _height; y++)
             {
-                var newTileVisual = GameObject.Instantiate(gridTileVisual, new Vector3(x * _cellWidth, y * _cellHeight, 0), quaternion.identity);
+                var newTileVisual = GameObject.Instantiate(gridTileVisual, new Vector3(x * _cellWidth, y * _cellHeight, 0), quaternion.identity, parent);
                 newTileVisual.transform.localScale = new Vector3(_cellWidth, _cellHeight, 0);
                 _gridTileVisuals[new GridPosition(x,y)] = newTileVisual;
             }

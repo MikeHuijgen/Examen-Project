@@ -24,7 +24,6 @@ public class HealthComponent : MonoBehaviour
     public void TakeDamage(int damage)
     {
         if (_currentHealth == 0) return;
-
         _currentHealth -= damage;
         OnTakeDamage?.Invoke();
         healthBar.UpdateHealthUI(_currentHealth);
