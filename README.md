@@ -1,1 +1,28 @@
 # Examen-Project
+
+## General
+
+Brawl Saloon is a real-time combat and match-3 hybrid game designed for mobile devices. The game combines fast-paced puzzle gameplay with Wild West-inspired combat, creating a unique and action-packed experience.
+
+The screen is divided into two sections: the combat area at the top and a match-3 grid at the bottom. Players match different stones to perform attacks against enemies while reacting to incoming attacks in real time. During combat, enemies can strike back, forcing the player to quickly dodge by swiping in the correct direction.
+
+As the town’s hero, the player must defeat dangerous outlaws threatening the peace of the saloon. Not with guns, but with their fists alone.
+
+## Documentation
+
+Team 5 documents everything in the GitHub Wiki, Trello and our own Miro board.
+
+## Who did what
+
+- Mike [Developer](https://github.com/MikeHuijgen)
+- Gerben [Developer](https://github.com/Gerben-Prins)
+- Keith [Developer](https://github.com/keithko)
+- Jonas [Developer](https://github.com/JonasDriessen0)
+- Lin [Artist](https://github.com/linmorren)
+- Nica [Artist](https://github.com/N1cachu)
+   - UI (textures, buttons, in-between screens, Stones, tiles, grid)
+   - sketches for assets
+   - styleguide and marketing documentation
+   - artsheets template
+- Joshua [Artist](https://github.com/drunkjoshua)
+- Raphael [Artist](https://github.com/Raphbama)
