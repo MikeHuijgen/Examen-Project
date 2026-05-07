@@ -1,8 +1,13 @@
 using UnityEngine;
+using UnityEngine.Serialization;
 
 public class Match3CameraHandler : MonoBehaviour
 {
     [SerializeField] private LevelGridData levelGridData;
+    
+    [SerializeField] private float zoom = 3.5f;
+    
+    [SerializeField] private Vector2 positionOffset;
 
     private void Start()
     {
@@ -20,6 +25,13 @@ public class Match3CameraHandler : MonoBehaviour
     private void AdjustCamera()
     {
         float aspectRatio = (float)Screen.width / Screen.height;
-        CameraHolder.Match3Camera.orthographicSize = levelGridData.GridWidth * levelGridData.GridCellWidth / aspectRatio / 3f + 1.5f;
+
+        float gridWorldWidth = levelGridData.GridWidth * levelGridData.GridCellWidth;
+
+        float calculatedSize = gridWorldWidth / aspectRatio / zoom;
+
+        CameraHolder.Match3Camera.orthographicSize = calculatedSize + 1.5f;
+        
+        CameraHolder.Match3Camera.transform.position += new Vector3(positionOffset.x, positionOffset.y, 0f);
     }
 }

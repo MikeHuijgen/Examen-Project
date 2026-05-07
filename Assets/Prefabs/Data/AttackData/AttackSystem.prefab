@@ -46,8 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AttackSystem
   playerDodgeSystem: {fileID: 0}
-  _playerHealth: {fileID: 0}
-  _opponentHealth: {fileID: 0}
+  playerHealth: {fileID: 0}
+  opponentHealth: {fileID: 0}
 --- !u!114 &5605699950899127044
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -61,3 +61,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AttackListener
   attackSystem: {fileID: 6226588983716817444}
+  matchAttackEffectChannel: {fileID: 11400000, guid: e962fad93546c6e4eb173102813c237d, type: 2}
