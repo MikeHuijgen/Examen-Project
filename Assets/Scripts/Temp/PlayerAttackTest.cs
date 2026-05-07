@@ -12,6 +12,6 @@ public class PlayerAttackTest : MonoBehaviour
             return;
 
         var attack = baseAttacks[index];
-        attackSystem.TriggerAttack(attack);
+        attackSystem.QueueAttack(attack);
     }
 }

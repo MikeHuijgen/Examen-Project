@@ -25,6 +25,8 @@ public class OpponentBehaviour : MonoBehaviour
 
     private void Update()
     {
+        HandleAttackDelay();
+
         if (!attackSystem.IsIdle)
         {
             int direction = attackSystem.CurrentAttackDirection();
@@ -37,7 +39,6 @@ public class OpponentBehaviour : MonoBehaviour
         else
         {
             attackDirectionWarnings.ForEach(warning => warning.SetActive(false));
-            HandleAttackDelay();
         }
     }
 
@@ -47,7 +48,7 @@ public class OpponentBehaviour : MonoBehaviour
             return;
 
         var attack = GetAttack();
-        attackSystem.TriggerAttack(attack);
+        attackSystem.QueueAttack(attack);
 
         SetNewDelay();
     }

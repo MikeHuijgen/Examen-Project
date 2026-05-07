@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class AttackSystem : MonoBehaviour
@@ -23,16 +24,32 @@ public class AttackSystem : MonoBehaviour
     private TimerManager _timer;
     private BaseAttack _currentAttack;
 
+    private Queue<BaseAttack> _attackQueue = new Queue<BaseAttack>();
+
+    private bool _hasExecutedAttack;
+
     private void Start()
     {
         _timer = new TimerManager();
     }
 
+    public void QueueAttack(BaseAttack attack)
+    {
+        _attackQueue.Enqueue(attack);
+    }
+
+    public void CheckQueue()
+    {
+        if (_attackQueue.Count > 0)
+        {
+            TriggerAttack(_attackQueue.Dequeue());
+        }
+    }
+
     public void TriggerAttack(BaseAttack attack)
     {
-        if (!IsIdle) return;
-
         _currentAttack = attack;
+        _hasExecutedAttack = false;
 
         if (_currentAttack is OpponentAttack opponentAttack && opponentAttack.ChargeDurationTime > 0f)
         {
@@ -49,6 +66,7 @@ public class AttackSystem : MonoBehaviour
         switch (_state)
         {
             case AttackState.Idle:
+                CheckQueue();
                 break;
 
             case AttackState.Charging:
@@ -60,14 +78,20 @@ public class AttackSystem : MonoBehaviour
                 HandleAttacking();
                 break;
         }
+
+        Debug.Log("Attack Queue = " + _attackQueue.Count);
     }
 
     private void HandleAttackExecution()
     {
+        if (_hasExecutedAttack)
+            return;
+
+        _hasExecutedAttack = true;
+
         if (_currentAttack is not OpponentAttack opponentAttack)
         {
             opponentHealth.TakeDamage(_currentAttack.Damage);
-            _state = AttackState.Idle;
             return;
         }
 
@@ -76,7 +100,7 @@ public class AttackSystem : MonoBehaviour
         if (!dodge.isDodging)
         {
             playerHealth.TakeDamage(_currentAttack.Damage);
-            _state = AttackState.Idle;
+            return;
         }
 
         SideType requiredDodge = GetRequiredDodge(opponentAttack.Direction);
@@ -84,7 +108,6 @@ public class AttackSystem : MonoBehaviour
         if (dodge.dodgeSide != requiredDodge)
         {
             playerHealth.TakeDamage(_currentAttack.Damage);
-            _state = AttackState.Idle;
         }
     }
 

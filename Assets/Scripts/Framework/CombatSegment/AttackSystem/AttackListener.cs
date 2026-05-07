@@ -15,6 +15,6 @@ public class AttackListener : MonoBehaviour
 
     private void HandleMatchDestroyed(BaseAttack attack)
     {
-        attackSystem.TriggerAttack(attack);
+        attackSystem.QueueAttack(attack);
     }
 }
