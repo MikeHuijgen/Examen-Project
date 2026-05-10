@@ -103,10 +103,4 @@ public class ComboCounter : MonoBehaviour
                 visuals.transform.localScale = Vector3.one;
             });
     }
-
-    private void OnEnable() => LevelGrid.OnMatchDestroyed += OnMatch;
-
-    private void OnDisable() => LevelGrid.OnMatchDestroyed -= OnMatch;
-
-    private void OnMatch(object _) => OnSuccessfulHit();
 }
