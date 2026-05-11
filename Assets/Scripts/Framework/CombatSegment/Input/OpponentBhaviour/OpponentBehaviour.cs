@@ -25,32 +25,15 @@ public class OpponentBehaviour : MonoBehaviour
 
     private void Update()
     {
+        if (!_timer.RunTimer(ref _idleTimer, _currentDelay)) return;
         HandleAttackDelay();
-
-        if (!attackSystem.IsIdle)
-        {
-            int direction = attackSystem.CurrentAttackDirection();
-
-            if (direction >= 0 && direction < attackDirectionWarnings.Count)
-            {
-                attackDirectionWarnings[direction].SetActive(true);
-            }
-        }
-        else
-        {
-            attackDirectionWarnings.ForEach(warning => warning.SetActive(false));
-        }
     }
 
     private void HandleAttackDelay()
     {
-        if (!_timer.RunTimer(ref _idleTimer, _currentDelay))
-            return;
-
         var attack = GetAttack();
-        attackSystem.QueueAttack(attack);
-
-        SetNewDelay();
+        attackDirectionWarnings[attack.Direction].SetActive(true);
+        attackSystem.TriggerAttack(attack);
     }
 
     private void SetNewDelay()
@@ -61,5 +44,17 @@ public class OpponentBehaviour : MonoBehaviour
     private OpponentAttack GetAttack()
     {
         return opponentAttacks[Random.Range(0, opponentAttacks.Count)];
+    }
+
+    public void ResetAllAttackWarningDirections()
+    {
+        attackDirectionWarnings.ForEach(warningObject => warningObject.SetActive(false));
+        SetNewDelay();
+    }
+
+    public void ResetTimer()
+    {
+        _idleTimer.ResetTimer();
+        SetNewDelay();
     }
 }
