@@ -1144,9 +1144,33 @@ PrefabInstance:
       value: 1.85
       objectReference: {fileID: 0}
     - target: {fileID: 5854545115571942955, guid: ed98fbafba7d40141bd8d9c7d46b0c36, type: 3}
+      propertyPath: maxIncrease
+      value: 65
+      objectReference: {fileID: 0}
+    - target: {fileID: 5854545115571942955, guid: ed98fbafba7d40141bd8d9c7d46b0c36, type: 3}
+      propertyPath: minIncrease
+      value: 43
+      objectReference: {fileID: 0}
+    - target: {fileID: 5854545115571942955, guid: ed98fbafba7d40141bd8d9c7d46b0c36, type: 3}
       propertyPath: attackSystem
       value: 
       objectReference: {fileID: 766133201}
+    - target: {fileID: 5854545115571942955, guid: ed98fbafba7d40141bd8d9c7d46b0c36, type: 3}
+      propertyPath: comboCounter
+      value: 
+      objectReference: {fileID: 998460514}
+    - target: {fileID: 6490981045924121961, guid: ed98fbafba7d40141bd8d9c7d46b0c36, type: 3}
+      propertyPath: barPunchScale
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6490981045924121961, guid: ed98fbafba7d40141bd8d9c7d46b0c36, type: 3}
+      propertyPath: barPunchDuration
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6490981045924121961, guid: ed98fbafba7d40141bd8d9c7d46b0c36, type: 3}
+      propertyPath: barTweenDuration
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 6490981045924121961, guid: ed98fbafba7d40141bd8d9c7d46b0c36, type: 3}
       propertyPath: popupFadeDuration
       value: 0.3

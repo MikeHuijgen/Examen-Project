@@ -14,6 +14,11 @@ public class AttackEnergyVisuals : MonoBehaviour
     [SerializeField] private float barTweenDuration = 0.25f;
     [SerializeField] private Ease barTweenEase = Ease.OutQuad;
 
+    [Header("Bar Punch Scale")]
+    [SerializeField] private float barPunchDuration = 0.15f;
+    [SerializeField] private float barPunchScale = 0.08f;
+    [SerializeField] private int barPunchVibrato = 6;
+
     [Header("Popup Text")]
     [SerializeField] private TextMeshProUGUI popupText;
     [SerializeField] private RectTransform popupRect;
@@ -22,6 +27,7 @@ public class AttackEnergyVisuals : MonoBehaviour
     [SerializeField] private float popupMoveDistance = 30f;
 
     private readonly Dictionary<Slider, Tween> _barTweens = new Dictionary<Slider, Tween>();
+    private readonly Dictionary<Slider, bool> _pendingFullReset = new Dictionary<Slider, bool>();
     private Sequence _popupSequence;
     private Vector2 _popupStartAnchoredPos;
 
@@ -66,26 +72,48 @@ public class AttackEnergyVisuals : MonoBehaviour
 
         if (_barTweens.TryGetValue(energy.EnergyBar, out Tween tween) && tween.IsActive()) tween.Kill();
 
-        _barTweens[energy.EnergyBar] = energy.EnergyBar
-            .DOValue(current, barTweenDuration)
-            .SetEase(barTweenEase);
+        var isFull = current >= energy.MaxEnergy - 0.001f;
+        var isResetToZero = current <= 0.001f;
+
+        if (isFull)
+        {
+            _pendingFullReset[energy.EnergyBar] = true;
+
+            _barTweens[energy.EnergyBar] = energy.EnergyBar.DOValue(energy.MaxEnergy, barTweenDuration).SetEase(barTweenEase);
+
+            PunchBar(energy.EnergyBar);
+            return;
+        }
+
+        if (isResetToZero && _pendingFullReset.TryGetValue(energy.EnergyBar, out bool pending) && pending)
+        {
+            _pendingFullReset[energy.EnergyBar] = false;
+
+            _barTweens[energy.EnergyBar] = energy.EnergyBar.DOValue(0f, barTweenDuration).SetEase(barTweenEase);
+
+            return;
+        }
+
+        _barTweens[energy.EnergyBar] = energy.EnergyBar.DOValue(current, barTweenDuration).SetEase(barTweenEase);
+    }
+
+    private void PunchBar(Slider slider)
+    {
+        var target = slider.transform;
+        target.DOKill();
+        target.DOPunchScale(Vector3.one * barPunchScale, barPunchDuration, barPunchVibrato, 0.5f);
     }
 
     private void HandleMatchGained(EnergyType energy, float gained)
     {
         if (popupText == null || popupRect == null) return;
 
-        string label = string.IsNullOrWhiteSpace(energy.DisplayName) ? energy.AttackType.name : energy.DisplayName;
+        var label = string.IsNullOrWhiteSpace(energy.DisplayName) ? energy.AttackType.name : energy.DisplayName;
         popupText.text = $"+{gained:0} {label} Energy";
 
-        Image fill = energy.EnergyBar.fillRect != null
-            ? energy.EnergyBar.fillRect.GetComponent<Image>()
-            : null;
+        var fill = energy.EnergyBar.fillRect != null ? energy.EnergyBar.fillRect.GetComponent<Image>() : null;
 
-        if (fill != null)
-        {
-            popupText.color = fill.color;
-        }
+        if (fill != null) popupText.color = fill.color;
 
         _popupSequence?.Kill();
         popupRect.anchoredPosition = _popupStartAnchoredPos;
@@ -94,10 +122,7 @@ public class AttackEnergyVisuals : MonoBehaviour
         _popupSequence = DOTween.Sequence();
         _popupSequence.Append(popupText.DOFade(1f, 0.15f));
         _popupSequence.Join(
-            popupRect.DOAnchorPosY(
-                _popupStartAnchoredPos.y + popupMoveDistance,
-                popupFadeDelay + popupFadeDuration
-            )
+            popupRect.DOAnchorPosY(_popupStartAnchoredPos.y + popupMoveDistance, popupFadeDelay + popupFadeDuration)
         );
         _popupSequence.AppendInterval(popupFadeDelay);
         _popupSequence.Append(popupText.DOFade(0f, popupFadeDuration));

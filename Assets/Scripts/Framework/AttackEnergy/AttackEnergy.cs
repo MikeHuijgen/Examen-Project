@@ -8,11 +8,9 @@ public class EnergyType
 {
     public BaseAttack AttackType;
     public string DisplayName;
-    public Color Color;
     public Slider EnergyBar;
     public float CurrentEnergy;
     public float MaxEnergy = 100f;
-    public float GainPerMatch = 10f;
 }
 
 public class AttackEnergy : MonoBehaviour
@@ -20,6 +18,12 @@ public class AttackEnergy : MonoBehaviour
     [SerializeField] private List<EnergyType> energyTypes = new List<EnergyType>();
     [SerializeField] private float decayRate = 2f;
     [SerializeField] private AttackSystem attackSystem;
+    [SerializeField] private ComboCounter comboCounter;
+
+    [Header("Combo Gain Scaling")]
+    [SerializeField] private float minIncrease = 8f;
+    [SerializeField] private float maxIncrease = 16f;
+    [SerializeField] private int maxComboForScaling = 20;
 
     private readonly Dictionary<BaseAttack, EnergyType> _energyByAttack = new Dictionary<BaseAttack, EnergyType>();
 
@@ -41,7 +45,7 @@ public class AttackEnergy : MonoBehaviour
     {
         foreach (EnergyType energy in energyTypes)
         {
-            float previous = energy.CurrentEnergy;
+            var previous = energy.CurrentEnergy;
             energy.CurrentEnergy = Mathf.Clamp(energy.CurrentEnergy, 0f, energy.MaxEnergy);
             UpdateBarMax(energy);
             OnEnergyChanged?.Invoke(energy, previous, energy.CurrentEnergy);
@@ -50,13 +54,13 @@ public class AttackEnergy : MonoBehaviour
 
     private void Update()
     {
-        float decay = decayRate * Time.deltaTime;
+        var decay = decayRate * Time.deltaTime;
 
         foreach (EnergyType energy in energyTypes)
         {
             if (energy.CurrentEnergy <= 0f) continue;
 
-            float previous = energy.CurrentEnergy;
+            var previous = energy.CurrentEnergy;
             energy.CurrentEnergy = Mathf.Max(0f, energy.CurrentEnergy - decay);
             UpdateBarMax(energy);
             OnEnergyChanged?.Invoke(energy, previous, energy.CurrentEnergy);
@@ -71,8 +75,8 @@ public class AttackEnergy : MonoBehaviour
             return;
         }
 
-        float previous = energy.CurrentEnergy;
-        float gained = energy.GainPerMatch;
+        var previous = energy.CurrentEnergy;
+        var gained = GetScaledGain();
 
         energy.CurrentEnergy = Mathf.Min(energy.MaxEnergy, energy.CurrentEnergy + gained);
 
@@ -90,10 +94,14 @@ public class AttackEnergy : MonoBehaviour
         }
     }
 
-    private void OnFullEnergy(BaseAttack attack)
+    private float GetScaledGain()
     {
-        attackSystem.TriggerAttack(attack);
+        var combo = comboCounter != null ? comboCounter.CurrentComboCount : 0;
+        var t = Mathf.InverseLerp(0f, maxComboForScaling, combo);
+        return Mathf.Lerp(minIncrease, maxIncrease, t);
     }
+
+    private void OnFullEnergy(BaseAttack attack) => attackSystem.TriggerAttack(attack);
 
     private void UpdateBarMax(EnergyType energy)
     {

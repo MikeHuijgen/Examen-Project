@@ -926,8 +926,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.00006485, y: 117.195366}
-  m_SizeDelta: {x: 265.6633, y: 71.1813}
+  m_AnchoredPosition: {x: 0.00006485, y: 88}
+  m_SizeDelta: {x: 270.0176, y: 71.1813}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8050478372820738519
 CanvasRenderer:
@@ -959,8 +959,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: +31 red energy
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 3f579d42caebb8343be924eede514078, type: 2}
-  m_sharedMaterial: {fileID: 2841101123864661246, guid: 3f579d42caebb8343be924eede514078, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3e5227d80b7af3a4191f418a1e54f180, type: 2}
+  m_sharedMaterial: {fileID: 2841101123864661246, guid: 3e5227d80b7af3a4191f418a1e54f180, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -968,7 +968,7 @@ MonoBehaviour:
     serializedVersion: 2
     rgba: 4278190335
   m_fontColor: {r: 1, g: 0, b: 0, a: 1}
-  m_enableVertexGradient: 1
+  m_enableVertexGradient: 0
   m_colorMode: 1
   m_fontColorGradient:
     topLeft: {r: 1, g: 0, b: 0, a: 1}
@@ -984,8 +984,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 50.3
-  m_fontSizeBase: 50.3
+  m_fontSize: 41.13
+  m_fontSizeBase: 41.13
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -1134,8 +1134,8 @@ RectTransform:
   m_GameObject: {fileID: 5587601671485916119}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 1.12, y: 1.12, z: 1.12}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4662287371587400311}
   - {fileID: 4567250731605988211}
@@ -1147,7 +1147,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.9850001, y: 0.70100003}
   m_AnchorMax: {x: 0.9850001, y: 0.70100003}
-  m_AnchoredPosition: {x: -121.92, y: 26}
+  m_AnchoredPosition: {x: -161, y: -41}
   m_SizeDelta: {x: 243.8443, y: 182.4147}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6315751906563321213
@@ -1203,41 +1203,35 @@ MonoBehaviour:
   energyTypes:
   - AttackType: {fileID: 11400000, guid: 5df7a0590b175f54faf78371705840df, type: 2}
     DisplayName: Slam
-    Color: {r: 0.7137255, g: 0, b: 0.9607844, a: 0}
     EnergyBar: {fileID: 1184763254328881058}
     CurrentEnergy: 0
     MaxEnergy: 100
-    GainPerMatch: 43
   - AttackType: {fileID: 11400000, guid: af9de7cebb32ba848a19db356ddf3feb, type: 2}
     DisplayName: Jab
-    Color: {r: 0.9607844, g: 0.73333335, b: 0, a: 0}
     EnergyBar: {fileID: 1393176292722025646}
     CurrentEnergy: 0
     MaxEnergy: 100
-    GainPerMatch: 43
   - AttackType: {fileID: 11400000, guid: 8c4fa548b30d1a64789adb0b06d5a0b8, type: 2}
     DisplayName: Double
-    Color: {r: 1, g: 0.55102044, b: 0, a: 1}
     EnergyBar: {fileID: 2575558401835234635}
     CurrentEnergy: 0
     MaxEnergy: 100
-    GainPerMatch: 43
   - AttackType: {fileID: 11400000, guid: 3ff87686a0af11244a18e1fb63ed4819, type: 2}
     DisplayName: Kick
-    Color: {r: 0.69803923, g: 0.9176471, b: 0.04705883, a: 0}
     EnergyBar: {fileID: 2933135211092081049}
     CurrentEnergy: 0
     MaxEnergy: 100
-    GainPerMatch: 43
   - AttackType: {fileID: 11400000, guid: 705d221ffb1a0fa4a9caa1252e033103, type: 2}
     DisplayName: Uppercut
-    Color: {r: 0.9607844, g: 0, b: 0, a: 0}
     EnergyBar: {fileID: 548046943732272}
     CurrentEnergy: 0
     MaxEnergy: 100
-    GainPerMatch: 43
-  decayRate: 1.4
+  decayRate: 1.85
   attackSystem: {fileID: 0}
+  comboCounter: {fileID: 0}
+  minIncrease: 43
+  maxIncrease: 65
+  maxComboForScaling: 20
 --- !u!114 &6490981045924121961
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1251,12 +1245,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AttackEnergyVisuals
   attackEnergy: {fileID: 5854545115571942955}
-  barTweenDuration: 0.25
+  barTweenDuration: 0.1
   barTweenEase: 7
+  barPunchDuration: 0.2
+  barPunchScale: 0.2
+  barPunchVibrato: 6
   popupText: {fileID: 4679807927907025251}
   popupRect: {fileID: 8389904565874484277}
   popupFadeDelay: 0.2
-  popupFadeDuration: 0.4
+  popupFadeDuration: 0.3
   popupMoveDistance: 30
 --- !u!114 &4948719711579845057
 MonoBehaviour:
