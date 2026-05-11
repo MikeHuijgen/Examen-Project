@@ -27,19 +27,6 @@ public class OpponentBehaviour : MonoBehaviour
     {
         if (!_timer.RunTimer(ref _idleTimer, _currentDelay)) return;
         HandleAttackDelay();
-        // if (!attackSystem.IsIdle)
-        // {
-        //     int direction = attackSystem.CurrentAttackDirection();
-
-        //     if (direction >= 0 && direction < attackDirectionWarnings.Count)
-        //     {
-        //         attackDirectionWarnings[direction].SetActive(true);
-        //     }
-        // }
-        // else
-        // {
-        //     HandleAttackDelay();
-        // }
     }
 
     private void HandleAttackDelay()

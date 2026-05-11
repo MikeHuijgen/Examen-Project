@@ -100,6 +100,7 @@ public class AttackSystem : MonoBehaviour
         if (!dodge.isDodging)
         {
             playerHealth.TakeDamage(_currentAttack.Damage);
+            OnEnemyAttackFinished?.Invoke();
             _state = AttackState.Idle;
             return;
         }
@@ -109,10 +110,10 @@ public class AttackSystem : MonoBehaviour
         if (dodge.dodgeSide != requiredDodge)
         {
             playerHealth.TakeDamage(_currentAttack.Damage);
-            _state = AttackState.Idle;
         }
 
         OnEnemyAttackFinished?.Invoke();
+        _state = AttackState.Idle;
     }
 
     private void HandleCharging()
