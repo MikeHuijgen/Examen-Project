@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class AttackSystem : MonoBehaviour
 {
+    //asdjflsdfoh
     public bool IsIdle => _state == AttackState.Idle;
 
     public enum AttackState
