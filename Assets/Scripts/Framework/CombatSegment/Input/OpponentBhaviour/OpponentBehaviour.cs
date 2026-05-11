@@ -51,4 +51,10 @@ public class OpponentBehaviour : MonoBehaviour
         attackDirectionWarnings.ForEach(warningObject => warningObject.SetActive(false));
         SetNewDelay();
     }
+
+    public void ResetTimer()
+    {
+        _idleTimer.ResetTimer();
+        SetNewDelay();
+    }
 }
