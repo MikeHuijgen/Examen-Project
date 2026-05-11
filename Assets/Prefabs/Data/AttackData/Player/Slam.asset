@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e41c2636cc19c3243af42ed9d78a9215, type: 3}
   m_Name: Slam
   m_EditorClassIdentifier: Assembly-CSharp::BaseAttack
-  Damage: 30
-  AttackAnim: {fileID: 0}
+  Damage: 8
+  AttackAnim: {fileID: 4615838938742925744, guid: 58e30cf79fe544840b4eeefbfb14bbea, type: 3}
   AttackDurationTime: 0.6
