@@ -3,10 +3,7 @@ using UnityEngine;
 public class AttackListener : MonoBehaviour
 {
     [SerializeField] private AttackSystem attackSystem;
-    private void OnEnable()
-    {
-        LevelGrid.OnMatchDestroyed += HandleMatchDestroyed;
-    }
+    [SerializeField] private MatchAttackEffectChannel matchAttackEffectChannel;
 
     private void OnDisable()
     {
@@ -17,4 +14,7 @@ public class AttackListener : MonoBehaviour
     {
         attackSystem.QueueAttack(attack);
     }
+    private void OnEnable() => matchAttackEffectChannel.OnEventRaised += HandleMatchDestroyed;
+    private void OnDisable() => matchAttackEffectChannel.OnEventRaised -= HandleMatchDestroyed;
+    private void HandleMatchDestroyed(BaseAttack attack) => attackSystem.TriggerAttack(attack);
 }
