@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 [Serializable]
@@ -22,29 +21,29 @@ public class AttackEnergy : MonoBehaviour
     [SerializeField] private float decayRate = 2f;
     [SerializeField] private AttackSystem attackSystem;
 
-    private readonly Dictionary<BaseAttack, EnergyType> energyByAttack = new();
+    private readonly Dictionary<BaseAttack, EnergyType> _energyByAttack = new Dictionary<BaseAttack, EnergyType>();
 
-    // Visual hooks
     public event Action<EnergyType, float, float> OnEnergyChanged;
     public event Action<EnergyType, float> OnMatchGained;
 
     private void Awake()
     {
-        energyByAttack.Clear();
-        foreach (var energy in energyTypes)
+        _energyByAttack.Clear();
+
+        foreach (EnergyType energy in energyTypes)
         {
             if (energy?.AttackType == null) continue;
-            energyByAttack[energy.AttackType] = energy;
+            _energyByAttack[energy.AttackType] = energy;
         }
     }
 
     private void Start()
     {
-        foreach (var energy in energyTypes)
+        foreach (EnergyType energy in energyTypes)
         {
             float previous = energy.CurrentEnergy;
             energy.CurrentEnergy = Mathf.Clamp(energy.CurrentEnergy, 0f, energy.MaxEnergy);
-            UpdateBar(energy);
+            UpdateBarMax(energy);
             OnEnergyChanged?.Invoke(energy, previous, energy.CurrentEnergy);
         }
     }
@@ -53,21 +52,20 @@ public class AttackEnergy : MonoBehaviour
     {
         float decay = decayRate * Time.deltaTime;
 
-        foreach (var energy in energyTypes)
+        foreach (EnergyType energy in energyTypes)
         {
-            if (energy.CurrentEnergy > 0f)
-            {
-                float previous = energy.CurrentEnergy;
-                energy.CurrentEnergy = Mathf.Max(0f, energy.CurrentEnergy - decay);
-                UpdateBar(energy);
-                OnEnergyChanged?.Invoke(energy, previous, energy.CurrentEnergy);
-            }
+            if (energy.CurrentEnergy <= 0f) continue;
+
+            float previous = energy.CurrentEnergy;
+            energy.CurrentEnergy = Mathf.Max(0f, energy.CurrentEnergy - decay);
+            UpdateBarMax(energy);
+            OnEnergyChanged?.Invoke(energy, previous, energy.CurrentEnergy);
         }
     }
 
     public void OnMatch(BaseAttack attackType)
     {
-        if (!energyByAttack.TryGetValue(attackType, out var energy) || energy == null)
+        if (!_energyByAttack.TryGetValue(attackType, out EnergyType energy) || energy == null)
         {
             Debug.LogWarning($"No EnergyType found for attack: {attackType?.name}");
             return;
@@ -75,9 +73,10 @@ public class AttackEnergy : MonoBehaviour
 
         float previous = energy.CurrentEnergy;
         float gained = energy.GainPerMatch;
+
         energy.CurrentEnergy = Mathf.Min(energy.MaxEnergy, energy.CurrentEnergy + gained);
 
-        UpdateBar(energy);
+        UpdateBarMax(energy);
         OnEnergyChanged?.Invoke(energy, previous, energy.CurrentEnergy);
         OnMatchGained?.Invoke(energy, gained);
 
@@ -86,17 +85,19 @@ public class AttackEnergy : MonoBehaviour
             OnFullEnergy(energy.AttackType);
             previous = energy.CurrentEnergy;
             energy.CurrentEnergy = 0f;
-            UpdateBar(energy);
+            UpdateBarMax(energy);
             OnEnergyChanged?.Invoke(energy, previous, energy.CurrentEnergy);
         }
     }
 
-    private void OnFullEnergy(BaseAttack attack) => attackSystem.TriggerAttack(attack);
+    private void OnFullEnergy(BaseAttack attack)
+    {
+        attackSystem.TriggerAttack(attack);
+    }
 
-    private void UpdateBar(EnergyType energy)
+    private void UpdateBarMax(EnergyType energy)
     {
         if (energy.EnergyBar == null) return;
         energy.EnergyBar.maxValue = energy.MaxEnergy;
-        energy.EnergyBar.value = energy.CurrentEnergy;
     }
 }
