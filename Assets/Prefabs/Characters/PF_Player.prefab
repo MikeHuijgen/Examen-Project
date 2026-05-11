@@ -77,9 +77,6 @@ PrefabInstance:
       addedObject: {fileID: 909055386880982165}
     - targetCorrespondingSourceObject: {fileID: 4973012409423327181, guid: 1002c38cde9a43e418bf091c41772e11, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 101565033687392927}
-    - targetCorrespondingSourceObject: {fileID: 4973012409423327181, guid: 1002c38cde9a43e418bf091c41772e11, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 4989426409756222545}
     - targetCorrespondingSourceObject: {fileID: 4973012409423327181, guid: 1002c38cde9a43e418bf091c41772e11, type: 3}
       insertIndex: -1
@@ -109,20 +106,6 @@ MonoBehaviour:
   cooldownDuration: 1
   startDodgeAmount: 1000
   maxDodgeAmount: 1000
---- !u!114 &101565033687392927
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2797627523177970832}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75f5a4f5c31770d40b18a09c70424cfa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DodgeSwipeInput
-  minimumSwipeDistance: 100
-  dodgeCamera: {fileID: 0}
 --- !u!95 &4989426409756222545
 Animator:
   serializedVersion: 7
@@ -193,6 +176,18 @@ MonoBehaviour:
         m_CallState: 2
   OnTakeDamage:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: LevelGrid, Assembly-CSharp
+        m_MethodName: OnHitShuffleGrid
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   maxHealth: 100
   healthBar: {fileID: 0}
