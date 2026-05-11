@@ -45,9 +45,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de273fdaa79468d4ab6a8b2fe5ed9f60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AttackSystem
+  OnEnemyAttackFinished:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: OpponentBehaviour, Assembly-CSharp
+        m_MethodName: ResetAllAttackWarningDirections
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   playerDodgeSystem: {fileID: 0}
   playerHealth: {fileID: 0}
   opponentHealth: {fileID: 0}
+  playerAnimator: {fileID: 0}
+  enemyAnimator: {fileID: 0}
 --- !u!114 &5605699950899127044
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -4,6 +4,6 @@ using UnityEngine;
 public class OpponentAttack : BaseAttack
 {
     [Range(0,2)]public int Direction;
-    public Animation ChargeAnimation;
+    public AnimationClip ChargeAnimation;
     public float ChargeDurationTime;
 }

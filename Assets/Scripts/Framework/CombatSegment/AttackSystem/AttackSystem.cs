@@ -1,9 +1,11 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class AttackSystem : MonoBehaviour
 {
     public bool IsIdle => _state == AttackState.Idle;
+    public UnityEvent OnEnemyAttackFinished = new UnityEvent();
 
     public enum AttackState
     {
@@ -20,7 +22,12 @@ public class AttackSystem : MonoBehaviour
 
     private AnimatorOverrideController _playerOverrideController;
     private AnimatorOverrideController _enemyOverrideController;
-    private const string _attackKeyString = "Attack";
+    private const string _attackTriggerKeyString = "TriggerAttack";
+    private const string _windUpAttackTriggerKeyString = "TriggerWindUpAttack";
+    private const string _mainAttackTriggerKeyString = "TriggerMainAttack";
+    private const string _playerAttackKeyString = "Attack";
+    private const string _enemyMainAttackKeyString = "MainAttack";
+    private const string _enemyWindUpAttackKeyString = "WindUpAttack";
 
     private AttackState _state = AttackState.Idle;
 
@@ -32,8 +39,8 @@ public class AttackSystem : MonoBehaviour
     private void Start()
     {
         _timer = new TimerManager();
-        _enemyOverrideController = new AnimatorOverrideController(enemyAnimator.runtimeAnimatorController);
         _playerOverrideController = new AnimatorOverrideController(playerAnimator.runtimeAnimatorController);
+        _enemyOverrideController = new AnimatorOverrideController(enemyAnimator.runtimeAnimatorController);
         playerAnimator.runtimeAnimatorController = _playerOverrideController;
         enemyAnimator.runtimeAnimatorController = _enemyOverrideController;
     }
@@ -76,8 +83,8 @@ public class AttackSystem : MonoBehaviour
     {
         if (_currentAttack is not OpponentAttack opponentAttack)
         {
-            _playerOverrideController[_attackKeyString] = _currentAttack.AttackAnim;
-            playerAnimator.SetTrigger("TriggerAttack");
+            _playerOverrideController[_playerAttackKeyString] = _currentAttack.AttackAnim;
+            playerAnimator.SetTrigger(_attackTriggerKeyString);
             opponentHealth.TakeDamage(_currentAttack.Damage);
             _state = AttackState.Idle;
             return;
@@ -85,10 +92,13 @@ public class AttackSystem : MonoBehaviour
 
         var dodge = playerDodgeSystem.GetCurrentDodgeInfo();
 
+        _enemyOverrideController[_enemyMainAttackKeyString] = opponentAttack.AttackAnim;
+
+        enemyAnimator.SetTrigger(_mainAttackTriggerKeyString);
+
+
         if (!dodge.isDodging)
         {
-            _enemyOverrideController[_attackKeyString] = _currentAttack.AttackAnim;
-            enemyAnimator.SetTrigger("TriggerAttack");
             playerHealth.TakeDamage(_currentAttack.Damage);
             _state = AttackState.Idle;
             return;
@@ -98,32 +108,28 @@ public class AttackSystem : MonoBehaviour
 
         if (dodge.dodgeSide != requiredDodge)
         {
-            _enemyOverrideController[_attackKeyString] = _currentAttack.AttackAnim;
-            enemyAnimator.SetTrigger("TriggerAttack");
             playerHealth.TakeDamage(_currentAttack.Damage);
             _state = AttackState.Idle;
         }
+
+        OnEnemyAttackFinished?.Invoke();
     }
 
     private void HandleCharging()
-    {
+    {       
         if (_currentAttack is OpponentAttack opponentAttack && opponentAttack.ChargeDurationTime > 0f)
         {
-            if (!_timer.RunTimer(ref _chargeTimer, opponentAttack.ChargeDurationTime))
-            {
-                return;
-            }
+            _enemyOverrideController[_enemyWindUpAttackKeyString] = opponentAttack.ChargeAnimation; 
+            enemyAnimator.SetTrigger(_windUpAttackTriggerKeyString);
+            if (!_timer.RunTimer(ref _chargeTimer, opponentAttack.ChargeDurationTime)) return;
         }
-
+        enemyAnimator.ResetTrigger(_windUpAttackTriggerKeyString);
         _state = AttackState.Attacking;
     }
 
     private void HandleAttacking()
     {
-        if (!_timer.RunTimer(ref _attackTimer, _currentAttack.AttackDurationTime))
-        {
-            return;
-        }
+        if (!_timer.RunTimer(ref _attackTimer, _currentAttack.AttackDurationTime)) return;
 
         _state = AttackState.Idle;
     }
