@@ -8,14 +8,12 @@ public class PlayerDodgeSystem : MonoBehaviour
     [SerializeField] private float cooldownDuration;
     [SerializeField] private int startDodgeAmount;
     [SerializeField] private int maxDodgeAmount;
+    [SerializeField] private Animator _characterAnimator;
 
-    private Animator _characterAnimator;
     private bool _isDodging;
     private SideType _currentDodgeSide;
     private float _currentDodgeAmount;
     private bool _canDodge;
-
-    private void Awake() => _characterAnimator = GetComponent<Animator>();
 
     private void Start()
     {
