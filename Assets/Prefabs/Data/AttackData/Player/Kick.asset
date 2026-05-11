@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Kick
   m_EditorClassIdentifier: Assembly-CSharp::Base
   Damage: 4
-  AttackAnim: {fileID: 0}
+  AttackAnim: {fileID: 2414078677739490355, guid: 58e30cf79fe544840b4eeefbfb14bbea, type: 3}
   AttackDurationTime: 0.5

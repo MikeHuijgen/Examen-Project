@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Uppercut
   m_EditorClassIdentifier: Assembly-CSharp::Base
   Damage: 6
-  AttackAnim: {fileID: 0}
+  AttackAnim: {fileID: -4675901675273485543, guid: 58e30cf79fe544840b4eeefbfb14bbea, type: 3}
   AttackDurationTime: 0.5

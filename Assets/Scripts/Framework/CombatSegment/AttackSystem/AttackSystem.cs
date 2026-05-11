@@ -15,6 +15,12 @@ public class AttackSystem : MonoBehaviour
     [SerializeField] private PlayerDodgeSystem playerDodgeSystem;
     [SerializeField] private HealthComponent playerHealth;
     [SerializeField] private HealthComponent opponentHealth;
+    [SerializeField] private Animator playerAnimator;
+    [SerializeField] private Animator enemyAnimator;
+
+    private AnimatorOverrideController _playerOverrideController;
+    private AnimatorOverrideController _enemyOverrideController;
+    private const string _attackKeyString = "Attack";
 
     private AttackState _state = AttackState.Idle;
 
@@ -26,6 +32,10 @@ public class AttackSystem : MonoBehaviour
     private void Start()
     {
         _timer = new TimerManager();
+        _enemyOverrideController = new AnimatorOverrideController(enemyAnimator.runtimeAnimatorController);
+        _playerOverrideController = new AnimatorOverrideController(playerAnimator.runtimeAnimatorController);
+        playerAnimator.runtimeAnimatorController = _playerOverrideController;
+        enemyAnimator.runtimeAnimatorController = _enemyOverrideController;
     }
 
     public void TriggerAttack(BaseAttack attack)
@@ -66,6 +76,8 @@ public class AttackSystem : MonoBehaviour
     {
         if (_currentAttack is not OpponentAttack opponentAttack)
         {
+            _playerOverrideController[_attackKeyString] = _currentAttack.AttackAnim;
+            playerAnimator.SetTrigger("TriggerAttack");
             opponentHealth.TakeDamage(_currentAttack.Damage);
             _state = AttackState.Idle;
             return;
@@ -75,14 +87,19 @@ public class AttackSystem : MonoBehaviour
 
         if (!dodge.isDodging)
         {
+            _enemyOverrideController[_attackKeyString] = _currentAttack.AttackAnim;
+            enemyAnimator.SetTrigger("TriggerAttack");
             playerHealth.TakeDamage(_currentAttack.Damage);
             _state = AttackState.Idle;
+            return;
         }
 
         SideType requiredDodge = GetRequiredDodge(opponentAttack.Direction);
 
         if (dodge.dodgeSide != requiredDodge)
         {
+            _enemyOverrideController[_attackKeyString] = _currentAttack.AttackAnim;
+            enemyAnimator.SetTrigger("TriggerAttack");
             playerHealth.TakeDamage(_currentAttack.Damage);
             _state = AttackState.Idle;
         }

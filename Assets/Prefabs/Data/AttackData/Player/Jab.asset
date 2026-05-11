@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Jab
   m_EditorClassIdentifier: Assembly-CSharp::Base
   Damage: 3
-  AttackAnim: {fileID: 0}
+  AttackAnim: {fileID: 2376983181681433475, guid: 58e30cf79fe544840b4eeefbfb14bbea, type: 3}
   AttackDurationTime: 0.5
