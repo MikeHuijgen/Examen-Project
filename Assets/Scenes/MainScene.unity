@@ -443,6 +443,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 611de309a31b4a94991e56586dcd53b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OpponentBehaviour
+--- !u!1 &607230549 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1242715901836879456, guid: cfb0303b938ee3047b12e8a02fe1f641, type: 3}
+  m_PrefabInstance: {fileID: 983837333}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &644201606
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -542,17 +547,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: afb8c9cf42c3a534cb269b6a8212dfab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Dodge
---- !u!114 &912468353 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2042408413560126088, guid: cfb0303b938ee3047b12e8a02fe1f641, type: 3}
-  m_PrefabInstance: {fileID: 983837333}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e9185a130a6f8a4aa793e6d505a6d8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttackTest
 --- !u!4 &912468356 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5687027047522733403, guid: cfb0303b938ee3047b12e8a02fe1f641, type: 3}
@@ -629,10 +623,29 @@ PrefabInstance:
       propertyPath: healthBar
       value: 
       objectReference: {fileID: 1697496788}
+    - target: {fileID: 7438313104435127994, guid: cfb0303b938ee3047b12e8a02fe1f641, type: 3}
+      propertyPath: OnTakeDamage.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1533981959}
+    - target: {fileID: 7438313104435127994, guid: cfb0303b938ee3047b12e8a02fe1f641, type: 3}
+      propertyPath: OnTakeDamage.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: SetBoolFalse
+      objectReference: {fileID: 0}
+    - target: {fileID: 7438313104435127994, guid: cfb0303b938ee3047b12e8a02fe1f641, type: 3}
+      propertyPath: OnTakeDamage.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: AnimationManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 7438313104435127994, guid: cfb0303b938ee3047b12e8a02fe1f641, type: 3}
+      propertyPath: OnTakeDamage.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_StringArgument
+      value: IsDodging
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 1242715901836879456, guid: cfb0303b938ee3047b12e8a02fe1f641, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1533981959}
   m_SourcePrefab: {fileID: 100100000, guid: cfb0303b938ee3047b12e8a02fe1f641, type: 3}
 --- !u!1 &1085733357
 GameObject:
@@ -1736,6 +1749,19 @@ Animator:
   m_CorrespondingSourceObject: {fileID: 2586978394792057331, guid: cfb0303b938ee3047b12e8a02fe1f641, type: 3}
   m_PrefabInstance: {fileID: 983837333}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1533981959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 607230549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c855a909bd1e5fc48a685122130190cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimationManager
+  animator: {fileID: 1533981957}
 --- !u!1 &1684429345 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4356904793604347739, guid: 3973858e61159fa45a1508633c7604ef, type: 3}
@@ -2516,7 +2542,7 @@ PrefabInstance:
     - target: {fileID: 3685076801437546403, guid: 22d53871838017344bf0f35f201a2402, type: 3}
       propertyPath: _playerAttackTest
       value: 
-      objectReference: {fileID: 912468353}
+      objectReference: {fileID: 0}
     - target: {fileID: 3779768140400638871, guid: 22d53871838017344bf0f35f201a2402, type: 3}
       propertyPath: m_Name
       value: PF_Input
