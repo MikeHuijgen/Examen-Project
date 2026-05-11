@@ -5,15 +5,6 @@ public class AttackListener : MonoBehaviour
     [SerializeField] private AttackSystem attackSystem;
     [SerializeField] private MatchAttackEffectChannel matchAttackEffectChannel;
 
-    private void OnDisable()
-    {
-        LevelGrid.OnMatchDestroyed -= HandleMatchDestroyed;
-    }
-
-    private void HandleMatchDestroyed(BaseAttack attack)
-    {
-        attackSystem.QueueAttack(attack);
-    }
     private void OnEnable() => matchAttackEffectChannel.OnEventRaised += HandleMatchDestroyed;
     private void OnDisable() => matchAttackEffectChannel.OnEventRaised -= HandleMatchDestroyed;
     private void HandleMatchDestroyed(BaseAttack attack) => attackSystem.TriggerAttack(attack);
