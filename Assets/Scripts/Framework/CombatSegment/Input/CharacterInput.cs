@@ -49,7 +49,6 @@ public class CharacterInput : MonoBehaviour
     {
         foreach (var pair in _dodgeHandlers) Bind(pair.Key, pair.Value);
 
-
         channel.OnGameOver += HandleGameOver;
         EnhancedTouchSupport.Enable();
         Touch.onFingerDown += OnFingerDown;
