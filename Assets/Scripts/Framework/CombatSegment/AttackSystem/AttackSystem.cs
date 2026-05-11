@@ -141,7 +141,11 @@ public class AttackSystem : MonoBehaviour
     }
 
     private void HandleCharging()
-    {       
+    {
+        if (_hasExecutedAttack)
+            return; 
+
+        _hasExecutedAttack = true;
         if (_currentAttack is OpponentAttack opponentAttack && opponentAttack.ChargeDurationTime > 0f)
         {
             _enemyOverrideController[_enemyWindUpAttackKeyString] = opponentAttack.ChargeAnimation; 
