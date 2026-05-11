@@ -173,9 +173,6 @@ PrefabInstance:
       addedObject: {fileID: 909055386880982165}
     - targetCorrespondingSourceObject: {fileID: 4973012409423327181, guid: 1002c38cde9a43e418bf091c41772e11, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 2042408413560126088}
-    - targetCorrespondingSourceObject: {fileID: 4973012409423327181, guid: 1002c38cde9a43e418bf091c41772e11, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 7438313104435127994}
   m_SourcePrefab: {fileID: 100100000, guid: 1002c38cde9a43e418bf091c41772e11, type: 3}
 --- !u!1 &2797627523177970832 stripped
@@ -200,25 +197,6 @@ MonoBehaviour:
   startDodgeAmount: 1000
   maxDodgeAmount: 1000
   _characterAnimator: {fileID: 2586978394792057331}
---- !u!114 &2042408413560126088
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2797627523177970832}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3e9185a130a6f8a4aa793e6d505a6d8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::PlayerAttackTest
-  attackSystem: {fileID: 0}
-  baseAttacks:
-  - {fileID: 11400000, guid: 8c4fa548b30d1a64789adb0b06d5a0b8, type: 2}
-  - {fileID: 11400000, guid: 255dda4e2b6f0114591a2efdcf79a0b0, type: 2}
-  - {fileID: 11400000, guid: af9de7cebb32ba848a19db356ddf3feb, type: 2}
-  - {fileID: 11400000, guid: 3ff87686a0af11244a18e1fb63ed4819, type: 2}
-  - {fileID: 11400000, guid: 705d221ffb1a0fa4a9caa1252e033103, type: 2}
 --- !u!114 &7438313104435127994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -236,7 +214,31 @@ MonoBehaviour:
       m_Calls: []
   OnTakeDamage:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2586978394792057331}
+        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
+        m_MethodName: SetTrigger
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: TriggerStun
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2586978394792057331}
+        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
+        m_MethodName: ResetTrigger
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Trigger
+          m_BoolArgument: 0
+        m_CallState: 2
   maxHealth: 100
   healthBar: {fileID: 0}
 --- !u!4 &5687027047522733403 stripped

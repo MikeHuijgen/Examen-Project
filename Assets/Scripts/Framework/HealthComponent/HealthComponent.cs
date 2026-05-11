@@ -9,6 +9,7 @@ public class HealthComponent : MonoBehaviour
     [SerializeField] private int maxHealth;
 
     [SerializeField] private HealthBar healthBar;
+    [SerializeField] private AnimationManager animationManager;
 
     private int _currentHealth;
 
