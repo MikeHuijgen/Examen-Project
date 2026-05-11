@@ -188,7 +188,7 @@ public class LevelGrid : MonoBehaviour
         ReshuffleGrid();
     }
 
-    public void ReshuffleGrid()
+    private void ReshuffleGrid()
     {
         var grid = _gridSystem.GetGridObjectArray;
         for (var x = 0; x < levelGridData.GridWidth; x++)
@@ -203,5 +203,17 @@ public class LevelGrid : MonoBehaviour
         }
 
         CheckForPossibleMoves();
+    }
+
+    public void OnHitShuffleGrid()
+    {
+        var grid = _gridSystem.GetGridObjectArray;
+        foreach (var gridObject in grid)
+        {
+            blockVisualManager.TryDisableVisualOnGridObject(gridObject);
+            gridObject.SetMatch3BlockProfile(null);
+        }
+
+        ReshuffleGrid();        
     }
 }
