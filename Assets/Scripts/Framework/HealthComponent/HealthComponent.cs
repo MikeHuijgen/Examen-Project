@@ -6,11 +6,11 @@ public class HealthComponent : MonoBehaviour
 {
     public UnityEvent OnDeath = new UnityEvent();
     public UnityEvent OnTakeDamage = new UnityEvent();
-    [SerializeField] private int maxHealth;
+    [SerializeField] private float maxHealth;
 
     [SerializeField] private HealthBar healthBar;
 
-    private int _currentHealth;
+    private float _currentHealth;
 
     private void Awake() =>_currentHealth = maxHealth;
     
@@ -21,7 +21,7 @@ public class HealthComponent : MonoBehaviour
         healthBar.UpdateHealthUI(_currentHealth);
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         if (_currentHealth == 0) return;
         _currentHealth -= damage;

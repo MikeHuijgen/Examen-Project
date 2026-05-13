@@ -15,6 +15,7 @@ public class AttackSystem : MonoBehaviour
         Attacking
     }
 
+    [SerializeField] private MatchDoubleDamageEffectChannel matchDoubleDamageEffectChannel;
     [SerializeField] private PlayerDodgeSystem playerDodgeSystem;
     [SerializeField] private HealthComponent playerHealth;
     [SerializeField] private HealthComponent opponentHealth;
@@ -40,6 +41,16 @@ public class AttackSystem : MonoBehaviour
     private Queue<BaseAttack> _attackQueue = new Queue<BaseAttack>();
     private bool _hasExecutedAttack;
     private bool _hasExecutedCharge;
+
+    private float _multiplier = 1f;
+
+    private void OnEnable() => matchDoubleDamageEffectChannel.OnEventRaised += HandleDoubleDamageEffect;
+    private void OnDisable() => matchDoubleDamageEffectChannel.OnEventRaised -= HandleDoubleDamageEffect;
+
+    private void HandleDoubleDamageEffect(float damageMultiplier)
+    {
+        _multiplier = damageMultiplier;
+    }
 
     private void Start()
     {
@@ -169,8 +180,12 @@ public class AttackSystem : MonoBehaviour
         if (!_timer.RunTimer(ref _attackTimer, _currentAttack.AttackDurationTime)) return;
         if (_currentAttack is not OpponentAttack opponentAttack)
         {
-            opponentHealth.TakeDamage(_currentAttack.Damage);
+            var totalDamage = _currentAttack.Damage * _multiplier;
+            opponentHealth.TakeDamage(totalDamage);
+            Debug.Log($"Normal attack Damage {_currentAttack.Damage} and total Damage {totalDamage}");
+            _multiplier = 1f;
         }
+
         _state = AttackState.Idle;
     }
 
