@@ -1,9 +1,7 @@
 using System;
 using UnityEngine;
-using UnityEngine.Events;
 public class GameOver : MonoBehaviour
 {
-    public UnityEvent OnGameOverActivated = new UnityEvent();
     [SerializeField] OnGameOverChanel gameOverChanel;
     [SerializeField] GameObject _gameOverScreen;
     [SerializeField] GameObject _victoryScreen;
@@ -20,14 +18,12 @@ public class GameOver : MonoBehaviour
     {
         gameOverChanel.RaceEvent();
         _gameOverScreen.SetActive(true);
-        OnGameOverActivated?.Invoke();
     }
 
     public void EnemyDead()
     {
         gameOverChanel.RaceEvent();
         _victoryScreen?.SetActive(true);
-        OnGameOverActivated?.Invoke();
     }
 
     public void OnDead() => putOff?.Invoke();
