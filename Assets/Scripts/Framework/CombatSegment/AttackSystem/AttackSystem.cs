@@ -63,7 +63,6 @@ public class AttackSystem : MonoBehaviour
 
     public void QueueAttack(BaseAttack attack)
     {
-        Debug.Log($"Queuing attack: {attack.name}");
         _attackQueue.Enqueue(attack);
     }
 
@@ -182,7 +181,6 @@ public class AttackSystem : MonoBehaviour
         {
             var totalDamage = _currentAttack.Damage * _multiplier;
             opponentHealth.TakeDamage(totalDamage);
-            Debug.Log($"Normal attack Damage {_currentAttack.Damage} and total Damage {totalDamage}");
             _multiplier = 1f;
         }
 
