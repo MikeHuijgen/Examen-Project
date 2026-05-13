@@ -1,10 +1,20 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
 public class GridActionProcessor : MonoBehaviour 
 {
-    public async Task TryProcessAction<Tparameters>(BaseAction<Tparameters> action)
+    private Stack<BaseAction> _actionStack = new Stack<BaseAction>();
+
+    public void ProcessAction<Tparameters>(BaseAction<Tparameters> action)
     {
-        await action.Execute();
+        _actionStack.Push(action);
+
+        action.Execute(OnActionComplete);
+    }
+
+    private void OnActionComplete()
+    {
+        _actionStack.Pop();
     }
 }

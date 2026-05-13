@@ -66,7 +66,7 @@ public class BlockVisualManager : MonoBehaviour
         _ActiveBlockVisuals.Remove(gridObject);
     }
 
-    public async Task MoveVisualWithTweenRoutineAsync(GridObject gridObjectA, GridObject gridObjectB, Func<GridPosition, Vector3> GetWorldPosition , float tweenSpeed, Ease ease)
+    public void SwapVisuals(GridObject gridObjectA, GridObject gridObjectB, Func<GridPosition, Vector3> GetWorldPosition , float tweenSpeed, Ease ease, Action OnVisualSwapComplete)
     {
         if(!_ActiveBlockVisuals.TryGetValue(gridObjectA, out var targetVisualA) || !_ActiveBlockVisuals.TryGetValue(gridObjectB, out var targetVisualB)) 
         {
@@ -78,7 +78,9 @@ public class BlockVisualManager : MonoBehaviour
         var newPositionB = GetWorldPosition(gridObjectB.GetGridPosition);
 
         targetVisualA.transform.DOMove(newPositionA, tweenSpeed).SetEase(ease);
-        await targetVisualB.transform.DOMove(newPositionB, tweenSpeed).SetEase(ease).AsyncWaitForCompletion();
+        var tween = targetVisualB.transform.DOMove(newPositionB, tweenSpeed).SetEase(ease);
+
+        tween.OnComplete(() => OnVisualSwapComplete());
     }
 
     public Tween CreateVisualMoveTween(GridObject gridObject, Vector3 newPosition, float tweenSpeed, Ease ease, float tweenStrength)
@@ -88,7 +90,7 @@ public class BlockVisualManager : MonoBehaviour
         return targetVisual.transform.DOMove(newPosition, tweenSpeed).SetEase(ease, tweenStrength);        
     }
 
-    public async Task DisableMatchesVisuals(HashSet<Match> matches)
+    public void DisableMatchesVisuals(HashSet<Match> matches)
     {
         foreach (var match in matches)
         {

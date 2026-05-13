@@ -128,48 +128,55 @@ public class LevelGrid : MonoBehaviour
         {   
             from = beginGridObject, 
             to = endGridObject, 
-            dataSwapCallback = _gridSystem.SwapGridObjectsData,
-            tweenSwapSpeed = levelGridData.VisualSwapSpeed,
-            visualSwapCallback = blockVisualManager.MoveVisualWithTweenRoutineAsync,
-            GetWorldPositionCallback = _gridSystem.ConvertGridPositionToWorldPosition
         };
 
-        await gridActionProcessor.TryProcessAction(new SwapAction(swapParameters));
-
-        var currentMatches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
-
-        if (!_matchDetector.HasAMatch(currentMatches))
+        var actionContext = new ActionContext
         {
-            await gridActionProcessor.TryProcessAction(new SwapAction(swapParameters));
-            _allowInput = true;
-            return;
-        }
+            GridSystem = _gridSystem, 
+            BlockVisualManager = blockVisualManager,
+            MatchDetector = _matchDetector,
+            LevelGridData = levelGridData,
+            GridActionProcessor = gridActionProcessor
+        };
 
-        while (true)
-        {
-            currentMatches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
+        gridActionProcessor.ProcessAction(new SwapAction(swapParameters, actionContext));
 
-            if (!_matchDetector.HasAMatch(currentMatches)) break;
+        //await gridActionProcessor.TryProcessAction(new SwapAction(swapParameters));
 
-            await gridActionProcessor.TryProcessAction(new MatchAction(new MatchActionParameters {Matches = currentMatches, DisposeMatchDataCallback = _gridSystem.DisposeMatchData, DisableMatchesVisualsCallback = blockVisualManager.DisableMatchesVisuals}));
-            await gridActionProcessor.TryProcessAction(new CollapseAndFillAction(new CollapseAndFillActionParameters
-            {
-                Grid = _gridSystem.GetGridObjectArray,
-                VisualFallSpeed = levelGridData.VisualFallSpeed,
-                GridHeight = levelGridData.GridHeight,
-                GridWidth = levelGridData.GridWidth,
-                GridCellHeight = levelGridData.GridCellHeight,
-                GridCellWidth = levelGridData.GridCellWidth,
-                GetWorldPositionCallback = _gridSystem.ConvertGridPositionToWorldPosition,
-                CreateVisualMoveTweenCallback = blockVisualManager.CreateVisualMoveTween,
-                GetRandomValidMatch3BlockCallBack = _matchDetector.GetRandomValidMatch3Profile,
-                Match3BlockProfiles = match3BlockProfileContainer.match3BlockProfiles,
-                MoveVisualBindingCallback = blockVisualManager.MoveVisualBinding,
-                TryEnableVisualByProfileCallback = blockVisualManager.TryEnableVisualByProfile
-            }));
-        }
+        // var currentMatches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
 
-        CheckForPossibleMoves();
+        // if (!_matchDetector.HasAMatch(currentMatches))
+        // {
+        //     //await gridActionProcessor.TryProcessAction(new SwapAction(swapParameters));
+        //     _allowInput = true;
+        //     return;
+        // }
+
+        // while (true)
+        // {
+        //     currentMatches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
+
+        //     if (!_matchDetector.HasAMatch(currentMatches)) break;
+
+        //     // await gridActionProcessor.TryProcessAction(new MatchAction(new MatchActionParameters {Matches = currentMatches, DisposeMatchDataCallback = _gridSystem.DisposeMatchData, DisableMatchesVisualsCallback = blockVisualManager.DisableMatchesVisuals}));
+        //     // await gridActionProcessor.TryProcessAction(new CollapseAndFillAction(new CollapseAndFillActionParameters
+        //     // {
+        //     //     Grid = _gridSystem.GetGridObjectArray,
+        //     //     VisualFallSpeed = levelGridData.VisualFallSpeed,
+        //     //     GridHeight = levelGridData.GridHeight,
+        //     //     GridWidth = levelGridData.GridWidth,
+        //     //     GridCellHeight = levelGridData.GridCellHeight,
+        //     //     GridCellWidth = levelGridData.GridCellWidth,
+        //     //     GetWorldPositionCallback = _gridSystem.ConvertGridPositionToWorldPosition,
+        //     //     CreateVisualMoveTweenCallback = blockVisualManager.CreateVisualMoveTween,
+        //     //     GetRandomValidMatch3BlockCallBack = _matchDetector.GetRandomValidMatch3Profile,
+        //     //     Match3BlockProfiles = match3BlockProfileContainer.match3BlockProfiles,
+        //     //     MoveVisualBindingCallback = blockVisualManager.MoveVisualBinding,
+        //     //     TryEnableVisualByProfileCallback = blockVisualManager.TryEnableVisualByProfile
+        //     // }));
+        // }
+
+        // CheckForPossibleMoves();
 
         _allowInput = true;
     }
