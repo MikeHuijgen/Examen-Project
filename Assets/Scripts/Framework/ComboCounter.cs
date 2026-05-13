@@ -2,7 +2,6 @@ using System;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class ComboCounter : MonoBehaviour
@@ -20,14 +19,25 @@ public class ComboCounter : MonoBehaviour
     [SerializeField] private float addComboScaleAmount = 0.3f;
     [SerializeField] private float resetTweenDuration = 0.5f;
 
-    
     private int _currentComboCount;
     private float _elapsedTime;
     private bool _isComboActive;
+    private Transform _startTransform;
+    private bool _isResetting;
 
     private Tween _shakeTween;
 
-    private void Awake() => visuals.SetActive(false);
+    public int CurrentComboCount => _currentComboCount;
+
+    private void Awake()
+    {
+        visuals.SetActive(false);
+    }
+
+    private void Start()
+    {
+        _startTransform = visuals.transform;
+    }
 
     private void Update()
     {
@@ -35,7 +45,7 @@ public class ComboCounter : MonoBehaviour
 
         _elapsedTime += Time.deltaTime;
 
-        float remainingTime = 1f - (_elapsedTime / comboDepleteTime);
+        var remainingTime = 1f - (_elapsedTime / comboDepleteTime);
         comboTimerBar.value = remainingTime;
 
         if (_elapsedTime >= comboDepleteTime && _currentComboCount > 0) OnLoseCombo();
@@ -43,6 +53,8 @@ public class ComboCounter : MonoBehaviour
 
     public void OnSuccessfulHit()
     {
+        if(_isResetting) return;
+        
         _currentComboCount++;
         _elapsedTime = 0f;
         _isComboActive = true;
@@ -53,6 +65,7 @@ public class ComboCounter : MonoBehaviour
         comboText.text = $"{_currentComboCount}X";
 
         visuals.transform.DOKill();
+        
         visuals.transform.DOPunchScale(Vector3.one * addComboScaleAmount, addComboTweenDuratin, 10, 1);
 
         HandleShake();
@@ -66,19 +79,22 @@ public class ComboCounter : MonoBehaviour
             return;
         }
 
-        float strength = baseShakeStrength + (_currentComboCount - 5) * 3f;
+        var strength = baseShakeStrength + (_currentComboCount - 5) * 3f;
         strength = Mathf.Clamp(strength, baseShakeStrength, maxShakeStrength);
 
         _shakeTween?.Kill();
 
         var vibrato = 20;
         var randomness = 90;
-        
+
         _shakeTween = visuals.transform.DOShakePosition(shakeTweenDuration, strength, vibrato, randomness, false, false)
             .SetLoops(-1, LoopType.Restart);
     }
 
-    public void OnLoseCombo() => ResetCombo();
+    public void OnLoseCombo()
+    {
+        ResetCombo();
+    }
 
     private void ResetCombo()
     {
@@ -93,6 +109,8 @@ public class ComboCounter : MonoBehaviour
         visuals.transform.DOKill();
         _shakeTween?.Kill();
 
+        _isResetting = true;
+        
         visuals.transform.DORotate(new Vector3(0, 0, 360f), resetTweenDuration, RotateMode.FastBeyond360).SetEase(Ease.InQuad);
         visuals.transform.DOScale(Vector3.zero, resetTweenDuration).SetEase(Ease.InQuad)
             .OnComplete(() =>
@@ -101,12 +119,8 @@ public class ComboCounter : MonoBehaviour
                 visuals.SetActive(false);
                 comboText.text = "0";
                 visuals.transform.localScale = Vector3.one;
+                visuals.transform.position = _startTransform.position;
+                _isResetting = false;
             });
     }
-
-    private void OnEnable() => LevelGrid.OnMatchDestroyed += OnMatch;
-
-    private void OnDisable() => LevelGrid.OnMatchDestroyed -= OnMatch;
-
-    private void OnMatch(object _) => OnSuccessfulHit();
 }

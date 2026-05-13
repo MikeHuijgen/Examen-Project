@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 97b3ce8f47fa5c24baa7d522c82dde50, type: 3}
-  m_Name: DodgeSound
+  m_Name: SFX_FightingMusicSound
   m_EditorClassIdentifier: Assembly-CSharp::SoundData
-  Identifier: Dodge
-  AudioClip: {fileID: 8300000, guid: dc753be70d70b4a438fc0220f65b5fb6, type: 3}
-  Volume: 0.866
+  Identifier: FightMusic
+  AudioClip: {fileID: 8300000, guid: 3213c357337b6fb4c9cdaced987f207d, type: 3}
+  Volume: 1
   Pitch: 1
-  Loop: 0
+  Loop: 1
