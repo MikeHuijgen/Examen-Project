@@ -142,41 +142,6 @@ public class LevelGrid : MonoBehaviour
 
         gridActionProcessor.ProcessAction(new SwapAction(swapParameters, actionContext));
 
-        //await gridActionProcessor.TryProcessAction(new SwapAction(swapParameters));
-
-        // var currentMatches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
-
-        // if (!_matchDetector.HasAMatch(currentMatches))
-        // {
-        //     //await gridActionProcessor.TryProcessAction(new SwapAction(swapParameters));
-        //     _allowInput = true;
-        //     return;
-        // }
-
-        // while (true)
-        // {
-        //     currentMatches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
-
-        //     if (!_matchDetector.HasAMatch(currentMatches)) break;
-
-        //     // await gridActionProcessor.TryProcessAction(new MatchAction(new MatchActionParameters {Matches = currentMatches, DisposeMatchDataCallback = _gridSystem.DisposeMatchData, DisableMatchesVisualsCallback = blockVisualManager.DisableMatchesVisuals}));
-        //     // await gridActionProcessor.TryProcessAction(new CollapseAndFillAction(new CollapseAndFillActionParameters
-        //     // {
-        //     //     Grid = _gridSystem.GetGridObjectArray,
-        //     //     VisualFallSpeed = levelGridData.VisualFallSpeed,
-        //     //     GridHeight = levelGridData.GridHeight,
-        //     //     GridWidth = levelGridData.GridWidth,
-        //     //     GridCellHeight = levelGridData.GridCellHeight,
-        //     //     GridCellWidth = levelGridData.GridCellWidth,
-        //     //     GetWorldPositionCallback = _gridSystem.ConvertGridPositionToWorldPosition,
-        //     //     CreateVisualMoveTweenCallback = blockVisualManager.CreateVisualMoveTween,
-        //     //     GetRandomValidMatch3BlockCallBack = _matchDetector.GetRandomValidMatch3Profile,
-        //     //     Match3BlockProfiles = match3BlockProfileContainer.match3BlockProfiles,
-        //     //     MoveVisualBindingCallback = blockVisualManager.MoveVisualBinding,
-        //     //     TryEnableVisualByProfileCallback = blockVisualManager.TryEnableVisualByProfile
-        //     // }));
-        // }
-
         CheckForPossibleMoves();
 
         _allowInput = true;
