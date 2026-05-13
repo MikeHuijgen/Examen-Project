@@ -26,7 +26,7 @@ public class AttackListener : MonoBehaviour
     private void HandleAttackTriggered(BaseAttack attack)
     {
         if (attackSystem == null || attack == null) return;
-        attackSystem.TriggerAttack(attack);
+        attackSystem.QueueAttack(attack);
     }
 
     private void HandleDoubleDamageTriggered(float multiplier)
