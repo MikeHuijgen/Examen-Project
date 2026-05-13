@@ -59,6 +59,7 @@ QualitySettings:
     terrainFadeLength: 5
     terrainMaxTrees: 50
     excludedTargetPlatforms:
+    - Android
     - Standalone
   - serializedVersion: 5
     name: PC
@@ -116,7 +117,7 @@ QualitySettings:
     - iPhone
   m_TextureMipmapLimitGroupNames: []
   m_PerPlatformDefaultQuality:
-    Android: 0
+    Android: 1
     GameCoreScarlett: 1
     GameCoreXboxOne: 1
     Lumin: 0

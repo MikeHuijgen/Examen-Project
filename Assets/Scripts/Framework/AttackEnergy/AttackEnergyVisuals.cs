@@ -38,22 +38,16 @@ public class AttackEnergyVisuals : MonoBehaviour
 
     private void OnEnable()
     {
-        if (attackEnergy != null)
-        {
-            attackEnergy.OnEnergyChanged += HandleEnergyChanged;
-            attackEnergy.OnMatchGained += HandleMatchGained;
-        }
+        attackEnergy.OnEnergyChanged += HandleEnergyChanged;
+        attackEnergy.OnMatchGained += HandleMatchGained;
 
         StartCoroutine(CachePopupPositionAfterLayout());
     }
 
     private void OnDisable()
     {
-        if (attackEnergy != null)
-        {
-            attackEnergy.OnEnergyChanged -= HandleEnergyChanged;
-            attackEnergy.OnMatchGained -= HandleMatchGained;
-        }
+        attackEnergy.OnEnergyChanged -= HandleEnergyChanged;
+        attackEnergy.OnMatchGained -= HandleMatchGained;
     }
 
     private IEnumerator CachePopupPositionAfterLayout()
@@ -79,7 +73,9 @@ public class AttackEnergyVisuals : MonoBehaviour
         {
             _pendingFullReset[energy.EnergyBar] = true;
 
-            _barTweens[energy.EnergyBar] = energy.EnergyBar.DOValue(energy.MaxEnergy, barTweenDuration).SetEase(barTweenEase);
+            _barTweens[energy.EnergyBar] = energy.EnergyBar
+                .DOValue(energy.MaxEnergy, barTweenDuration)
+                .SetEase(barTweenEase);
 
             PunchBar(energy.EnergyBar);
             return;
@@ -89,12 +85,16 @@ public class AttackEnergyVisuals : MonoBehaviour
         {
             _pendingFullReset[energy.EnergyBar] = false;
 
-            _barTweens[energy.EnergyBar] = energy.EnergyBar.DOValue(0f, barTweenDuration).SetEase(barTweenEase);
+            _barTweens[energy.EnergyBar] = energy.EnergyBar
+                .DOValue(0f, barTweenDuration)
+                .SetEase(barTweenEase);
 
             return;
         }
 
-        _barTweens[energy.EnergyBar] = energy.EnergyBar.DOValue(current, barTweenDuration).SetEase(barTweenEase);
+        _barTweens[energy.EnergyBar] = energy.EnergyBar
+            .DOValue(current, barTweenDuration)
+            .SetEase(barTweenEase);
     }
 
     private void PunchBar(Slider slider)
@@ -108,12 +108,10 @@ public class AttackEnergyVisuals : MonoBehaviour
     {
         if (popupText == null || popupRect == null) return;
 
-        var label = string.IsNullOrWhiteSpace(energy.DisplayName) ? energy.AttackType.name : energy.DisplayName;
+        var effectName = energy.MatchEffect != null ? energy.MatchEffect.name : "Match";
+        var label = string.IsNullOrWhiteSpace(energy.DisplayName) ? effectName : energy.DisplayName;
         popupText.text = $"+{gained:0} {label} Energy";
-
-        var fill = energy.EnergyBar.fillRect != null ? energy.EnergyBar.fillRect.GetComponent<Image>() : null;
-
-        if (fill != null) popupText.color = fill.color;
+        popupText.color = energy.DisplayColor;
 
         _popupSequence?.Kill();
         popupRect.anchoredPosition = _popupStartAnchoredPos;

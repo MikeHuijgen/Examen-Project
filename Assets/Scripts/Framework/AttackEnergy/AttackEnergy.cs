@@ -6,39 +6,58 @@ using UnityEngine.UI;
 [Serializable]
 public class EnergyType
 {
-    public BaseAttack AttackType;
+    public BaseMatchEffect MatchEffect;
     public string DisplayName;
     public Slider EnergyBar;
+    public Color DisplayColor = Color.white;
     public float CurrentEnergy;
     public float MaxEnergy = 100f;
+    public float BaseGain = 8f;
 }
 
 public class AttackEnergy : MonoBehaviour
 {
     [SerializeField] private List<EnergyType> energyTypes = new List<EnergyType>();
     [SerializeField] private float decayRate = 2f;
-    [SerializeField] private AttackSystem attackSystem;
     [SerializeField] private ComboCounter comboCounter;
 
     [Header("Combo Gain Scaling")]
-    [SerializeField] private float minIncrease = 8f;
     [SerializeField] private float maxIncrease = 16f;
     [SerializeField] private int maxComboForScaling = 20;
 
-    private readonly Dictionary<BaseAttack, EnergyType> _energyByAttack = new Dictionary<BaseAttack, EnergyType>();
+    [Header("Effect Channels")]
+    [SerializeField] private MatchAttackEffectChannel matchAttackEffectChannel;
+    [SerializeField] private MatchDoubleDamageEffectChannel matchDoubleDamageEffectChannel;
+
+    private readonly Dictionary<BaseMatchEffect, EnergyType> _energyByEffect = new Dictionary<BaseMatchEffect, EnergyType>();
 
     public event Action<EnergyType, float, float> OnEnergyChanged;
     public event Action<EnergyType, float> OnMatchGained;
 
+    public event Action<BaseAttack> OnAttackTriggered;
+    public event Action<float> OnDoubleDamageTriggered;
+
     private void Awake()
     {
-        _energyByAttack.Clear();
+        _energyByEffect.Clear();
 
         foreach (EnergyType energy in energyTypes)
         {
-            if (energy?.AttackType == null) continue;
-            _energyByAttack[energy.AttackType] = energy;
+            if (energy?.MatchEffect == null) continue;
+            _energyByEffect[energy.MatchEffect] = energy;
         }
+    }
+
+    private void OnEnable()
+    {
+        matchAttackEffectChannel.OnEventRaised += HandleMatchAttack;
+        matchDoubleDamageEffectChannel.OnEventRaised += HandleDoubleDamage;
+    }
+
+    private void OnDisable()
+    {
+        matchAttackEffectChannel.OnEventRaised -= HandleMatchAttack;
+        matchDoubleDamageEffectChannel.OnEventRaised -= HandleDoubleDamage;
     }
 
     private void Start()
@@ -67,26 +86,51 @@ public class AttackEnergy : MonoBehaviour
         }
     }
 
-    public void OnMatch(BaseAttack attackType)
+    private void HandleMatchAttack(BaseAttack attack)
     {
-        if (!_energyByAttack.TryGetValue(attackType, out EnergyType energy) || energy == null)
+        if (attack == null) return;
+
+        foreach (var pair in _energyByEffect)
         {
-            Debug.LogWarning($"No EnergyType found for attack: {attackType?.name}");
+            if (pair.Key is MatchAttackEffect attackEffect && attackEffect.Attack == attack)
+            {
+                OnMatch(pair.Key);
+                break;
+            }
+        }
+    }
+
+    private void HandleDoubleDamage(float multiplier)
+    {
+        foreach (var pair in _energyByEffect)
+        {
+            if (pair.Key is MatchDoubleDamageEffect)
+            {
+                OnMatch(pair.Key);
+                break;
+            }
+        }
+    }
+
+    public void OnMatch(BaseMatchEffect effect)
+    {
+        if (!_energyByEffect.TryGetValue(effect, out EnergyType energy) || energy == null)
+        {
             return;
         }
 
         var previous = energy.CurrentEnergy;
-        var gained = GetScaledGain();
-
+        var gained = GetScaledGain(energy);
         energy.CurrentEnergy = Mathf.Min(energy.MaxEnergy, energy.CurrentEnergy + gained);
 
+        comboCounter.OnSuccessfulHit();
         UpdateBarMax(energy);
         OnEnergyChanged?.Invoke(energy, previous, energy.CurrentEnergy);
         OnMatchGained?.Invoke(energy, gained);
 
         if (energy.CurrentEnergy >= energy.MaxEnergy)
         {
-            OnFullEnergy(energy.AttackType);
+            OnFullEnergy(effect);
             previous = energy.CurrentEnergy;
             energy.CurrentEnergy = 0f;
             UpdateBarMax(energy);
@@ -94,14 +138,18 @@ public class AttackEnergy : MonoBehaviour
         }
     }
 
-    private float GetScaledGain()
+    private float GetScaledGain(EnergyType energy)
     {
         var combo = comboCounter != null ? comboCounter.CurrentComboCount : 0;
         var t = Mathf.InverseLerp(0f, maxComboForScaling, combo);
-        return Mathf.Lerp(minIncrease, maxIncrease, t);
+        return Mathf.Lerp(energy.BaseGain, energy.BaseGain + maxIncrease, t);
     }
 
-    private void OnFullEnergy(BaseAttack attack) => attackSystem.TriggerAttack(attack);
+    private void OnFullEnergy(BaseMatchEffect matchEffect)
+    {
+        if (matchEffect is MatchAttackEffect attackEffect) OnAttackTriggered?.Invoke(attackEffect.Attack);
+        else if (matchEffect is MatchDoubleDamageEffect doubleDamageEffect) OnDoubleDamageTriggered?.Invoke(doubleDamageEffect.Multiplier);
+    }
 
     private void UpdateBarMax(EnergyType energy)
     {

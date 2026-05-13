@@ -2,16 +2,35 @@ using UnityEngine;
 
 public class AttackListener : MonoBehaviour
 {
-    [SerializeField] private ComboCounter ComboCounter;
     [SerializeField] private AttackEnergy attackEnergy;
-    [SerializeField] private MatchAttackEffectChannel matchAttackEffectChannel;
+    [SerializeField] private AttackSystem attackSystem;
 
-    private void OnEnable() => matchAttackEffectChannel.OnEventRaised += HandleMatchDestroyed;
-    private void OnDisable() => matchAttackEffectChannel.OnEventRaised -= HandleMatchDestroyed;
-
-    private void HandleMatchDestroyed(BaseAttack attack)
+    private void OnEnable()
     {
-        ComboCounter.OnSuccessfulHit();
-        attackEnergy.OnMatch(attack);
+        if (attackEnergy != null)
+        {
+            attackEnergy.OnAttackTriggered += HandleAttackTriggered;
+            attackEnergy.OnDoubleDamageTriggered += HandleDoubleDamageTriggered;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (attackEnergy != null)
+        {
+            attackEnergy.OnAttackTriggered -= HandleAttackTriggered;
+            attackEnergy.OnDoubleDamageTriggered -= HandleDoubleDamageTriggered;
+        }
+    }
+
+    private void HandleAttackTriggered(BaseAttack attack)
+    {
+        if (attackSystem == null || attack == null) return;
+        attackSystem.TriggerAttack(attack);
+    }
+
+    private void HandleDoubleDamageTriggered(float multiplier)
+    {
+        Debug.Log("double damage fire from listener");
     }
 }
