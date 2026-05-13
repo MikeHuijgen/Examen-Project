@@ -11,15 +11,17 @@ public class CollapseAndFillAction : BaseAction<CollapseAndFillActionParameters>
 
     public CollapseAndFillAction(CollapseAndFillActionParameters parameters, ActionContext context) : base(parameters, context){}
 
-    public override void Execute(Action onActionComplete)
+    public override void Execute(Action<BaseAction> onActionComplete)
     {
+        Debug.Log("Started");
+        on_action_complete = onActionComplete;
         _tweens = new List<Tween>();
-        var grid = parameters.Grid;
+        var grid = action_context.GridSystem.GetGridObjectArray;
 
-        for (int x = 0; x < parameters.GridWidth; x++)
+        for (int x = 0; x < action_context.LevelGridData.GridWidth; x++)
         {
-            //HandleCollapse(grid, x);
-            //HandleFill(grid, x);
+            HandleCollapse(grid, x);
+            HandleFill(grid, x);
         }
 
         if (_tweens.Count > 0)
@@ -29,69 +31,71 @@ public class CollapseAndFillAction : BaseAction<CollapseAndFillActionParameters>
 
             Task.WhenAll(seq.AsyncWaitForCompletion());
         }
+
+        CompleteAction();
     }
 
-    // private void HandleCollapse(GridObject[,] grid, int x)
-    // {
-    //     var fallables = new List<(GridObject tile, Match3BlockProfile profile)>();
+    private void HandleCollapse(GridObject[,] grid, int x)
+    {
+        var fallables = new List<(GridObject tile, Match3BlockProfile profile)>();
 
-    //     for (var y = 0; y < parameters.GridHeight; y++)
-    //     {
-    //         var tile = grid[x, y];
-    //         var profile = tile.GetMatch3BlockProfile;
+        for (var y = 0; y < action_context.LevelGridData.GridHeight; y++)
+        {
+            var tile = grid[x, y];
+            var profile = tile.GetMatch3BlockProfile;
 
-    //         if (profile == null || !profile.HasRule("CollapseAndFill")) continue;
+            if (profile == null || !profile.HasRule("CollapseAndFill")) continue;
 
-    //         fallables.Add((tile, profile));
-    //         tile.SetMatch3BlockProfile(null);
-    //     }
+            fallables.Add((tile, profile));
+            tile.SetMatch3BlockProfile(null);
+        }
 
-    //     var fallIndex = 0;
+        var fallIndex = 0;
 
-    //     for (var y = 0; y < parameters.GridHeight; y++)
-    //     {
-    //         var targetGridObject = grid[x, y];
+        for (var y = 0; y < action_context.LevelGridData.GridHeight; y++)
+        {
+            var targetGridObject = grid[x, y];
 
-    //         if (targetGridObject.GetMatch3BlockProfile != null) continue;
+            if (targetGridObject.GetMatch3BlockProfile != null) continue;
 
-    //         if (fallIndex >= fallables.Count) break;
+            if (fallIndex >= fallables.Count) break;
 
-    //         var tile = fallables[fallIndex];
+            var tile = fallables[fallIndex];
 
-    //         targetGridObject.SetMatch3BlockProfile(tile.profile);
+            targetGridObject.SetMatch3BlockProfile(tile.profile);
 
-    //         parameters.MoveVisualBindingCallback(tile.tile, targetGridObject);
+            action_context.BlockVisualManager.MoveVisualBinding(tile.tile, targetGridObject);
 
-    //         var tween = parameters.CreateVisualMoveTweenCallback(
-    //             targetGridObject,
-    //             targetGridObject.GetWorldPosition(parameters.GridCellWidth, parameters.GridCellHeight),
-    //             parameters.VisualFallSpeed,
-    //             Ease.OutBounce,
-    //             .2f
-    //         );
+            var tween = action_context.BlockVisualManager.CreateVisualMoveTween(
+                targetGridObject,
+                targetGridObject.GetWorldPosition(action_context.LevelGridData.GridCellWidth, action_context.LevelGridData.GridCellHeight),
+                action_context.LevelGridData.VisualFallSpeed,
+                Ease.OutBounce,
+                .2f
+            );
 
-    //         _tweens.Add(tween);
+            _tweens.Add(tween);
 
-    //         fallIndex++;
-    //     }
-    // }
+            fallIndex++;
+        }
+    }
 
-    // private void HandleFill(GridObject[,] grid, int x)
-    // {
-    //     for (var y = 0; y < parameters.GridHeight; y++)
-    //     {
-    //         var targetGrid = grid[x, y];
-    //         if (targetGrid.GetMatch3BlockProfile != null) continue;
+    private void HandleFill(GridObject[,] grid, int x)
+    {
+        for (var y = 0; y < action_context.LevelGridData.GridHeight; y++)
+        {
+            var targetGrid = grid[x, y];
+            if (targetGrid.GetMatch3BlockProfile != null) continue;
 
-    //         var spawnY = parameters.GetWorldPositionCallback(targetGrid.GetGridPosition).y + _spawnOffset;
+            var spawnY = action_context.GridSystem.ConvertGridPositionToWorldPosition(targetGrid.GetGridPosition).y + _spawnOffset;
 
-    //         var newMatch3Profile = parameters.GetRandomValidMatch3BlockCallBack(parameters.Match3BlockProfiles, grid, x, y);
-    //         if (!parameters.TryEnableVisualByProfileCallback(newMatch3Profile, grid[x, y], parameters.GetWorldPositionCallback, spawnY)) continue;
-    //         newMatch3Profile.Init();
-    //         targetGrid.SetMatch3BlockProfile(newMatch3Profile);
+            var newMatch3Profile = action_context.MatchDetector.GetRandomValidMatch3Profile(parameters.Match3BlockProfiles, grid, x, y);
+            if (!action_context.BlockVisualManager.TryEnableVisualByProfile(newMatch3Profile, grid[x, y], action_context.GridSystem.ConvertGridPositionToWorldPosition, spawnY)) continue;
+            newMatch3Profile.Init();
+            targetGrid.SetMatch3BlockProfile(newMatch3Profile);
 
-    //         var tween = parameters.CreateVisualMoveTweenCallback(targetGrid, targetGrid.GetWorldPosition(parameters.GridCellWidth, parameters.GridCellHeight), parameters.VisualFallSpeed, Ease.OutBounce, .2f);
-    //         _tweens.Add(tween);
-    //     }
-    // }
+            var tween = action_context.BlockVisualManager.CreateVisualMoveTween(targetGrid, targetGrid.GetWorldPosition(action_context.LevelGridData.GridCellWidth, action_context.LevelGridData.GridCellHeight), action_context.LevelGridData.VisualFallSpeed, Ease.OutBounce, .2f);
+            _tweens.Add(tween);
+        }
+    }
 }

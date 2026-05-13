@@ -1,14 +1,13 @@
 using DG.Tweening;
 using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 public class SwapAction : BaseAction<SwapActionParameters>
 {
     private bool _revertingSwap;
     public SwapAction(SwapActionParameters parameters, ActionContext context) : base(parameters, context){}
 
-    public override void Execute(Action OnActionComplete)
+    public override void Execute(Action<BaseAction> OnActionComplete)
     {
         on_action_complete = OnActionComplete;
         HandleSwapLogic();
@@ -52,14 +51,12 @@ public class SwapAction : BaseAction<SwapActionParameters>
         if(!CheckForMatch(out var matches))
         {
             ReveredSwap();
-            Debug.Log("Swap action done");
             CompleteAction();
             return;
         }
 
         action_context.GridActionProcessor.ProcessAction(new MatchAction(new MatchActionParameters{Matches = matches}, action_context));
 
-        Debug.Log("Swap action done");
         CompleteAction();
     }
 

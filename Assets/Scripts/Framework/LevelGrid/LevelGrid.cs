@@ -176,7 +176,7 @@ public class LevelGrid : MonoBehaviour
         //     // }));
         // }
 
-        // CheckForPossibleMoves();
+        CheckForPossibleMoves();
 
         _allowInput = true;
     }

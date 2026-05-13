@@ -1,14 +1,25 @@
 using System;
-using System.Threading.Tasks;
 
 public abstract class BaseAction
 {
     protected ActionContext action_context;
-    protected Action on_action_complete;   
+    protected Action<BaseAction> on_action_complete;  
+
+    public ActionState actionState {get; private set;} 
 
     protected void CompleteAction()
     {
-        on_action_complete();
+        on_action_complete(this);
+    }
+
+    public void SetActionState(ActionState actionState) => this.actionState = actionState;
+
+    public enum ActionState
+    {
+        Waiting,
+        Running,
+        Completed,
+        Canceled
     }
 }
 
@@ -22,10 +33,5 @@ public abstract class BaseAction<Tparameters> : BaseAction
         action_context = context;
     }
 
-    public void Execute(GridActionProcessor processor)
-    {
-        processor.ProcessAction(this);
-    }
-
-    public virtual void Execute(Action OnActionComplete){}
+    public virtual void Execute(Action<BaseAction> OnActionComplete){}
 }
