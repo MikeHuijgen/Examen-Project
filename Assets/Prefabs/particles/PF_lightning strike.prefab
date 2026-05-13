@@ -14707,7 +14707,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6113506144784895810}
   m_Layer: 0
-  m_Name: lightning strike
+  m_Name: PF_lightning strike
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
