@@ -7,5 +7,5 @@ public class AttackListener : MonoBehaviour
 
     private void OnEnable() => matchAttackEffectChannel.OnEventRaised += HandleMatchDestroyed;
     private void OnDisable() => matchAttackEffectChannel.OnEventRaised -= HandleMatchDestroyed;
-    private void HandleMatchDestroyed(BaseAttack attack) => attackSystem.TriggerAttack(attack);
+    private void HandleMatchDestroyed(BaseAttack attack) => attackSystem.QueueAttack(attack);
 }

@@ -84,7 +84,7 @@ public class AttackSystem : MonoBehaviour
         }
     }
 
-    public void TriggerAttack(BaseAttack attack)
+    private void TriggerAttack(BaseAttack attack)
     {
         if (_state != AttackState.Idle)
         {
