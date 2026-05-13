@@ -38,8 +38,8 @@ public class AttackSystem : MonoBehaviour
     private BaseAttack _currentAttack;
 
     private Queue<BaseAttack> _attackQueue = new Queue<BaseAttack>();
-
     private bool _hasExecutedAttack;
+    private bool _hasExecutedCharge;
 
     private void Start()
     {
@@ -52,7 +52,28 @@ public class AttackSystem : MonoBehaviour
 
     public void QueueAttack(BaseAttack attack)
     {
+        Debug.Log($"Queuing attack: {attack.name}");
         _attackQueue.Enqueue(attack);
+    }
+
+    private void Update()
+    {
+        switch (_state)
+        {
+            case AttackState.Idle:
+                CheckQueue();
+                break;
+
+            case AttackState.Charging:
+                HandleChargeExecution();
+                HandleCharging();
+                break;
+
+            case AttackState.Attacking:
+                HandleAttackExecution();
+                HandleAttacking();
+                break;
+        }
     }
 
     public void CheckQueue()
@@ -65,8 +86,15 @@ public class AttackSystem : MonoBehaviour
 
     public void TriggerAttack(BaseAttack attack)
     {
+        if (_state != AttackState.Idle)
+        {
+            _attackQueue.Enqueue(attack);
+            return;
+        }
+
         _currentAttack = attack;
         _hasExecutedAttack = false;
+        _hasExecutedCharge = false;
 
         if (_currentAttack is OpponentAttack opponentAttack && opponentAttack.ChargeDurationTime > 0f)
         {
@@ -78,25 +106,17 @@ public class AttackSystem : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void HandleChargeExecution()
     {
-        switch (_state)
+        if (_hasExecutedCharge)
+            return;
+
+        _hasExecutedCharge = true;
+        if (_currentAttack is OpponentAttack opponentAttack && opponentAttack.ChargeDurationTime > 0f)
         {
-            case AttackState.Idle:
-                CheckQueue();
-                break;
-
-            case AttackState.Charging:
-                HandleCharging();
-                break;
-
-            case AttackState.Attacking:
-                HandleAttackExecution();
-                HandleAttacking();
-                break;
+            _enemyOverrideController[_enemyWindUpAttackKeyString] = opponentAttack.ChargeAnimation;
+            enemyAnimator.SetTrigger(_windUpAttackTriggerKeyString);
         }
-
-        Debug.Log("Attack Queue = " + _attackQueue.Count);
     }
 
     private void HandleAttackExecution()
@@ -110,22 +130,17 @@ public class AttackSystem : MonoBehaviour
         {
             _playerOverrideController[_playerAttackKeyString] = _currentAttack.AttackAnim;
             playerAnimator.SetTrigger(_attackTriggerKeyString);
-            opponentHealth.TakeDamage(_currentAttack.Damage);
             return;
         }
 
         var dodge = playerDodgeSystem.GetCurrentDodgeInfo();
-
         _enemyOverrideController[_enemyMainAttackKeyString] = opponentAttack.AttackAnim;
-
         enemyAnimator.SetTrigger(_mainAttackTriggerKeyString);
-
 
         if (!dodge.isDodging)
         {
             playerHealth.TakeDamage(_currentAttack.Damage);
             OnEnemyAttackFinished?.Invoke();
-            _state = AttackState.Idle;
             return;
         }
 
@@ -137,29 +152,25 @@ public class AttackSystem : MonoBehaviour
         }
 
         OnEnemyAttackFinished?.Invoke();
-        _state = AttackState.Idle;
     }
 
     private void HandleCharging()
     {
-        if (_hasExecutedAttack)
-            return; 
-
-        _hasExecutedAttack = true;
-        if (_currentAttack is OpponentAttack opponentAttack && opponentAttack.ChargeDurationTime > 0f)
+        if (_currentAttack is OpponentAttack opponentAttack)
         {
-            _enemyOverrideController[_enemyWindUpAttackKeyString] = opponentAttack.ChargeAnimation; 
-            enemyAnimator.SetTrigger(_windUpAttackTriggerKeyString);
             if (!_timer.RunTimer(ref _chargeTimer, opponentAttack.ChargeDurationTime)) return;
+            enemyAnimator.ResetTrigger(_windUpAttackTriggerKeyString);
+            _state = AttackState.Attacking;
         }
-        enemyAnimator.ResetTrigger(_windUpAttackTriggerKeyString);
-        _state = AttackState.Attacking;
     }
 
     private void HandleAttacking()
     {
         if (!_timer.RunTimer(ref _attackTimer, _currentAttack.AttackDurationTime)) return;
-
+        if (_currentAttack is not OpponentAttack opponentAttack)
+        {
+            opponentHealth.TakeDamage(_currentAttack.Damage);
+        }
         _state = AttackState.Idle;
     }
 
