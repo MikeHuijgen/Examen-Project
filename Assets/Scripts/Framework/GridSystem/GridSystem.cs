@@ -11,7 +11,7 @@ public class GridSystem
 
     private GridObject[,] _gridObjectArray;
 
-    Dictionary<GridPosition, GridTileVisual> _gridTileVisuals = new Dictionary<GridPosition, GridTileVisual>();
+    private Dictionary<GridPosition, GridTileVisual> _gridTileVisuals = new Dictionary<GridPosition, GridTileVisual>();
 
     public GridSystem(int width, int height, float cellWidth, float cellHeight)
     {
@@ -41,13 +41,13 @@ public class GridSystem
         }
     }
 
-    public void CreateGridTileVisuals(GridTileVisual gridTileVisual)
+    public void CreateGridTileVisuals(GridTileVisual gridTileVisual, Transform parent)
     {
         for (var x = 0; x < _width; x++)
         {
             for (int y = 0; y < _height; y++)
             {
-                var newTileVisual = GameObject.Instantiate(gridTileVisual, new Vector3(x * _cellWidth, y * _cellHeight, 0), quaternion.identity);
+                var newTileVisual = GameObject.Instantiate(gridTileVisual, new Vector3(x * _cellWidth, y * _cellHeight, 0), quaternion.identity, parent);
                 newTileVisual.transform.localScale = new Vector3(_cellWidth, _cellHeight, 0);
                 _gridTileVisuals[new GridPosition(x,y)] = newTileVisual;
             }
@@ -56,16 +56,7 @@ public class GridSystem
 
     public Vector3 ConvertGridPositionToWorldPosition(GridPosition gridPosition)
     {
-        var gridWidthPx = _width * _cellWidth;
-        var gridHeightPx = _height * _cellHeight;
-
-        var offsetX = -gridWidthPx / 2f;
-        var offsetY = -gridHeightPx / 2f;
-
-        var x = offsetX + gridPosition.X * _cellWidth + _cellWidth * 0.5f;
-        var y = offsetY + gridPosition.Y * _cellHeight + _cellHeight * 0.5f;
-
-        return new Vector3(x, y, 0);
+        return new Vector3(gridPosition.X * _cellWidth + _cellWidth / 2, gridPosition.Y * _cellHeight + _cellHeight / 2, 0);
     }
 
 
@@ -226,5 +217,17 @@ public class GridSystem
     {
        if(!_gridTileVisuals.TryGetValue(targetGridPosition, out var gridTileVisual)) return;
        gridTileVisual.OnTileDeselected();
+    }
+
+    public void DisposeMatchData(HashSet<Match> matches)
+    {
+        foreach (var match in matches)
+        {
+            for (int i = 0; i < match.MatchedObjectGroup.Length; i++)
+            {
+                var gridPos = new GridPosition(match.MatchedObjectGroup[i].GetGridPosition.X, match.MatchedObjectGroup[i].GetGridPosition.Y);
+                _gridObjectArray[gridPos.X, gridPos.Y].SetMatch3BlockProfile(null);
+            }
+        }
     }
 }

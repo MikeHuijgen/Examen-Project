@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: RightPunch
   m_EditorClassIdentifier: Assembly-CSharp::Opponent
   Damage: 5
-  AttackAnim: {fileID: 0}
+  AttackAnim: {fileID: 6436658443108912332, guid: 9dbdbd5c301daa743862d758fd813839, type: 3}
   AttackDurationTime: 0.5
   Direction: 2
-  ChargeAnimation: {fileID: 0}
+  ChargeAnimation: {fileID: -305927376744522517, guid: 9dbdbd5c301daa743862d758fd813839, type: 3}
   ChargeDurationTime: 1.5
