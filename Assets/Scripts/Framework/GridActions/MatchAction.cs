@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class MatchAction : BaseAction<MatchActionParameters>
 {
@@ -14,8 +15,21 @@ public class MatchAction : BaseAction<MatchActionParameters>
         action_context.GridSystem.DisposeMatchData(matches);
         action_context.BlockVisualManager.DisableMatchesVisuals(matches);
 
-        //action_context.GridActionProcessor.ProcessAction(new CollapseAndFillAction(new CollapseAndFillActionParameters{Match3BlockProfiles = action_context.Match3BlockProfileContainer.match3BlockProfiles},action_context));
-        CompleteAction();
+        action_context.GridActionProcessor.ProcessAction
+        (
+            new CollapseAndFillAction
+            (
+                new CollapseAndFillActionParameters
+                {
+                    Match3BlockProfiles = action_context.Match3BlockProfileContainer.match3BlockProfiles
+                },
+                action_context
+            ),
+            _ =>
+            {
+                CompleteAction();
+            }
+        );
     }
 
     private void ActivateMatchEffect(HashSet<Match> matches)

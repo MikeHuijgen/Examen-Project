@@ -136,7 +136,8 @@ public class LevelGrid : MonoBehaviour
             BlockVisualManager = blockVisualManager,
             MatchDetector = _matchDetector,
             LevelGridData = levelGridData,
-            GridActionProcessor = gridActionProcessor
+            GridActionProcessor = gridActionProcessor,
+            Match3BlockProfileContainer = match3BlockProfileContainer
         };
 
         gridActionProcessor.ProcessAction(new SwapAction(swapParameters, actionContext));

@@ -1,6 +1,7 @@
 using DG.Tweening;
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class SwapAction : BaseAction<SwapActionParameters>
 {
@@ -44,26 +45,33 @@ public class SwapAction : BaseAction<SwapActionParameters>
         );        
     }
 
+    private void HandleReverseSwapLogic()
+    {
+        var from = parameters.from;
+        var to = parameters.to;
+
+        action_context.GridSystem.SwapGridObjectsData(from, to);
+        action_context.BlockVisualManager.SwapVisuals
+        (
+            from, 
+            to, 
+            action_context.GridSystem.ConvertGridPositionToWorldPosition,
+            action_context.LevelGridData.VisualSwapSpeed,
+            Ease.InOutQuad,
+            OnReveredVisualSwapComplete
+        );        
+    }
+
     private void OnVisualSwapComplete()
     {
-        if (_revertingSwap) return;
-
         if(!CheckForMatch(out var matches))
         {
-            ReveredSwap();
-            CompleteAction();
+            HandleReverseSwapLogic();
             return;
         }
 
-        action_context.GridActionProcessor.ProcessAction(new MatchAction(new MatchActionParameters{Matches = matches}, action_context));
-
-        CompleteAction();
+        action_context.GridActionProcessor.ProcessAction(new MatchAction(new MatchActionParameters{Matches = matches}, action_context), _ => {CompleteAction();});
     }
 
-    private void ReveredSwap()
-    {
-        _revertingSwap = true;
-
-        HandleSwapLogic();
-    }
+    private void OnReveredVisualSwapComplete() => CompleteAction();
 }

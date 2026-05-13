@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 public abstract class BaseAction
 {
@@ -6,6 +7,7 @@ public abstract class BaseAction
     protected Action<BaseAction> on_action_complete;  
 
     public ActionState actionState {get; private set;} 
+    public BaseAction parent;
 
     protected void CompleteAction()
     {

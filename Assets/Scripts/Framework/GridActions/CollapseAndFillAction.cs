@@ -13,7 +13,6 @@ public class CollapseAndFillAction : BaseAction<CollapseAndFillActionParameters>
 
     public override void Execute(Action<BaseAction> onActionComplete)
     {
-        Debug.Log("Started");
         on_action_complete = onActionComplete;
         _tweens = new List<Tween>();
         var grid = action_context.GridSystem.GetGridObjectArray;
@@ -29,10 +28,12 @@ public class CollapseAndFillAction : BaseAction<CollapseAndFillActionParameters>
             var seq = DOTween.Sequence();
             foreach (var t in _tweens) seq.Join(t);
 
-            Task.WhenAll(seq.AsyncWaitForCompletion());
+            seq.OnComplete(() => CompleteAction());
         }
-
-        CompleteAction();
+        else
+        {
+            CompleteAction();
+        }
     }
 
     private void HandleCollapse(GridObject[,] grid, int x)
