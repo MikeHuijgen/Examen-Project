@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8588713560040784111}
   m_Layer: 0
-  m_Name: star effect
+  m_Name: PF_star
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
