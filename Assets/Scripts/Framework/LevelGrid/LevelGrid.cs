@@ -120,6 +120,7 @@ public class LevelGrid : MonoBehaviour
 
     private void ResetCurrentGridPosition()
     {
+        if (_currentSelectedGridPosition == null) return;
         _gridSystem.DeselectTileByGridPosition(_currentSelectedGridPosition.Value.hitGridPosition);
         _currentSelectedGridPosition = null;
     }
@@ -158,7 +159,7 @@ public class LevelGrid : MonoBehaviour
     public void ShuffleGridOnHit()
     {
         _allowInput = false;
-        //ResetCurrentGridPosition();
+        ResetCurrentGridPosition();
         gridActionProcessor.CancelCurrentChain();
 
         _actionContext = new ActionContext
