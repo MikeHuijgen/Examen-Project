@@ -10,7 +10,6 @@ public class GridActionProcessor : MonoBehaviour
     {
         if(_actionStack.TryPeek(out var parentAction))
         {
-            if (parentAction.IsCanceled) return;
             parentAction.SetActionState(BaseAction.ActionState.Waiting);
             action.Parent = parentAction;
             parentAction.ChainedActions.Add(action);
@@ -34,14 +33,5 @@ public class GridActionProcessor : MonoBehaviour
         source.SetActionState(BaseAction.ActionState.Completed);
         source.Parent?.SetActionState(BaseAction.ActionState.Running);
         _actionStack.Pop();
-    }
-
-    public void CancelCurrentChainedActions()
-    {
-        if (!_actionStack.TryPeek(out var current)) return;
-
-        current.Root.Cancel();
-
-        _actionStack.Clear();
     }
 }

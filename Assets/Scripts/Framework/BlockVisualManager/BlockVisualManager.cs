@@ -12,8 +12,6 @@ public class BlockVisualManager : MonoBehaviour
     private Dictionary<Match3BlockProfile, GameObject> _profileToVisualsDictionary;
     private Dictionary<Match3BlockProfile, List<GameObject>> _pool;
     private Dictionary<GridObject, GameObject> _ActiveBlockVisuals;
-    private int _activeOperations;
-    private readonly List<Action> _waiters = new();
 
     void Awake()
     {
@@ -68,7 +66,7 @@ public class BlockVisualManager : MonoBehaviour
         _ActiveBlockVisuals.Remove(gridObject);
     }
 
-    public void SwapVisuals(GridObject gridObjectA, GridObject gridObjectB, Func<GridPosition, Vector3> GetWorldPosition , float tweenSpeed, Ease ease)
+    public void SwapVisuals(GridObject gridObjectA, GridObject gridObjectB, Func<GridPosition, Vector3> GetWorldPosition , float tweenSpeed, Ease ease, Action OnVisualSwapComplete)
     {
         if(!_ActiveBlockVisuals.TryGetValue(gridObjectA, out var targetVisualA) || !_ActiveBlockVisuals.TryGetValue(gridObjectB, out var targetVisualB)) 
         {
@@ -79,15 +77,17 @@ public class BlockVisualManager : MonoBehaviour
         var newPositionA = GetWorldPosition(gridObjectA.GetGridPosition);
         var newPositionB = GetWorldPosition(gridObjectB.GetGridPosition);
 
-        CreateTween(targetVisualA.transform.DOMove(newPositionA, tweenSpeed).SetEase(ease));
-        CreateTween(targetVisualB.transform.DOMove(newPositionB, tweenSpeed).SetEase(ease));
+        targetVisualA.transform.DOMove(newPositionA, tweenSpeed).SetEase(ease);
+        var tween = targetVisualB.transform.DOMove(newPositionB, tweenSpeed).SetEase(ease);
+
+        tween.OnComplete(() => OnVisualSwapComplete());
     }
 
-    public void CreateVisualMoveTween(GridObject gridObject, Vector3 newPosition, float tweenSpeed, Ease ease, float tweenStrength)
+    public Tween CreateVisualMoveTween(GridObject gridObject, Vector3 newPosition, float tweenSpeed, Ease ease, float tweenStrength)
     {
-        if(!_ActiveBlockVisuals.TryGetValue(gridObject, out var targetVisual)) return;
+        if(!_ActiveBlockVisuals.TryGetValue(gridObject, out var targetVisual)) return null;
 
-        CreateTween(targetVisual.transform.DOMove(newPosition, tweenSpeed).SetEase(ease, tweenStrength));        
+        return targetVisual.transform.DOMove(newPosition, tweenSpeed).SetEase(ease, tweenStrength);        
     }
 
     public void DisableMatchesVisuals(HashSet<Match> matches)
@@ -107,43 +107,6 @@ public class BlockVisualManager : MonoBehaviour
 
         _ActiveBlockVisuals.Remove(from);
         _ActiveBlockVisuals[to] = visual;
-    }
-
-    private Tween CreateTween(Tween tween)
-    {
-        _activeOperations++;
-
-        tween.OnComplete(OnOperationFinished);
-        tween.OnKill(OnOperationFinished);
-
-        tween.Play();
-
-        return tween;
-    }
-
-    private void OnOperationFinished()
-    {
-        if (_activeOperations <= 0) return;
-
-        _activeOperations--;
-
-        if (_activeOperations > 0) return;
-
-        foreach (var w in _waiters)
-            w?.Invoke();
-
-        _waiters.Clear();
-    }
-
-    public void WaitForAllTweens(Action onComplete)
-    {
-        if (_activeOperations == 0)
-        {
-            onComplete?.Invoke();
-            return;
-        }
-
-        _waiters.Add(onComplete);
     }
 }
 
