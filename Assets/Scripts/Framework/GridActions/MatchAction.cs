@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class MatchAction : BaseAction<MatchActionParameters>
 {
-    public MatchAction(MatchActionParameters parameters, ActionContext context) : base(parameters, context){}
+    public MatchAction(MatchActionParameters parameters) : base(parameters){}
 
     public override void Execute(Action<BaseAction> onActionComplete)
     {
         on_action_complete = onActionComplete;
+        action_context = parameters.actionContext;
         var matches = parameters.Matches;
         ActivateMatchEffect(matches);
 
@@ -21,9 +22,8 @@ public class MatchAction : BaseAction<MatchActionParameters>
             (
                 new CollapseAndFillActionParameters
                 {
-                    Match3BlockProfiles = action_context.Match3BlockProfileContainer.match3BlockProfiles
-                },
-                action_context
+                    actionContext = action_context,
+                }
             ),
             _ =>
             {

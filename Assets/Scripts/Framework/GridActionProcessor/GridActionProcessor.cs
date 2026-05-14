@@ -6,6 +6,27 @@ public class GridActionProcessor : MonoBehaviour
 {
     private Stack<BaseAction> _actionStack = new Stack<BaseAction>();
 
+    public void ProcessAction(BaseAction action, Action<BaseAction> onComplete = null)
+    {
+        if(_actionStack.TryPeek(out var parentAction))
+        {
+            parentAction.SetActionState(BaseAction.ActionState.Waiting);
+            action.parent = parentAction;
+        }
+
+        _actionStack.Push(action);
+
+        action.SetActionState(BaseAction.ActionState.Running);
+        ActionDebugRegistry.ActiveActions.Add(action);
+
+        action.Execute(completedAction =>
+        {
+            OnActionComplete(completedAction);
+
+            onComplete?.Invoke(completedAction);
+        });
+    }
+
     public void ProcessAction<Tparameters>(BaseAction<Tparameters> action, Action<BaseAction> onComplete = null)
     {
         if(_actionStack.TryPeek(out var parentAction))

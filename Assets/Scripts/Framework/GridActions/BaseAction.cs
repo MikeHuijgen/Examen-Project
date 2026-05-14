@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public abstract class BaseAction
@@ -9,6 +10,8 @@ public abstract class BaseAction
 
     public ActionState actionState {get; private set;} 
     public BaseAction parent;
+
+    public virtual void Execute(Action<BaseAction> OnActionComplete){}
 
     protected void CompleteAction()
     {
@@ -28,13 +31,10 @@ public abstract class BaseAction
 
 public abstract class BaseAction<Tparameters> : BaseAction
 {
-    protected Tparameters parameters {get; private set;}
+    public Tparameters parameters {get; private set;}
 
-    public BaseAction(Tparameters parameters, ActionContext context)
+    public BaseAction(Tparameters parameters) : base()
     {
         this.parameters = parameters;
-        action_context = context;
     }
-
-    public virtual void Execute(Action<BaseAction> OnActionComplete){}
 }

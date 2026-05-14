@@ -124,12 +124,6 @@ public class LevelGrid : MonoBehaviour
             return; 
         }
 
-        var swapParameters = new SwapActionParameters
-        {   
-            from = beginGridObject, 
-            to = endGridObject, 
-        };
-
         var actionContext = new ActionContext
         {
             GridSystem = _gridSystem, 
@@ -140,7 +134,14 @@ public class LevelGrid : MonoBehaviour
             Match3BlockProfileContainer = match3BlockProfileContainer
         };
 
-        gridActionProcessor.ProcessAction(new SwapAction(swapParameters, actionContext));
+        var swapParameters = new SwapActionParameters
+        {  
+            actionContext = actionContext,
+            from = beginGridObject, 
+            to = endGridObject, 
+        };
+
+        gridActionProcessor.ProcessAction(new SwapAction(swapParameters));
 
         CheckForPossibleMoves();
 
