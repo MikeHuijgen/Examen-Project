@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GridActionProcessor : MonoBehaviour 
 {
+    public event Action OnParentActionComplete; 
     private Stack<BaseAction> _actionStack = new Stack<BaseAction>();
 
     public void ProcessAction<Tparameters>(BaseAction<Tparameters> action, Action<BaseAction> onComplete = null)
@@ -32,6 +33,7 @@ public class GridActionProcessor : MonoBehaviour
 
     private void OnActionComplete(BaseAction source)
     {
+        if (_actionStack.TryPeek(out var parentAction) && source == parentAction) OnParentActionComplete?.Invoke();
         source.SetActionState(BaseAction.ActionState.Completed);
         source.Parent?.SetActionState(BaseAction.ActionState.Running);
         _actionStack.Pop();
