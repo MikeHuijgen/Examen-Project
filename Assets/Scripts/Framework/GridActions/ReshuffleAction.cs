@@ -68,7 +68,10 @@ public class ReshuffleAction : BaseAction<ReshuffleActionParameters>
                 _sequence.Join(t);
             }
 
-            CompleteAction();
+            _sequence.OnComplete(() =>
+            {
+                CompleteAction();
+            });
             return;
         }
 

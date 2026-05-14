@@ -33,7 +33,7 @@ public class GridActionProcessor : MonoBehaviour
 
     private void OnActionComplete(BaseAction source)
     {
-        if (_actionStack.TryPeek(out var parentAction) && source == parentAction) OnParentActionComplete?.Invoke();
+        if (source.Root == source) OnParentActionComplete?.Invoke();
         source.SetActionState(BaseAction.ActionState.Completed);
         source.Parent?.SetActionState(BaseAction.ActionState.Running);
         _actionStack.Pop();
