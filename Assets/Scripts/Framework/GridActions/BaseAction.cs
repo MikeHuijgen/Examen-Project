@@ -13,10 +13,37 @@ public abstract class BaseAction
     public readonly List<BaseAction> ChainedActions = new List<BaseAction>();
 
     public virtual void Execute(Action<BaseAction> OnActionComplete){}
+    public bool IsCanceled => actionState == ActionState.Canceled;
 
     protected void CompleteAction()
     {
+        if (actionState == ActionState.Canceled) return;
         on_action_complete(this);
+    }
+
+    public virtual void Cancel()
+    {
+        if (actionState == ActionState.Canceled || actionState == ActionState.Completed) return;
+
+        actionState = ActionState.Canceled;
+
+        foreach (var child in ChainedActions)
+        {
+            child.Cancel();
+        }
+    }
+
+    public BaseAction Root
+    {
+        get
+        {
+            var current = this;
+
+            while (current.Parent != null)
+                current = current.Parent;
+
+            return current;
+        }
     }
 
     public void SetActionState(ActionState actionState) => this.actionState = actionState;

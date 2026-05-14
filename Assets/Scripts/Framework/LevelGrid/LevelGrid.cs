@@ -149,6 +149,8 @@ public class LevelGrid : MonoBehaviour
 
     public void ShuffleGridOnHit()
     {
+        gridActionProcessor.CancelCurrentChainedActions();
+
         _actionContext = new ActionContext
         {
             GridSystem = _gridSystem, 
