@@ -9,7 +9,8 @@ public abstract class BaseAction
     protected Action<BaseAction> on_action_complete;  
 
     public ActionState actionState {get; private set;} 
-    public BaseAction parent;
+    public BaseAction Parent;
+    public readonly List<BaseAction> ChainedActions = new List<BaseAction>();
 
     public virtual void Execute(Action<BaseAction> OnActionComplete){}
 

@@ -11,7 +11,7 @@ public class GridActionProcessor : MonoBehaviour
         if(_actionStack.TryPeek(out var parentAction))
         {
             parentAction.SetActionState(BaseAction.ActionState.Waiting);
-            action.parent = parentAction;
+            action.Parent = parentAction;
         }
 
         _actionStack.Push(action);
@@ -32,7 +32,8 @@ public class GridActionProcessor : MonoBehaviour
         if(_actionStack.TryPeek(out var parentAction))
         {
             parentAction.SetActionState(BaseAction.ActionState.Waiting);
-            action.parent = parentAction;
+            action.Parent = parentAction;
+            parentAction.ChainedActions.Add(action);
         }
 
         _actionStack.Push(action);
@@ -51,7 +52,7 @@ public class GridActionProcessor : MonoBehaviour
     private void OnActionComplete(BaseAction source)
     {
         source.SetActionState(BaseAction.ActionState.Completed);
-        source.parent?.SetActionState(BaseAction.ActionState.Running);
+        source.Parent?.SetActionState(BaseAction.ActionState.Running);
         _actionStack.Pop();
     }
 }

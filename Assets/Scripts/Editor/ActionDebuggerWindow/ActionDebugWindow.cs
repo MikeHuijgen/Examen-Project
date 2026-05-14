@@ -1,9 +1,14 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
 public class ActionDebugWindow : EditorWindow
 {
-    [MenuItem("Tools/Action Debug Window")]
+    private Dictionary<BaseAction, bool> _foldoutStates = new();
+    private bool _collapseFoldout;
+    private Vector2 _scrollPosition;
+
+    [MenuItem("Team 5 tools/Action Debug Window")]
     public static void OpenWindow()
     {
         GetWindow<ActionDebugWindow>("Action Debug");
@@ -12,8 +17,12 @@ public class ActionDebugWindow : EditorWindow
     private void OnGUI()
     {
         GUILayout.Label("Active Actions", EditorStyles.boldLabel);
+        GUILayout.Space(10);
+        GUILayout.Label("Expand action chain on creation");
+        _collapseFoldout = GUILayout.Toggle(_collapseFoldout, "");
+        GUILayout.Space(10);
 
-        if (Application.isPlaying == false)
+        if (!Application.isPlaying)
         {
             GUILayout.Label("Enter Play Mode to view actions.");
             return;
@@ -25,18 +34,93 @@ public class ActionDebugWindow : EditorWindow
             return;
         }
 
+        _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
+
         foreach (var action in ActionDebugRegistry.ActiveActions)
         {
-            if (action == null) continue;
+            if (action.Parent != null) continue;
 
-            GUILayout.BeginVertical("box");
-
-            GUILayout.Label(action.GetType().Name);
-            GUILayout.Label($"State: {action.actionState}");
-
-            GUILayout.EndVertical();
+            DrawActionRecursive(action, 0);
         }
 
+        EditorGUILayout.EndScrollView();
+
         Repaint();
+    }
+
+    private void DrawActionRecursive(BaseAction action, int indent)
+    {
+        if (action == null) return;
+
+        bool hasChildren = action.ChainedActions != null && action.ChainedActions.Count > 0;
+
+        if (!_foldoutStates.ContainsKey(action))
+        {
+            _foldoutStates[action] = _collapseFoldout;
+        }
+
+        GUILayout.BeginHorizontal();
+
+        GUILayout.Space(indent * 18);
+
+        GUI.backgroundColor = GetStateColor(action.actionState);
+
+        GUILayout.BeginVertical("box");
+
+        GUI.backgroundColor = Color.white;
+
+        GUILayout.Space(2);
+
+        GUILayout.BeginHorizontal();
+
+        if (hasChildren)
+        {
+            _foldoutStates[action] = EditorGUILayout.Foldout(
+                _foldoutStates[action],
+                "",
+                true
+            );
+        }
+        else
+        {
+            GUILayout.Space(16);
+        }
+
+        GUILayout.Label(
+            $"{action.GetType().Name}",
+            EditorStyles.boldLabel
+        );
+
+        GUILayout.FlexibleSpace();
+
+        GUILayout.Label(action.actionState.ToString());
+
+        GUILayout.EndHorizontal();
+
+        GUILayout.Space(2);
+
+        GUILayout.EndVertical();
+
+        GUILayout.EndHorizontal();
+
+        if (hasChildren && _foldoutStates[action])
+        {
+            foreach (var child in action.ChainedActions)
+            {
+                DrawActionRecursive(child, indent + 1);
+            }
+        }
+    }
+
+    private Color GetStateColor(BaseAction.ActionState state)
+    {
+        return state switch
+        {
+            BaseAction.ActionState.Running => new Color(0.35f, 0.55f, 1f, 1f),
+            BaseAction.ActionState.Waiting => new Color(1f, 0.7f, 0.2f, 1f),
+            BaseAction.ActionState.Completed => new Color(0.3f, 0.8f, 0.3f, 1f),
+            BaseAction.ActionState.Canceled => new Color(1f, 0.3f, 0.3f, 1f),
+            _ => new Color(0.25f, 0.25f, 0.25f, 1f)
+        };
     }
 }
