@@ -5,8 +5,17 @@ using UnityEngine.Events;
 
 public class AttackSystem : MonoBehaviour
 {
-    public bool IsIdle => _state == AttackState.Idle;
-    public UnityEvent OnEnemyAttackFinished = new UnityEvent();
+    [Header("Scriptable Objects")]
+    [SerializeField] private MatchDoubleDamageEffectChannel matchDoubleDamageEffectChannel;
+
+    [Header("System Class References")]
+    [SerializeField] private PlayerDodgeSystem playerDodgeSystem;
+    [SerializeField] private HealthComponent playerHealth;
+    [SerializeField] private HealthComponent opponentHealth;
+
+    [Header("Animators")]
+    [SerializeField] private Animator playerAnimator;
+    [SerializeField] private Animator enemyAnimator;
 
     public enum AttackState
     {
@@ -14,16 +23,21 @@ public class AttackSystem : MonoBehaviour
         Charging,
         Attacking
     }
+    [Header("Events")]
+    public UnityEvent OnEnemyAttackFinished = new UnityEvent();
 
-    [SerializeField] private MatchDoubleDamageEffectChannel matchDoubleDamageEffectChannel;
-    [SerializeField] private PlayerDodgeSystem playerDodgeSystem;
-    [SerializeField] private HealthComponent playerHealth;
-    [SerializeField] private HealthComponent opponentHealth;
-    [SerializeField] private Animator playerAnimator;
-    [SerializeField] private Animator enemyAnimator;
+    private CountdownTimer _chargeTimer;
+    private CountdownTimer _attackTimer;
+    private TimerManager _timer;
+    private BaseAttack _currentAttack;
+
+    private AttackState _state = AttackState.Idle;
 
     private AnimatorOverrideController _playerOverrideController;
     private AnimatorOverrideController _enemyOverrideController;
+
+    private Queue<BaseAttack> _attackQueue = new Queue<BaseAttack>();
+
     private const string _attackTriggerKeyString = "TriggerAttack";
     private const string _windUpAttackTriggerKeyString = "TriggerWindUpAttack";
     private const string _mainAttackTriggerKeyString = "TriggerMainAttack";
@@ -31,26 +45,11 @@ public class AttackSystem : MonoBehaviour
     private const string _enemyMainAttackKeyString = "MainAttack";
     private const string _enemyWindUpAttackKeyString = "WindUpAttack";
 
-    private AttackState _state = AttackState.Idle;
-
-    private CountdownTimer _chargeTimer;
-    private CountdownTimer _attackTimer;
-    private TimerManager _timer;
-    private BaseAttack _currentAttack;
-
-    private Queue<BaseAttack> _attackQueue = new Queue<BaseAttack>();
+    private bool IsIdle => _state == AttackState.Idle;
     private bool _hasExecutedAttack;
     private bool _hasExecutedCharge;
 
     private float _multiplier = 1f;
-
-    private void OnEnable() => matchDoubleDamageEffectChannel.OnEventRaised += HandleDoubleDamageEffect;
-    private void OnDisable() => matchDoubleDamageEffectChannel.OnEventRaised -= HandleDoubleDamageEffect;
-
-    private void HandleDoubleDamageEffect(float damageMultiplier)
-    {
-        _multiplier = damageMultiplier;
-    }
 
     private void Start()
     {
@@ -59,11 +58,6 @@ public class AttackSystem : MonoBehaviour
         _enemyOverrideController = new AnimatorOverrideController(enemyAnimator.runtimeAnimatorController);
         playerAnimator.runtimeAnimatorController = _playerOverrideController;
         enemyAnimator.runtimeAnimatorController = _enemyOverrideController;
-    }
-
-    public void QueueAttack(BaseAttack attack)
-    {
-        _attackQueue.Enqueue(attack);
     }
 
     private void Update()
@@ -76,14 +70,22 @@ public class AttackSystem : MonoBehaviour
 
             case AttackState.Charging:
                 HandleChargeExecution();
-                HandleCharging();
+                HandleChargeOutput();
                 break;
 
             case AttackState.Attacking:
                 HandleAttackExecution();
-                HandleAttacking();
+                HandleAttackOutput();
                 break;
         }
+    }
+
+    private void OnEnable() => matchDoubleDamageEffectChannel.OnEventRaised += HandleDoubleDamageEffect;
+    private void OnDisable() => matchDoubleDamageEffectChannel.OnEventRaised -= HandleDoubleDamageEffect;
+
+    public void QueueAttack(BaseAttack attack)
+    {
+        _attackQueue.Enqueue(attack);
     }
 
     public void CheckQueue()
@@ -164,7 +166,7 @@ public class AttackSystem : MonoBehaviour
         OnEnemyAttackFinished?.Invoke();
     }
 
-    private void HandleCharging()
+    private void HandleChargeOutput()
     {
         if (_currentAttack is OpponentAttack opponentAttack)
         {
@@ -174,7 +176,7 @@ public class AttackSystem : MonoBehaviour
         }
     }
 
-    private void HandleAttacking()
+    private void HandleAttackOutput()
     {
         if (!_timer.RunTimer(ref _attackTimer, _currentAttack.AttackDurationTime)) return;
         if (_currentAttack is not OpponentAttack opponentAttack)
@@ -208,5 +210,10 @@ public class AttackSystem : MonoBehaviour
             2 => SideType.Left,
             _ => throw new Exception("Invalid attack direction")
         };
+    }
+
+    private void HandleDoubleDamageEffect(float damageMultiplier)
+    {
+        _multiplier = damageMultiplier;
     }
 }
