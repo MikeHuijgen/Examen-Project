@@ -5,69 +5,116 @@ using UnityEngine;
 
 public class SwapAction : BaseAction<SwapActionParameters>
 {
-    public SwapAction(SwapActionParameters parameters) : base(parameters){}
+    private Sequence _sequence;
+
+    public SwapAction(SwapActionParameters parameters) : base(parameters) { }
 
     public override void Execute(Action<BaseAction> OnActionComplete)
     {
         on_action_complete = OnActionComplete;
         action_context = parameters.actionContext;
-        HandleSwapLogic();
+
+        if (IsCanceled) return;
+
+        _sequence = DOTween.Sequence();
+
+        HandleForwardSwap();
     }
 
-    private void HandleSwapLogic()
+    private void HandleForwardSwap()
     {
-        if(IsCanceled) return;
         var from = parameters.from;
         var to = parameters.to;
 
         action_context.GridSystem.SwapGridObjectsData(from, to);
-        action_context.BlockVisualManager.SwapVisuals
-        (
-            from, 
-            to, 
+
+        var tweens = action_context.BlockVisualManager.SwapVisualTweens(
+            from,
+            to,
             action_context.GridSystem.ConvertGridPositionToWorldPosition,
             action_context.LevelGridData.VisualSwapSpeed,
-            Ease.InOutQuad,
-            OnVisualSwapComplete
-        );        
+            Ease.InOutQuad
+        );
+
+        foreach (var t in tweens)
+        {
+            if (IsCanceled) break;
+            _sequence.Join(t);
+        }
+
+        _sequence.AppendCallback(OnForwardSwapComplete);
     }
 
-    private void HandleReverseSwapLogic()
+    private void OnForwardSwapComplete()
     {
-        if(IsCanceled) return;
-        var from = parameters.from;
-        var to = parameters.to;
+        if (IsCanceled) return;
 
-        action_context.GridSystem.SwapGridObjectsData(from, to);
-        action_context.BlockVisualManager.SwapVisuals
-        (
-            from, 
-            to, 
-            action_context.GridSystem.ConvertGridPositionToWorldPosition,
-            action_context.LevelGridData.VisualSwapSpeed,
-            Ease.InOutQuad,
-            OnReveredVisualSwapComplete
-        );   
-    }
-
-    private void OnVisualSwapComplete()
-    {
-        if(IsCanceled) return;
-
-        var matches = action_context.MatchDetector.CheckForAllMatches
-        (
+        var matches = action_context.MatchDetector.CheckForAllMatches(
             action_context.GridSystem.GetGridObjectArray,
             action_context.LevelGridData.GridWidth,
             action_context.LevelGridData.GridHeight
         );
-        if(matches.Count <= 0)
+
+        if (matches.Count > 0)
         {
-            HandleReverseSwapLogic();
+            action_context.GridActionProcessor.ProcessAction(
+                new MatchAction(new MatchActionParameters
+                {
+                    Matches = matches,
+                    actionContext = action_context
+                }),
+                _ => CompleteAction()
+            );
+
             return;
         }
 
-        action_context.GridActionProcessor.ProcessAction(new MatchAction(new MatchActionParameters{Matches = matches, actionContext = action_context}), _ => {CompleteAction();});
+        HandleReverseSwap();
     }
 
-    private void OnReveredVisualSwapComplete() => CompleteAction();
+    private void HandleReverseSwap()
+    {
+        if (IsCanceled) return;
+
+        var from = parameters.from;
+        var to = parameters.to;
+
+        action_context.GridSystem.SwapGridObjectsData(from, to);
+
+        var tweens = action_context.BlockVisualManager.SwapVisualTweens(
+            from,
+            to,
+            action_context.GridSystem.ConvertGridPositionToWorldPosition,
+            action_context.LevelGridData.VisualSwapSpeed,
+            Ease.InOutQuad
+        );
+
+        var reverseSequence = DOTween.Sequence();
+
+        foreach (var t in tweens)
+        {
+            if (IsCanceled) break;
+            reverseSequence.Join(t);
+        }
+
+        reverseSequence.OnComplete(OnReverseSwapComplete);
+
+        _sequence = reverseSequence;
+    }
+
+    private void OnReverseSwapComplete()
+    {
+        if (IsCanceled) return;
+        CompleteAction();
+    }
+
+    public override void Cancel()
+    {
+        base.Cancel();
+
+        if (_sequence != null && _sequence.IsActive())
+        {
+            _sequence.Kill();
+        }
+    }
 }

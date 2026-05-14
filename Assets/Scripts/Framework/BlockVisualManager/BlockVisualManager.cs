@@ -66,25 +66,20 @@ public class BlockVisualManager : MonoBehaviour
         _ActiveBlockVisuals.Remove(gridObject);
     }
 
-    public void SwapVisuals(GridObject gridObjectA, GridObject gridObjectB, Func<GridPosition, Vector3> GetWorldPosition , float tweenSpeed, Ease ease, Action OnVisualSwapComplete)
+    public Tween[] SwapVisualTweens(GridObject gridObjectA, GridObject gridObjectB, Func<GridPosition, Vector3> GetWorldPosition , float tweenSpeed, Ease ease)
     {
         if(!_ActiveBlockVisuals.TryGetValue(gridObjectA, out var targetVisualA) || !_ActiveBlockVisuals.TryGetValue(gridObjectB, out var targetVisualB)) 
         {
             Debug.LogWarning("One or both of the grid objects are not a active block visual");
-            return;
+            return null;
         }
-
-        var seq = DOTween.Sequence();
 
         var newPositionA = GetWorldPosition(gridObjectA.GetGridPosition);
         var newPositionB = GetWorldPosition(gridObjectB.GetGridPosition);
 
-        seq.Join(targetVisualA.transform.DOMove(newPositionA, tweenSpeed).SetEase(ease));
-        seq.Join(targetVisualB.transform.DOMove(newPositionB, tweenSpeed).SetEase(ease));
-        seq.OnComplete(() =>
-        {
-            OnVisualSwapComplete();
-        });  
+        var tweens = new Tween[]{targetVisualA.transform.DOMove(newPositionA, tweenSpeed).SetEase(ease), targetVisualB.transform.DOMove(newPositionB, tweenSpeed).SetEase(ease)};
+
+        return tweens;
     }
 
     public Tween CreateVisualMoveTween(GridObject gridObject, Vector3 newPosition, float tweenSpeed, Ease ease, float tweenStrength)
