@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MatchAction : BaseAction<MatchActionParameters>
 {
-    public MatchAction(MatchActionParameters parameters) : base(parameters){}
+    public MatchAction(MatchActionParameters parameters) : base(parameters) { }
 
     public override void Execute(Action<BaseAction> onActionComplete)
     {
@@ -24,11 +24,7 @@ public class MatchAction : BaseAction<MatchActionParameters>
                 {
                     actionContext = action_context,
                 }
-            ),
-            _ =>
-            {
-                CompleteAction();
-            }
+            ), _ => { CompleteAction(); }
         );
     }
 
@@ -36,7 +32,8 @@ public class MatchAction : BaseAction<MatchActionParameters>
     {
         foreach (var match in matches)
         {
-            if(match.MatchEffect == null) continue;
+            if (IsCanceled) break;
+            if (match.MatchEffect == null) continue;
             match.MatchEffect.ActivateEffect();
         }
     }

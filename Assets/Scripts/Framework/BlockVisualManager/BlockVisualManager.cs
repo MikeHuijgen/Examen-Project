@@ -74,20 +74,24 @@ public class BlockVisualManager : MonoBehaviour
             return;
         }
 
+        var seq = DOTween.Sequence();
+
         var newPositionA = GetWorldPosition(gridObjectA.GetGridPosition);
         var newPositionB = GetWorldPosition(gridObjectB.GetGridPosition);
 
-        targetVisualA.transform.DOMove(newPositionA, tweenSpeed).SetEase(ease);
-        var tween = targetVisualB.transform.DOMove(newPositionB, tweenSpeed).SetEase(ease);
-
-        tween.OnComplete(() => OnVisualSwapComplete());
+        seq.Join(targetVisualA.transform.DOMove(newPositionA, tweenSpeed).SetEase(ease));
+        seq.Join(targetVisualB.transform.DOMove(newPositionB, tweenSpeed).SetEase(ease));
+        seq.OnComplete(() =>
+        {
+            OnVisualSwapComplete();
+        });  
     }
 
     public Tween CreateVisualMoveTween(GridObject gridObject, Vector3 newPosition, float tweenSpeed, Ease ease, float tweenStrength)
     {
         if(!_ActiveBlockVisuals.TryGetValue(gridObject, out var targetVisual)) return null;
 
-        return targetVisual.transform.DOMove(newPosition, tweenSpeed).SetEase(ease, tweenStrength);        
+        return targetVisual.transform.DOMove(newPosition, tweenSpeed).SetEase(ease, tweenStrength).Pause();        
     }
 
     public void DisableMatchesVisuals(HashSet<Match> matches)

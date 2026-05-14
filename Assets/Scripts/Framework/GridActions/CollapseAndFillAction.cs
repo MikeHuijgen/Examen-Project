@@ -11,6 +11,7 @@ public class CollapseAndFillAction : BaseAction<CollapseAndFillActionParameters>
     private int _gridHeight;
     private int _gridWidth;
     private GridObject[,] _grid;
+    private Sequence _sequence;
 
 
     public CollapseAndFillAction(CollapseAndFillActionParameters parameters) : base(parameters) { }
@@ -23,27 +24,40 @@ public class CollapseAndFillAction : BaseAction<CollapseAndFillActionParameters>
         _gridHeight = action_context.LevelGridData.GridHeight;
         _gridWidth = action_context.LevelGridData.GridWidth;
         _grid = action_context.GridSystem.GetGridObjectArray;
-        
+
 
         _tweens = new List<Tween>();
 
         for (int x = 0; x < _gridWidth; x++)
         {
+            if (IsCanceled) break;
+
             HandleCollapse(x);
             HandleFill(x);
         }
 
-        if (_tweens.Count > 0)
-        {
-            var seq = DOTween.Sequence();
-            foreach (var t in _tweens) seq.Join(t);
+        _sequence = DOTween.Sequence();
 
-            seq.OnComplete(() => CheckForNewMatchAfterCollapse());
-        }
-        else
+        if (_tweens.Count <= 0)
         {
             CheckForNewMatchAfterCollapse();
+            return;
         }
+
+        foreach (var t in _tweens)
+        {
+            if (IsCanceled) break;
+            _sequence.Join(t);
+        }
+
+        _sequence.OnComplete(() =>
+        {
+            if (IsCanceled) return;
+            CheckForNewMatchAfterCollapse();
+        });
+
+        _sequence.Play();
+
     }
 
     private void HandleCollapse(int x)
@@ -52,6 +66,7 @@ public class CollapseAndFillAction : BaseAction<CollapseAndFillActionParameters>
 
         for (var y = 0; y < _gridHeight; y++)
         {
+            if (IsCanceled) break;
             var tile = _grid[x, y];
             var profile = tile.GetMatch3BlockProfile;
 
@@ -65,6 +80,7 @@ public class CollapseAndFillAction : BaseAction<CollapseAndFillActionParameters>
 
         for (var y = 0; y < _gridHeight; y++)
         {
+            if (IsCanceled) break;
             var targetGridObject = _grid[x, y];
 
             if (targetGridObject.GetMatch3BlockProfile != null) continue;
@@ -95,6 +111,7 @@ public class CollapseAndFillAction : BaseAction<CollapseAndFillActionParameters>
     {
         for (var y = 0; y < _gridHeight; y++)
         {
+            if (IsCanceled) break;
             var targetGrid = _grid[x, y];
             if (targetGrid.GetMatch3BlockProfile != null) continue;
 
@@ -116,6 +133,7 @@ public class CollapseAndFillAction : BaseAction<CollapseAndFillActionParameters>
 
     private void CheckForNewMatchAfterCollapse()
     {
+        if (IsCanceled) return;
         var matches = action_context.MatchDetector.CheckForAllMatches(_grid, _gridWidth, _gridHeight);
         if (matches.Count <= 0)
         {
@@ -123,6 +141,16 @@ public class CollapseAndFillAction : BaseAction<CollapseAndFillActionParameters>
             return;
         }
 
-        action_context.GridActionProcessor.ProcessAction(new MatchAction(new MatchActionParameters{Matches = matches, actionContext = action_context}), _ => {CompleteAction();});
+        action_context.GridActionProcessor.ProcessAction(new MatchAction(new MatchActionParameters { Matches = matches, actionContext = action_context }), _ => { CompleteAction(); });
+    }
+
+    public override void Cancel()
+    {
+        base.Cancel();
+
+        if (_sequence != null && _sequence.IsActive())
+        {
+            _sequence.Kill();
+        }
     }
 }

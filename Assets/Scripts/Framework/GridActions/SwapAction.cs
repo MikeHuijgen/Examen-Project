@@ -14,22 +14,9 @@ public class SwapAction : BaseAction<SwapActionParameters>
         HandleSwapLogic();
     }
 
-    private bool CheckForMatch(out HashSet<Match> matches)
-    {
-        matches = action_context.MatchDetector.CheckForAllMatches
-        (
-            action_context.GridSystem.GetGridObjectArray,
-            action_context.LevelGridData.GridWidth,
-            action_context.LevelGridData.GridHeight
-        );
-        
-        if (matches.Count <= 0) return false;
-        
-        return true;
-    }
-
     private void HandleSwapLogic()
     {
+        if(IsCanceled) return;
         var from = parameters.from;
         var to = parameters.to;
 
@@ -47,6 +34,7 @@ public class SwapAction : BaseAction<SwapActionParameters>
 
     private void HandleReverseSwapLogic()
     {
+        if(IsCanceled) return;
         var from = parameters.from;
         var to = parameters.to;
 
@@ -59,12 +47,20 @@ public class SwapAction : BaseAction<SwapActionParameters>
             action_context.LevelGridData.VisualSwapSpeed,
             Ease.InOutQuad,
             OnReveredVisualSwapComplete
-        );        
+        );   
     }
 
     private void OnVisualSwapComplete()
     {
-        if(!CheckForMatch(out var matches))
+        if(IsCanceled) return;
+
+        var matches = action_context.MatchDetector.CheckForAllMatches
+        (
+            action_context.GridSystem.GetGridObjectArray,
+            action_context.LevelGridData.GridWidth,
+            action_context.LevelGridData.GridHeight
+        );
+        if(matches.Count <= 0)
         {
             HandleReverseSwapLogic();
             return;
