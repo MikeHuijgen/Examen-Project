@@ -77,6 +77,7 @@ public class AttackSystem : MonoBehaviour
         {
             playerHealth.TakeDamage(_currentAttack.Damage);
             _state = AttackState.Idle;
+            return;
         }
 
         SideType requiredDodge = GetRequiredDodge(opponentAttack.Direction);

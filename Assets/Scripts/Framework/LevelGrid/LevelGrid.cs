@@ -15,7 +15,7 @@ public class LevelGrid : MonoBehaviour
     private GridHit? _currentSelectedGridPosition;
     public static event Action<BaseAttack> OnMatchDestroyed;
     private bool _allowInput = true;
-
+    private ActionContext _actionContext;
 
     private void Awake()
     {
@@ -34,7 +34,18 @@ public class LevelGrid : MonoBehaviour
     {
         _gridSystem.GenerateGrid();
         _gridSystem.CreateGridTileVisuals(levelGridData.GridTileVisual, tileVisualHolder);
-        ReshuffleGrid();
+
+        _actionContext = new ActionContext
+        {
+            GridSystem = _gridSystem, 
+            BlockVisualManager = blockVisualManager,
+            MatchDetector = _matchDetector,
+            LevelGridData = levelGridData,
+            GridActionProcessor = gridActionProcessor,
+            Match3BlockProfileContainer = match3BlockProfileContainer
+        };
+        
+        gridActionProcessor.ProcessAction(new ReshuffleAction(new ReshuffleActionParameters{actionContext = _actionContext}));
 
         CharacterInput.Instance.OnNewFingerDownInput += OnNewFingerDownInput;
         CharacterInput.Instance.OnNewFingerUpInput += OnNewFingerUpInput;
@@ -124,7 +135,21 @@ public class LevelGrid : MonoBehaviour
             return; 
         }
 
-        var actionContext = new ActionContext
+        var swapParameters = new SwapActionParameters
+        {  
+            actionContext = _actionContext,
+            from = beginGridObject, 
+            to = endGridObject, 
+        };
+
+        gridActionProcessor.ProcessAction(new SwapAction(swapParameters));
+
+        _allowInput = true;
+    }
+
+    public void ShuffleGridOnHit()
+    {
+        _actionContext = new ActionContext
         {
             GridSystem = _gridSystem, 
             BlockVisualManager = blockVisualManager,
@@ -133,61 +158,7 @@ public class LevelGrid : MonoBehaviour
             GridActionProcessor = gridActionProcessor,
             Match3BlockProfileContainer = match3BlockProfileContainer
         };
-
-        var swapParameters = new SwapActionParameters
-        {  
-            actionContext = actionContext,
-            from = beginGridObject, 
-            to = endGridObject, 
-        };
-
-        gridActionProcessor.ProcessAction(new SwapAction(swapParameters));
-
-        CheckForPossibleMoves();
-
-        _allowInput = true;
-    }
-
-    private void CheckForPossibleMoves()
-    {
-        var grid = _gridSystem.GetGridObjectArray;
-        if (_matchDetector.PlayerHasPossibleMoves(grid, _gridSystem.SwapGridObjectsData)) return;
-
-        foreach (var gridObject in grid)
-        {
-            blockVisualManager.TryDisableVisualOnGridObject(gridObject);
-            gridObject.SetMatch3BlockProfile(null);
-        }
-
-        ReshuffleGrid();
-    }
-
-    private void ReshuffleGrid()
-    {
-        var grid = _gridSystem.GetGridObjectArray;
-        for (var x = 0; x < levelGridData.GridWidth; x++)
-        {
-            for (int y = 0; y < levelGridData.GridHeight; y++)
-            {
-                var newMatch3Profile = _matchDetector.GetRandomValidMatch3Profile(match3BlockProfileContainer.match3BlockProfiles, grid, x, y);
-                if (!blockVisualManager.TryEnableVisualByProfile(newMatch3Profile, grid[x, y], _gridSystem.ConvertGridPositionToWorldPosition)) continue;
-                newMatch3Profile.Init();
-                grid[x, y].SetMatch3BlockProfile(newMatch3Profile);
-            }
-        }
-
-        CheckForPossibleMoves();
-    }
-
-    public void OnHitShuffleGrid()
-    {
-        var grid = _gridSystem.GetGridObjectArray;
-        foreach (var gridObject in grid)
-        {
-            blockVisualManager.TryDisableVisualOnGridObject(gridObject);
-            gridObject.SetMatch3BlockProfile(null);
-        }
-
-        ReshuffleGrid();        
+        
+        gridActionProcessor.ProcessAction(new ReshuffleAction(new ReshuffleActionParameters{actionContext = _actionContext}));        
     }
 }
