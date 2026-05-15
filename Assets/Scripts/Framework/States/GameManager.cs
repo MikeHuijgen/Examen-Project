@@ -21,7 +21,6 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(0.5f); 
         Time.timeScale = 0f;
         musicScource.ignoreListenerPause = true;
-        animator.updateMode = AnimatorUpdateMode.UnscaledTime;
     }
 
     private void ActiveGame()
@@ -41,10 +40,6 @@ public class GameManager : MonoBehaviour
 
             case GameStates.pause:
                 StartCoroutine(FreezeGame());     
-                break;
-
-            case GameStates.death:
-                StartCoroutine(FreezeGame()); 
                 break;
         }
     }

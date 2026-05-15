@@ -45,6 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21a9a51523663e54698a4dcb59fc9e90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TemporaryCharacterInput
+  channel: {fileID: 11400000, guid: f8715f1dadf61544299c98d16e538d11, type: 2}
   _playerAttackTest: {fileID: 0}
   _playerInput: {fileID: 2287925830614108618}
 --- !u!114 &2287925830614108618
