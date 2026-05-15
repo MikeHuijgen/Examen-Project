@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: LeftPunch
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
   Damage: 5
-  AttackAnim: {fileID: 0}
+  AttackAnim: {fileID: -4573011543401062269, guid: 9dbdbd5c301daa743862d758fd813839, type: 3}
   AttackDurationTime: 0.5
   Direction: 0
-  ChargeAnimation: {fileID: 0}
+  ChargeAnimation: {fileID: 7094167060038029395, guid: 9dbdbd5c301daa743862d758fd813839, type: 3}
   ChargeDurationTime: 1.5

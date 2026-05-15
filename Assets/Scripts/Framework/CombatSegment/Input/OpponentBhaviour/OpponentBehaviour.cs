@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class OpponentBehaviour : MonoBehaviour
@@ -7,18 +8,17 @@ public class OpponentBehaviour : MonoBehaviour
 
     [SerializeField] private List<OpponentAttack> opponentAttacks;
     [SerializeField] private List<GameObject> attackDirectionWarnings;
+    [SerializeField] private OnGameOverChanel channel;
 
     [SerializeField] private float minAttackDelayTime;
     [SerializeField] private float maxAttackDelayTime;
-    [SerializeField] private TutorialManager tutorialManager;
-    [SerializeField] private GameOver gameOver;
 
     private CountdownTimer _idleTimer;
     private TimerManager _timer;
 
+    private bool _allowAttack = true;
+
     private float _currentDelay;
-    private bool _finishedTutorial;
-    private bool _gameOver;
 
     private void Start()
     {
@@ -27,46 +27,24 @@ public class OpponentBehaviour : MonoBehaviour
         SetNewDelay();
     }
 
-    private void OnEnable()
-    {
-        tutorialManager.OnTutorialFinished += () => _finishedTutorial = true;
-        gameOver.OnGameOver += () => _gameOver = true;
-    }
-    private void OnDisable()
-    {
-        tutorialManager.OnTutorialFinished -= () => _finishedTutorial = true;
-        gameOver.OnGameOver -= () => _gameOver = true;
-    }
-
     private void Update()
     {
-        if (!_finishedTutorial || _gameOver) return;
+        if (!_timer.RunTimer(ref _idleTimer, _currentDelay) || !_allowAttack) return;
+        HandleAttackDelay();
+    }
+    private void OnEnable() => channel.OnGameOver += HandleGameOver ;
+    private void OnDisable() => channel.OnGameOver -= HandleGameOver;
 
-        if (!attackSystem.IsIdle)
-        {
-            int direction = attackSystem.CurrentAttackDirection();
-
-            if (direction >= 0 && direction < attackDirectionWarnings.Count)
-            {
-                attackDirectionWarnings[direction].SetActive(true);
-            }
-        }
-        else
-        {
-            attackDirectionWarnings.ForEach(warning => warning.SetActive(false));
-            HandleAttackDelay();
-        }
+    private void HandleGameOver()
+    {
+        _allowAttack = false;
     }
 
     private void HandleAttackDelay()
     {
-        if (!_timer.RunTimer(ref _idleTimer, _currentDelay))
-            return;
-
         var attack = GetAttack();
+        attackDirectionWarnings[attack.Direction].SetActive(true);
         attackSystem.TriggerAttack(attack);
-
-        SetNewDelay();
     }
 
     private void SetNewDelay()
@@ -77,5 +55,17 @@ public class OpponentBehaviour : MonoBehaviour
     private OpponentAttack GetAttack()
     {
         return opponentAttacks[Random.Range(0, opponentAttacks.Count)];
+    }
+
+    public void ResetAllAttackWarningDirections()
+    {
+        attackDirectionWarnings.ForEach(warningObject => warningObject.SetActive(false));
+        SetNewDelay();
+    }
+
+    public void ResetTimer()
+    {
+        _idleTimer.ResetTimer();
+        SetNewDelay();
     }
 }
