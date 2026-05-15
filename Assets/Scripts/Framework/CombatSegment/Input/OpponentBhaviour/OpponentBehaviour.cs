@@ -29,7 +29,7 @@ public class OpponentBehaviour : MonoBehaviour
 
     private void Update()
     {
-        if (!_timer.RunTimer(ref _idleTimer, _currentDelay)) return;
+        if (!_timer.RunTimer(ref _idleTimer, _currentDelay) || !_allowAttack) return;
         HandleAttackDelay();
     }
     private void OnEnable() => channel.OnGameOver += HandleGameOver ;
