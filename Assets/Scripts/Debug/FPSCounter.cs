@@ -3,21 +3,25 @@ using TMPro;
 
 public class FPSCounter : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI FPSText;
-    private float updateInterval = 1f;
-    private float _timeSinceLastUpdate = 0f;
+    [SerializeField] private TextMeshProUGUI fpsText;
+    [SerializeField] private float refreshRate = 0.5f;
 
-    private float _fps;
+    private int _frameCount;
+    private float _timer;
 
-    void Update()
+    private void Update()
     {
-        _timeSinceLastUpdate += Time.deltaTime;
+        _frameCount++;
+        _timer += Time.unscaledDeltaTime;
 
-        if (_timeSinceLastUpdate >= updateInterval)
+        if (_timer >= refreshRate)
         {
-            int fps = Mathf.RoundToInt(1f / Time.deltaTime);
-            FPSText.text = $"FPS {fps}";
-            _timeSinceLastUpdate = 0f;
+            float fps = _frameCount / _timer;
+
+            fpsText.text = $"FPS: {Mathf.RoundToInt(fps)}";
+
+            _frameCount = 0;
+            _timer = 0f;
         }
     }
 }
