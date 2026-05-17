@@ -2,9 +2,11 @@ using System;
 using UnityEngine;
 public class GameOver : MonoBehaviour
 {
-    public event Action OnGameOver;
+    [SerializeField] OnGameOverChanel gameOverChanel;
     [SerializeField] GameObject _gameOverScreen;
     [SerializeField] GameObject _victoryScreen;
+
+    public Action putOff;
 
     void Start()
     {
@@ -14,13 +16,15 @@ public class GameOver : MonoBehaviour
 
     public void PlayerDead()
     {
+        gameOverChanel.RaceEvent();
         _gameOverScreen.SetActive(true);
-        OnGameOver?.Invoke();
     }
 
     public void EnemyDead()
     {
+        gameOverChanel.RaceEvent();
         _victoryScreen?.SetActive(true);
-        OnGameOver?.Invoke();
     }
+
+    public void OnDead() => putOff?.Invoke();
 }

@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 41417d9c881d14a459fcc7e1679c9982, type: 3}
+  m_Name: MatchEffectProfileGreen
+  m_EditorClassIdentifier: Assembly-CSharp::MatchAttackEffect
+  Attack: {fileID: 11400000, guid: 3ff87686a0af11244a18e1fb63ed4819, type: 2}
+  effectChannel: {fileID: 11400000, guid: e962fad93546c6e4eb173102813c237d, type: 2}

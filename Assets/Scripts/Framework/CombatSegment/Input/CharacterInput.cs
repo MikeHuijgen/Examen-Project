@@ -13,12 +13,11 @@ public class CharacterInput : MonoBehaviour
     public event Action<Vector2> OnNewFingerUpInput;
     public event Action<SideType> OnDodgeInput;
 
+    private bool _allowInput = true;
+
+    [SerializeField] private OnGameOverChanel channel;
     [SerializeField] private PlayerAttackTest _playerAttackTest;
     [SerializeField] private PlayerInput _playerInput;
-    [SerializeField] private TutorialManager tutorialManager;
-    [SerializeField] private GameOver gameOver;
-    private bool _finishedTutorial;
-    private bool _gameOver;
 
     private readonly Dictionary<string, SideType> _dodgeBindings = new()
     {
@@ -50,43 +49,44 @@ public class CharacterInput : MonoBehaviour
     {
         foreach (var pair in _dodgeHandlers) Bind(pair.Key, pair.Value);
 
+        channel.OnGameOver += HandleGameOver;
         EnhancedTouchSupport.Enable();
         Touch.onFingerDown += OnFingerDown;
         Touch.onFingerUp += OnFingerUp;
-        tutorialManager.OnTutorialFinished += () => _finishedTutorial = true;
-        gameOver.OnGameOver += () => _gameOver = true;
     }
 
     private void OnDisable()
     {
         foreach (var pair in _dodgeHandlers) Unbind(pair.Key, pair.Value);
 
+        channel.OnGameOver -= HandleGameOver;
         EnhancedTouchSupport.Disable();
         Touch.onFingerDown -= OnFingerDown;
         Touch.onFingerUp -= OnFingerUp;
-        tutorialManager.OnTutorialFinished -= () => _finishedTutorial = true;
-        gameOver.OnGameOver -= () => _gameOver = true;
     }
-
+    private void HandleGameOver()
+    {
+        _allowInput = false;
+    }
     private void Bind(string actionName, Action<InputAction.CallbackContext> handler) => _playerInput.actions[actionName].performed += handler;
 
     private void Unbind(string actionName, Action<InputAction.CallbackContext> handler) => _playerInput.actions[actionName].performed -= handler;
 
     public void OnDodgeInputDetected(SideType dodgeSide)
-    {
-        if (!_finishedTutorial || _gameOver) return;
-        OnDodgeInput?.Invoke(dodgeSide);
+    { 
+        if (!_allowInput) return;
+        OnDodgeInput?.Invoke(dodgeSide); 
     }
-    
+
     private void OnFingerDown(Finger finger)
     {
-        if (!_finishedTutorial || _gameOver) return;
+        if (!_allowInput) return;
         OnNewFingerDownInput?.Invoke(finger.screenPosition);
     }
 
     private void OnFingerUp(Finger finger)
     {
-        if (!_finishedTutorial || _gameOver) return;
+        if (!_allowInput) return;
         OnNewFingerUpInput?.Invoke(finger.screenPosition);
     }
 }
