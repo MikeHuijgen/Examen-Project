@@ -1,17 +1,13 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class TutorialManager : MonoBehaviour
 {
-    public event Action OnTutorialFinished;
+    public UnityEvent OnTutorialFinished = new UnityEvent();
     [SerializeField] private GameObject[] tutorialSlides;
     private int _slideIndex;
     private GameObject _currentActiveSlide;
-
-    private void Awake() 
-    {
-        //DontDestroyOnLoad(this);
-    }
 
     private void Start()
     {
