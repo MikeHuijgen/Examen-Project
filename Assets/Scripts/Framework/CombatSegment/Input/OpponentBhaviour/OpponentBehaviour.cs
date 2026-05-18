@@ -16,7 +16,7 @@ public class OpponentBehaviour : MonoBehaviour
     private CountdownTimer _idleTimer;
     private TimerManager _timer;
 
-    private bool _allowAttack = true;
+    private bool _allowAttack;
 
     private float _currentDelay;
 
@@ -35,10 +35,7 @@ public class OpponentBehaviour : MonoBehaviour
     private void OnEnable() => channel.OnGameOver += HandleGameOver ;
     private void OnDisable() => channel.OnGameOver -= HandleGameOver;
 
-    private void HandleGameOver()
-    {
-        _allowAttack = false;
-    }
+    private void HandleGameOver() => SetAllowAttack(false);
 
     private void HandleAttackDelay()
     {
@@ -68,4 +65,6 @@ public class OpponentBehaviour : MonoBehaviour
         _idleTimer.ResetTimer();
         SetNewDelay();
     }
+
+    public void SetAllowAttack(bool value) => _allowAttack = value;
 }
