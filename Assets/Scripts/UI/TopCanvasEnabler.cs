@@ -8,11 +8,11 @@ public class TopCanvasEnabler : MonoBehaviour
     private void OnEnable()
     {
         tutorialManager.OnTutorialFinished += () => container.SetActive(true);
-        gameOver.OnGameOver += () => container.SetActive(false);
+        gameOver.putOff += () => container.SetActive(false);
     }
     private void OnDisable()
     {
         tutorialManager.OnTutorialFinished -=  () => container.SetActive(true);
-        gameOver.OnGameOver -= () => container.SetActive(false);
+        gameOver.putOff -= () => container.SetActive(false);
     }
 }
