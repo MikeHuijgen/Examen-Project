@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 21d82b4bdc23e804c94ec80611808030, type: 3}
   m_Name: LeftPunch
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  Damage: 5
+  Damage: 25
   AttackAnim: {fileID: -4573011543401062269, guid: 9dbdbd5c301daa743862d758fd813839, type: 3}
   AttackDurationTime: 0.5
   Direction: 0

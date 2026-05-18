@@ -44,7 +44,7 @@ public class OpponentBehaviour : MonoBehaviour
     {
         var attack = GetAttack();
         attackDirectionWarnings[attack.Direction].SetActive(true);
-        attackSystem.TriggerAttack(attack);
+        attackSystem.QueueAttack(attack);
     }
 
     private void SetNewDelay()
