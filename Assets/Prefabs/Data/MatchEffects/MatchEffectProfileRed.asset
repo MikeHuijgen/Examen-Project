@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 41417d9c881d14a459fcc7e1679c9982, type: 3}
   m_Name: MatchEffectProfileRed
   m_EditorClassIdentifier: Assembly-CSharp::MatchAttackEffect
+  BreakVFX: {fileID: 530070218518211748, guid: 431863e01880ccd4cb6367627583ff5a, type: 3}
   Attack: {fileID: 11400000, guid: 705d221ffb1a0fa4a9caa1252e033103, type: 2}
-  effectChannel: {fileID: 11400000, guid: e962fad93546c6e4eb173102813c237d, type: 2}
+  EffectChannel: {fileID: 11400000, guid: e962fad93546c6e4eb173102813c237d, type: 2}

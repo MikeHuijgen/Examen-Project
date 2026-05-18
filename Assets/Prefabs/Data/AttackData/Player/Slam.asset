@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BaseAttack
   Damage: 8
   AttackAnim: {fileID: 4615838938742925744, guid: 58e30cf79fe544840b4eeefbfb14bbea, type: 3}
-  AttackDurationTime: 0.6
+  AttackDurationTime: 0.5

@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9dda21adaa5b38a438ce5c2cfda3e3db, type: 3}
   m_Name: MatchEffectDubbleDamageOrange
   m_EditorClassIdentifier: Assembly-CSharp::MatchDoubleDamageEffect
+  BreakVFX: {fileID: 2897397927221182201, guid: a7581a51835f86a4591602531317a11c, type: 3}
   Multiplier: 1.5
-  effectChannel: {fileID: 11400000, guid: 99e21b2cdec123548a1efec720cd3634, type: 2}
+  EffectChannel: {fileID: 11400000, guid: 99e21b2cdec123548a1efec720cd3634, type: 2}

@@ -45,7 +45,7 @@ public class HealthBar : MonoBehaviour
             _currentDelayTime = delayTimer;
         }
     }
-    public void SetSliderMaxValue(int maxHealth)
+    public void SetSliderMaxValue(float maxHealth)
     {
         healthSlider.maxValue = maxHealth;
         delaySlider.maxValue = maxHealth;
@@ -54,7 +54,7 @@ public class HealthBar : MonoBehaviour
         fillD.color = gradientDelay.Evaluate(1f);
     }
 
-     public void UpdateHealthUI(int currentHealth)
+     public void UpdateHealthUI(float currentHealth)
     {
         sliderTextHealth.text = (currentHealth).ToString();
         healthSlider.value = currentHealth;

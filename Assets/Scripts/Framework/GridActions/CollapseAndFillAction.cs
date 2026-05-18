@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using DG.Tweening;
@@ -7,36 +8,66 @@ public class CollapseAndFillAction : BaseAction<CollapseAndFillActionParameters>
 {
     private float _spawnOffset = 5f;
     private List<Tween> _tweens;
+    private int _gridHeight;
+    private int _gridWidth;
+    private GridObject[,] _grid;
+    private Sequence _sequence;
+
 
     public CollapseAndFillAction(CollapseAndFillActionParameters parameters) : base(parameters) { }
 
-    public override async Task Execute()
+    public override void Execute(Action<BaseAction> onActionComplete)
     {
+        on_action_complete = onActionComplete;
+        action_context = parameters.actionContext;
+
+        _gridHeight = action_context.LevelGridData.GridHeight;
+        _gridWidth = action_context.LevelGridData.GridWidth;
+        _grid = action_context.GridSystem.GetGridObjectArray;
+
+
         _tweens = new List<Tween>();
-        var grid = parameters.Grid;
 
-        for (int x = 0; x < parameters.GridWidth; x++)
+        for (int x = 0; x < _gridWidth; x++)
         {
-            HandleCollapse(grid, x);
-            HandleFill(grid, x);
+            if (IsCanceled) break;
+
+            HandleCollapse(x);
+            HandleFill(x);
         }
 
-        if (_tweens.Count > 0)
-        {
-            var seq = DOTween.Sequence();
-            foreach (var t in _tweens) seq.Join(t);
+        _sequence = DOTween.Sequence();
 
-            await Task.WhenAll(seq.AsyncWaitForCompletion());
+        if (_tweens.Count <= 0)
+        {
+            CheckForNewMatchAfterCollapse();
+            return;
         }
+
+        foreach (var t in _tweens)
+        {
+            if (IsCanceled) break;
+            _sequence.Join(t);
+        }
+
+        _sequence.OnComplete(() =>
+        {
+            if (IsCanceled) return;
+            CheckForNewMatchAfterCollapse();
+        });
+
+        _sequence.Play();
+
     }
 
-    private void HandleCollapse(GridObject[,] grid, int x)
+    private void HandleCollapse(int x)
     {
         var fallables = new List<(GridObject tile, Match3BlockProfile profile)>();
 
-        for (var y = 0; y < parameters.GridHeight; y++)
+        for (var y = 0; y < _gridHeight; y++)
         {
-            var tile = grid[x, y];
+            if (IsCanceled) break;
+            var tile = _grid[x, y];
             var profile = tile.GetMatch3BlockProfile;
 
             if (profile == null || !profile.HasRule("CollapseAndFill")) continue;
@@ -47,9 +78,10 @@ public class CollapseAndFillAction : BaseAction<CollapseAndFillActionParameters>
 
         var fallIndex = 0;
 
-        for (var y = 0; y < parameters.GridHeight; y++)
+        for (var y = 0; y < _gridHeight; y++)
         {
-            var targetGridObject = grid[x, y];
+            if (IsCanceled) break;
+            var targetGridObject = _grid[x, y];
 
             if (targetGridObject.GetMatch3BlockProfile != null) continue;
 
@@ -59,12 +91,12 @@ public class CollapseAndFillAction : BaseAction<CollapseAndFillActionParameters>
 
             targetGridObject.SetMatch3BlockProfile(tile.profile);
 
-            parameters.MoveVisualBindingCallback(tile.tile, targetGridObject);
+            action_context.BlockVisualManager.MoveVisualBinding(tile.tile, targetGridObject);
 
-            var tween = parameters.CreateVisualMoveTweenCallback(
+            var tween = action_context.BlockVisualManager.CreateVisualMoveTween(
                 targetGridObject,
-                targetGridObject.GetWorldPosition(parameters.GridCellWidth, parameters.GridCellHeight),
-                parameters.VisualFallSpeed,
+                targetGridObject.GetWorldPosition(action_context.LevelGridData.GridCellWidth, action_context.LevelGridData.GridCellHeight),
+                action_context.LevelGridData.VisualFallSpeed,
                 Ease.OutBounce,
                 .2f
             );
@@ -75,22 +107,50 @@ public class CollapseAndFillAction : BaseAction<CollapseAndFillActionParameters>
         }
     }
 
-    private void HandleFill(GridObject[,] grid, int x)
+    private void HandleFill(int x)
     {
-        for (var y = 0; y < parameters.GridHeight; y++)
+        for (var y = 0; y < _gridHeight; y++)
         {
-            var targetGrid = grid[x, y];
+            if (IsCanceled) break;
+            var targetGrid = _grid[x, y];
             if (targetGrid.GetMatch3BlockProfile != null) continue;
 
-            var spawnY = parameters.GetWorldPositionCallback(targetGrid.GetGridPosition).y + _spawnOffset;
+            var newTileAction = new CreateTileAction(new CreateTileActionParameters
+            {
+                actionContext = action_context,
+                targetGridPosition = new GridPosition(x, y),
+                spawnYOffset = _spawnOffset,
+                targetGridObject = targetGrid
+            });
 
-            var newMatch3Profile = parameters.GetRandomValidMatch3BlockCallBack(parameters.Match3BlockProfiles, grid, x, y);
-            if (!parameters.TryEnableVisualByProfileCallback(newMatch3Profile, grid[x, y], parameters.GetWorldPositionCallback, spawnY)) continue;
-            newMatch3Profile.Init();
-            targetGrid.SetMatch3BlockProfile(newMatch3Profile);
+            action_context.GridActionProcessor.ProcessAction(newTileAction);
 
-            var tween = parameters.CreateVisualMoveTweenCallback(targetGrid, targetGrid.GetWorldPosition(parameters.GridCellWidth, parameters.GridCellHeight), parameters.VisualFallSpeed, Ease.OutBounce, .2f);
-            _tweens.Add(tween);
+            if (newTileAction.TileTween == null) continue;
+
+            _tweens.Add(newTileAction.TileTween);
+        }
+    }
+
+    private void CheckForNewMatchAfterCollapse()
+    {
+        if (IsCanceled) return;
+        var matches = action_context.MatchDetector.CheckForAllMatches(_grid, _gridWidth, _gridHeight);
+        if (matches.Count <= 0)
+        {
+            CompleteAction();
+            return;
+        }
+
+        action_context.GridActionProcessor.ProcessAction(new MatchAction(new MatchActionParameters { Matches = matches, actionContext = action_context }), _ => { CompleteAction(); });
+    }
+
+    public override void Cancel()
+    {
+        base.Cancel();
+
+        if (_sequence != null && _sequence.IsActive())
+        {
+            _sequence.Kill();
         }
     }
 }
