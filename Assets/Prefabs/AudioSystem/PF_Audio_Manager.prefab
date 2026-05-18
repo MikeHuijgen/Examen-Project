@@ -46,7 +46,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioManager
   sounds:
+  - {fileID: 11400000, guid: cd4ae6feb7cf4d64caa6d00f3fd3b5a9, type: 2}
+  - {fileID: 11400000, guid: b9960df4e0a31c147b407be774e46ff1, type: 2}
+  - {fileID: 11400000, guid: d3110f8eca9fc714a8b15532dd765edf, type: 2}
   - {fileID: 11400000, guid: bf67a58524e98a44b8e166a85b181b2d, type: 2}
+  - {fileID: 11400000, guid: dd26a72fb10c1c943ad008c194bf3b18, type: 2}
+  - {fileID: 11400000, guid: 0fdf75c4f4c92dd4fa097c03771d39b3, type: 2}
+  - {fileID: 11400000, guid: 96e676f861021c945b9fa7f4ad89f8db, type: 2}
+  - {fileID: 11400000, guid: dde108d6fde24bb42a15a2425767acf4, type: 2}
+  - {fileID: 11400000, guid: dfef222efa75a0647836928b99c266ee, type: 2}
+  - {fileID: 11400000, guid: 00fc5d080a50a3342b8ce21eadd5c312, type: 2}
+  - {fileID: 11400000, guid: 81efba3003e0fb34f84754f9455e7b1a, type: 2}
   audioPool: {fileID: 9222617471977164971}
 --- !u!114 &9222617471977164971
 MonoBehaviour:
@@ -60,6 +70,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 959df10f19f66724182e757589eeed51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioPool
-  AudioSourcePrefab: {fileID: 2720682555581073108, guid: dccc168208389674da3104080dab092a, type: 3}
+  AudioSourcePrefab: {fileID: 2720682555581073108, guid: 7ae705852f7598f4284c876993542937, type: 3}
   initialSize: 30
   parent: {fileID: 8030590276898165404}
