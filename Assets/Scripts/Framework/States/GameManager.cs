@@ -20,14 +20,16 @@ public class GameManager : MonoBehaviour
         _playerInput.SetActive(false);
         yield return new WaitForSeconds(0.5f); 
         Time.timeScale = 0f;
-        musicScource.ignoreListenerPause = true;
+        if (musicScource != null)
+            musicScource.ignoreListenerPause = true;
     }
 
     private void ActiveGame()
     {
         Time.timeScale = 1f;
         _playerInput.SetActive(true);
-        musicScource.ignoreListenerPause =false;
+        if (musicScource != null)
+            musicScource.ignoreListenerPause = false;
     }
     public void ChancheGameStates(int enumValue)
     {
