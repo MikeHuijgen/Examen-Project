@@ -33,7 +33,15 @@ public class MatchAction : BaseAction<MatchActionParameters>
         foreach (var match in matches)
         {
             if (IsCanceled) break;
+
             if (match.MatchEffect == null) continue;
+            foreach (var matchProfile in match.MatchedObjectGroup)
+            {
+                var targetPos = matchProfile.GetWorldPosition(action_context.LevelGridData.GridCellWidth, action_context.LevelGridData.GridCellHeight);
+                targetPos.z = targetPos.z - 2f;
+                match.MatchEffect.PlayBreakEffectOnPosition(targetPos);
+            }
+
             match.MatchEffect.ActivateEffect();
         }
     }

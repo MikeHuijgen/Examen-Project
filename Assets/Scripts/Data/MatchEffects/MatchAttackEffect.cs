@@ -4,7 +4,7 @@ using UnityEngine;
 public class MatchAttackEffect : BaseMatchEffect
 {
     public BaseAttack Attack;
-    public MatchAttackEffectChannel effectChannel;
+    public MatchAttackEffectChannel EffectChannel;
 
-    public override void ActivateEffect() => effectChannel.Raise(Attack);
+    public override void ActivateEffect() => EffectChannel.Raise(Attack);
 }
