@@ -2664,7 +2664,7 @@ GameObject:
   - component: {fileID: 6568750690956604414}
   - component: {fileID: 6323500423670058159}
   m_Layer: 5
-  m_Name: TutorialCanvas
+  m_Name: PF_Tutorial_Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2774,6 +2774,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8adb86eaa57575c41a95edffd2c882aa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TutorialManager
+  background: {fileID: 6181640305761619551}
   tutorialSlides:
   - {fileID: 7763555861060148672}
   - {fileID: 6883014800658513171}
@@ -2989,7 +2990,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7026573803049928846
 RectTransform:
   m_ObjectHideFlags: 0
