@@ -4,6 +4,7 @@ using UnityEngine;
 public class MatchDoubleDamageEffect : BaseMatchEffect
 {
     public float Multiplier = 1.5f;
-    public MatchDoubleDamageEffectChannel effectChannel;
-    public override void ActivateEffect() => effectChannel.Raise(Multiplier);
+    public MatchDoubleDamageEffectChannel EffectChannel;
+    
+    public override void ActivateEffect() => EffectChannel.Raise(Multiplier);
 }
