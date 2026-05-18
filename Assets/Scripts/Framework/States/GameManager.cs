@@ -4,37 +4,31 @@ using UnityEngine.Events;
 using System.Collections;
 public class GameManager : MonoBehaviour
 {
-    public GameStates currentGameStates;
-    private AudioSource musicScource;
-    private Animator animator;
+    public GameStates CurrentGameStates;
+    private AudioSource _musicScource;
 
-    [SerializeField] GameObject _playerInput;
-
-    private void Awake()
-    {
-        animator = GetComponent<Animator>();
-    }
+    [SerializeField] private GameObject _playerInput;
 
     private IEnumerator FreezeGame()
     {
         _playerInput.SetActive(false);
         yield return new WaitForSeconds(0.5f); 
         Time.timeScale = 0f;
-        if (musicScource != null)
-            musicScource.ignoreListenerPause = true;
+        if (_musicScource != null)
+            _musicScource.ignoreListenerPause = true;
     }
 
     private void ActiveGame()
     {
         Time.timeScale = 1f;
         _playerInput.SetActive(true);
-        if (musicScource != null)
-            musicScource.ignoreListenerPause = false;
+        if (_musicScource != null)
+            _musicScource.ignoreListenerPause = false;
     }
     public void ChancheGameStates(int enumValue)
     {
-      currentGameStates = (GameStates)enumValue;
-        switch (currentGameStates)
+      CurrentGameStates = (GameStates)enumValue;
+        switch (CurrentGameStates)
         {
             case GameStates.start:
                 ActiveGame();
