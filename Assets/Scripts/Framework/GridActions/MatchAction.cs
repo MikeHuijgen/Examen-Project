@@ -11,8 +11,8 @@ public class MatchAction : BaseAction<MatchActionParameters>
         on_action_complete = onActionComplete;
         action_context = parameters.actionContext;
         var matches = parameters.Matches;
-        ActivateMatchEffect(matches);
         AudioManager.Instance.PlaySound("Match3");
+        ActivateMatchEffect(matches);
 
         action_context.GridSystem.DisposeMatchData(matches);
         action_context.BlockVisualManager.DisableMatchesVisuals(matches);
