@@ -8,7 +8,7 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: TRIANGLE
-    second: {fileID: 2100000, guid: 7b07c26e15ca53a44bae92e66b8c74d1, type: 2}
+    second: {fileID: 2100000, guid: d9324566f7e1cd1478df92ccee8e5571, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
