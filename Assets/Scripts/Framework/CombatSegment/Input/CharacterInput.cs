@@ -13,7 +13,6 @@ public class CharacterInput : MonoBehaviour
     public event Action<Vector2> OnNewFingerUpInput;
     public event Action<SideType> OnDodgeInput;
 
-    [SerializeField] private PlayerAttackTest _playerAttackTest;
     [SerializeField] private PlayerInput _playerInput;
 
     private readonly Dictionary<string, SideType> _dodgeBindings = new()
