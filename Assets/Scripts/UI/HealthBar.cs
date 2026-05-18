@@ -9,9 +9,12 @@ public class HealthBar : MonoBehaviour
 {
     [SerializeField] private Slider healthSlider;
     [SerializeField] private Slider delaySlider;
-    [SerializeField] private Gradient gradient;
+    [SerializeField] private Gradient gradientHealth;
+    [SerializeField] private Gradient gradientDelay;
     [SerializeField] private TextMeshProUGUI sliderTextHealth;
-    [SerializeField] private Image fill;
+    [SerializeField] private Image fillH;
+    [SerializeField] private Image fillD;
+
     
     [SerializeField] private float delaySpeed;
     
@@ -25,9 +28,6 @@ public class HealthBar : MonoBehaviour
 
         healthSlider.interactable = false;
         delaySlider.interactable = false;
-
-        healthSlider.handleRect.gameObject.SetActive(false);
-        delaySlider.handleRect.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -45,19 +45,21 @@ public class HealthBar : MonoBehaviour
             _currentDelayTime = delayTimer;
         }
     }
-    public void SetSliderMaxValue(int maxHealth)
+    public void SetSliderMaxValue(float maxHealth)
     {
         healthSlider.maxValue = maxHealth;
         delaySlider.maxValue = maxHealth;
         delaySlider.value = healthSlider.value;
-        fill.color = gradient.Evaluate(1f);
+        fillH.color = gradientHealth.Evaluate(1f);
+        fillD.color = gradientDelay.Evaluate(1f);
     }
 
-     public void UpdateHealthUI(int currentHealth)
+     public void UpdateHealthUI(float currentHealth)
     {
         sliderTextHealth.text = (currentHealth).ToString();
         healthSlider.value = currentHealth;
         _currentDelayTime = delayTimer; 
-        fill.color = gradient.Evaluate(healthSlider.normalizedValue);
+        fillH.color = gradientHealth.Evaluate(healthSlider.normalizedValue);
+        fillD.color = gradientDelay.Evaluate(healthSlider.normalizedValue);
     }
 }

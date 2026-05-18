@@ -2,19 +2,28 @@ using UnityEngine;
 
 public class AttackListener : MonoBehaviour
 {
+    [SerializeField] private AttackEnergy attackEnergy;
     [SerializeField] private AttackSystem attackSystem;
+
     private void OnEnable()
     {
-        LevelGrid.OnMatchDestroyed += HandleMatchDestroyed;
+        if (attackEnergy != null)
+        {
+            attackEnergy.OnAttackTriggered += HandleAttackTriggered;
+        }
     }
 
     private void OnDisable()
     {
-        LevelGrid.OnMatchDestroyed -= HandleMatchDestroyed;
+        if (attackEnergy != null)
+        {
+            attackEnergy.OnAttackTriggered -= HandleAttackTriggered;
+        }
     }
 
-    private void HandleMatchDestroyed(BaseAttack attack)
+    private void HandleAttackTriggered(BaseAttack attack)
     {
-        attackSystem.TriggerAttack(attack);
+        if (attackSystem == null || attack == null) return;
+        attackSystem.QueueAttack(attack);
     }
 }
