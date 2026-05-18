@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class OpponentBehaviour : MonoBehaviour
@@ -12,6 +11,7 @@ public class OpponentBehaviour : MonoBehaviour
 
     [SerializeField] private float minAttackDelayTime;
     [SerializeField] private float maxAttackDelayTime;
+    
 
     private CountdownTimer _idleTimer;
     private TimerManager _timer;
