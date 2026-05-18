@@ -11,6 +11,7 @@ public class OpponentBehaviour : MonoBehaviour
 
     [SerializeField] private float minAttackDelayTime;
     [SerializeField] private float maxAttackDelayTime;
+    
 
     private CountdownTimer _idleTimer;
     private TimerManager _timer;
