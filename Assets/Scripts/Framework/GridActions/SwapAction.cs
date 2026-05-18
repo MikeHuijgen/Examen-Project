@@ -23,6 +23,8 @@ public class SwapAction : BaseAction<SwapActionParameters>
 
     private void HandleForwardSwap()
     {
+        if (IsCanceled) return;
+        AudioManager.Instance.PlaySound("StoneSwitch");
         var from = parameters.from;
         var to = parameters.to;
 
@@ -75,7 +77,7 @@ public class SwapAction : BaseAction<SwapActionParameters>
     private void HandleReverseSwap()
     {
         if (IsCanceled) return;
-
+        AudioManager.Instance.PlaySound("StoneSwitch");
         var from = parameters.from;
         var to = parameters.to;
 

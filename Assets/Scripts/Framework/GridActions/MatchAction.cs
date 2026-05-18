@@ -11,6 +11,7 @@ public class MatchAction : BaseAction<MatchActionParameters>
         on_action_complete = onActionComplete;
         action_context = parameters.actionContext;
         var matches = parameters.Matches;
+        AudioManager.Instance.PlaySound("Match3");
         ActivateMatchEffect(matches);
 
         action_context.GridSystem.DisposeMatchData(matches);
@@ -33,7 +34,15 @@ public class MatchAction : BaseAction<MatchActionParameters>
         foreach (var match in matches)
         {
             if (IsCanceled) break;
+
             if (match.MatchEffect == null) continue;
+            foreach (var matchProfile in match.MatchedObjectGroup)
+            {
+                var targetPos = matchProfile.GetWorldPosition(action_context.LevelGridData.GridCellWidth, action_context.LevelGridData.GridCellHeight);
+                targetPos.z = targetPos.z - 2f;
+                match.MatchEffect.PlayBreakEffectOnPosition(targetPos);
+            }
+
             match.MatchEffect.ActivateEffect();
         }
     }
