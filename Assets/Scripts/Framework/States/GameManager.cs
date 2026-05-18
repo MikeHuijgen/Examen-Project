@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.Events;
@@ -9,21 +10,21 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject _playerInput;
 
+    private void Awake() => ActiveGame();
+
     private IEnumerator FreezeGame()
     {
         _playerInput.SetActive(false);
         yield return new WaitForSeconds(0.5f); 
         Time.timeScale = 0f;
-        if (_musicScource != null)
-            _musicScource.ignoreListenerPause = true;
+        if (_musicScource != null) _musicScource.ignoreListenerPause = true;
     }
 
     private void ActiveGame()
     {
         Time.timeScale = 1f;
         _playerInput.SetActive(true);
-        if (_musicScource != null)
-            _musicScource.ignoreListenerPause = false;
+        if (_musicScource != null) _musicScource.ignoreListenerPause = false;
     }
     public void ChancheGameStates(int enumValue)
     {
