@@ -15,7 +15,7 @@ public class LevelGrid : MonoBehaviour
     private GridHit? _currentSelectedGridPosition;
     public static event Action<BaseAttack> OnMatchDestroyed;
     private bool _allowInput = true;
-
+    private ActionContext _actionContext;
 
     private void Awake()
     {
@@ -25,6 +25,7 @@ public class LevelGrid : MonoBehaviour
             levelGridData.GridHeight,
             levelGridData.GridCellWidth,
             levelGridData.GridCellHeight);
+        gridActionProcessor = new GridActionProcessor();
 
         Application.targetFrameRate = 120;
         QualitySettings.vSyncCount = 0;
@@ -34,10 +35,30 @@ public class LevelGrid : MonoBehaviour
     {
         _gridSystem.GenerateGrid();
         _gridSystem.CreateGridTileVisuals(levelGridData.GridTileVisual, tileVisualHolder);
-        ReshuffleGrid();
+
+        _actionContext = new ActionContext
+        {
+            GridSystem = _gridSystem, 
+            BlockVisualManager = blockVisualManager,
+            MatchDetector = _matchDetector,
+            LevelGridData = levelGridData,
+            GridActionProcessor = gridActionProcessor,
+            Match3BlockProfileContainer = match3BlockProfileContainer
+        };
+        
+        gridActionProcessor.ProcessAction(new ReshuffleAction(new ReshuffleActionParameters{actionContext = _actionContext}));
 
         CharacterInput.Instance.OnNewFingerDownInput += OnNewFingerDownInput;
         CharacterInput.Instance.OnNewFingerUpInput += OnNewFingerUpInput;
+    }
+
+    private void OnEnable() => gridActionProcessor.OnParentActionComplete += () => _allowInput = true;
+
+    private void OnDisable()
+    {
+        CharacterInput.Instance.OnNewFingerDownInput -= OnNewFingerDownInput;
+        CharacterInput.Instance.OnNewFingerUpInput -= OnNewFingerUpInput;
+        gridActionProcessor.OnParentActionComplete -= () => _allowInput = true;
     }
 
     private void OnNewFingerDownInput(Vector2 fingerPosition)
@@ -47,7 +68,7 @@ public class LevelGrid : MonoBehaviour
         _beginTouchGridPosition = newGridHit;
     }
 
-    private async void OnNewFingerUpInput(Vector2 fingerPosition)
+    private void OnNewFingerUpInput(Vector2 fingerPosition)
     {
         if (!_allowInput) return;
         var newGridHit = _gridSystem.ConvertScreenPositionToGridHit(fingerPosition);
@@ -83,7 +104,7 @@ public class LevelGrid : MonoBehaviour
             }
 
 
-            await HandleMove(_currentSelectedGridPosition.Value.hitGridPosition, endGridPosition);
+            HandleMove(_currentSelectedGridPosition.Value.hitGridPosition, endGridPosition);
         }
         else
         {
@@ -91,7 +112,7 @@ public class LevelGrid : MonoBehaviour
 
             endGridPosition = _gridSystem.CheckGridBounds(endGridPosition);
 
-            await HandleMove(_beginTouchGridPosition.hitGridPosition, endGridPosition);
+            HandleMove(_beginTouchGridPosition.hitGridPosition, endGridPosition);
         }
 
         _currentSelectedGridPosition = null;
@@ -99,11 +120,12 @@ public class LevelGrid : MonoBehaviour
 
     private void ResetCurrentGridPosition()
     {
+        if (_currentSelectedGridPosition == null) return;
         _gridSystem.DeselectTileByGridPosition(_currentSelectedGridPosition.Value.hitGridPosition);
         _currentSelectedGridPosition = null;
     }
 
-    private async Task HandleMove(GridPosition beginGridPosition, GridPosition endGridPosition)
+    private void HandleMove(GridPosition beginGridPosition, GridPosition endGridPosition)
     {
         if (_currentSelectedGridPosition != null) _gridSystem.DeselectTileByGridPosition(_currentSelectedGridPosition.Value.hitGridPosition);
 
@@ -125,95 +147,31 @@ public class LevelGrid : MonoBehaviour
         }
 
         var swapParameters = new SwapActionParameters
-        {   
+        {  
+            actionContext = _actionContext,
             from = beginGridObject, 
             to = endGridObject, 
-            dataSwapCallback = _gridSystem.SwapGridObjectsData,
-            tweenSwapSpeed = levelGridData.VisualSwapSpeed,
-            visualSwapCallback = blockVisualManager.MoveVisualWithTweenRoutineAsync,
-            GetWorldPositionCallback = _gridSystem.ConvertGridPositionToWorldPosition
         };
 
-        await gridActionProcessor.TryProcessAction(new SwapAction(swapParameters));
-
-        var currentMatches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
-
-        if (!_matchDetector.HasAMatch(currentMatches))
-        {
-            await gridActionProcessor.TryProcessAction(new SwapAction(swapParameters));
-            _allowInput = true;
-            return;
-        }
-
-        while (true)
-        {
-            currentMatches = _matchDetector.CheckForAllMatches(_gridSystem.GetGridObjectArray, levelGridData.GridWidth, levelGridData.GridHeight);
-
-            if (!_matchDetector.HasAMatch(currentMatches)) break;
-
-            await gridActionProcessor.TryProcessAction(new MatchAction(new MatchActionParameters {Matches = currentMatches, DisposeMatchDataCallback = _gridSystem.DisposeMatchData, DisableMatchesVisualsCallback = blockVisualManager.DisableMatchesVisuals}));
-            await gridActionProcessor.TryProcessAction(new CollapseAndFillAction(new CollapseAndFillActionParameters
-            {
-                Grid = _gridSystem.GetGridObjectArray,
-                VisualFallSpeed = levelGridData.VisualFallSpeed,
-                GridHeight = levelGridData.GridHeight,
-                GridWidth = levelGridData.GridWidth,
-                GridCellHeight = levelGridData.GridCellHeight,
-                GridCellWidth = levelGridData.GridCellWidth,
-                GetWorldPositionCallback = _gridSystem.ConvertGridPositionToWorldPosition,
-                CreateVisualMoveTweenCallback = blockVisualManager.CreateVisualMoveTween,
-                GetRandomValidMatch3BlockCallBack = _matchDetector.GetRandomValidMatch3Profile,
-                Match3BlockProfiles = match3BlockProfileContainer.match3BlockProfiles,
-                MoveVisualBindingCallback = blockVisualManager.MoveVisualBinding,
-                TryEnableVisualByProfileCallback = blockVisualManager.TryEnableVisualByProfile
-            }));
-        }
-
-        CheckForPossibleMoves();
-
-        _allowInput = true;
+        gridActionProcessor.ProcessAction(new SwapAction(swapParameters));
     }
 
-    private void CheckForPossibleMoves()
+    public void ShuffleGridOnHit()
     {
-        var grid = _gridSystem.GetGridObjectArray;
-        if (_matchDetector.PlayerHasPossibleMoves(grid, _gridSystem.SwapGridObjectsData)) return;
+        _allowInput = false;
+        ResetCurrentGridPosition();
+        gridActionProcessor.CancelCurrentChain();
 
-        foreach (var gridObject in grid)
+        _actionContext = new ActionContext
         {
-            blockVisualManager.TryDisableVisualOnGridObject(gridObject);
-            gridObject.SetMatch3BlockProfile(null);
-        }
-
-        ReshuffleGrid();
-    }
-
-    private void ReshuffleGrid()
-    {
-        var grid = _gridSystem.GetGridObjectArray;
-        for (var x = 0; x < levelGridData.GridWidth; x++)
-        {
-            for (int y = 0; y < levelGridData.GridHeight; y++)
-            {
-                var newMatch3Profile = _matchDetector.GetRandomValidMatch3Profile(match3BlockProfileContainer.match3BlockProfiles, grid, x, y);
-                if (!blockVisualManager.TryEnableVisualByProfile(newMatch3Profile, grid[x, y], _gridSystem.ConvertGridPositionToWorldPosition)) continue;
-                newMatch3Profile.Init();
-                grid[x, y].SetMatch3BlockProfile(newMatch3Profile);
-            }
-        }
-
-        CheckForPossibleMoves();
-    }
-
-    public void OnHitShuffleGrid()
-    {
-        var grid = _gridSystem.GetGridObjectArray;
-        foreach (var gridObject in grid)
-        {
-            blockVisualManager.TryDisableVisualOnGridObject(gridObject);
-            gridObject.SetMatch3BlockProfile(null);
-        }
-
-        ReshuffleGrid();        
+            GridSystem = _gridSystem, 
+            BlockVisualManager = blockVisualManager,
+            MatchDetector = _matchDetector,
+            LevelGridData = levelGridData,
+            GridActionProcessor = gridActionProcessor,
+            Match3BlockProfileContainer = match3BlockProfileContainer
+        };
+        
+        gridActionProcessor.ProcessAction(new ReshuffleAction(new ReshuffleActionParameters{actionContext = _actionContext}));        
     }
 }

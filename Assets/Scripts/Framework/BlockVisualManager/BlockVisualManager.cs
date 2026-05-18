@@ -66,29 +66,30 @@ public class BlockVisualManager : MonoBehaviour
         _ActiveBlockVisuals.Remove(gridObject);
     }
 
-    public async Task MoveVisualWithTweenRoutineAsync(GridObject gridObjectA, GridObject gridObjectB, Func<GridPosition, Vector3> GetWorldPosition , float tweenSpeed, Ease ease)
+    public Tween[] SwapVisualTweens(GridObject gridObjectA, GridObject gridObjectB, Func<GridPosition, Vector3> GetWorldPosition , float tweenSpeed, Ease ease)
     {
         if(!_ActiveBlockVisuals.TryGetValue(gridObjectA, out var targetVisualA) || !_ActiveBlockVisuals.TryGetValue(gridObjectB, out var targetVisualB)) 
         {
             Debug.LogWarning("One or both of the grid objects are not a active block visual");
-            return;
+            return null;
         }
 
         var newPositionA = GetWorldPosition(gridObjectA.GetGridPosition);
         var newPositionB = GetWorldPosition(gridObjectB.GetGridPosition);
 
-        targetVisualA.transform.DOMove(newPositionA, tweenSpeed).SetEase(ease);
-        await targetVisualB.transform.DOMove(newPositionB, tweenSpeed).SetEase(ease).AsyncWaitForCompletion();
+        var tweens = new Tween[]{targetVisualA.transform.DOMove(newPositionA, tweenSpeed).SetEase(ease), targetVisualB.transform.DOMove(newPositionB, tweenSpeed).SetEase(ease)};
+
+        return tweens;
     }
 
     public Tween CreateVisualMoveTween(GridObject gridObject, Vector3 newPosition, float tweenSpeed, Ease ease, float tweenStrength)
     {
         if(!_ActiveBlockVisuals.TryGetValue(gridObject, out var targetVisual)) return null;
 
-        return targetVisual.transform.DOMove(newPosition, tweenSpeed).SetEase(ease, tweenStrength);        
+        return targetVisual.transform.DOMove(newPosition, tweenSpeed).SetEase(ease, tweenStrength).Pause();        
     }
 
-    public async Task DisableMatchesVisuals(HashSet<Match> matches)
+    public void DisableMatchesVisuals(HashSet<Match> matches)
     {
         foreach (var match in matches)
         {

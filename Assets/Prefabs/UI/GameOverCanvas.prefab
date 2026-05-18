@@ -681,6 +681,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 67a90ca32c267db46b220e3d2c92790d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameOver
+  gameOverChanel: {fileID: 11400000, guid: f8715f1dadf61544299c98d16e538d11, type: 2}
   _gameOverScreen: {fileID: 755264758468324240}
   _victoryScreen: {fileID: 1015402790119991941}
 --- !u!1 &6229348456254158298
