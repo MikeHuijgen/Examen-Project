@@ -9,6 +9,5 @@ public class MatchDoubleDamageEffectChannel : ScriptableObject
     public void Raise(float multiplier)
     {
         OnEventRaised?.Invoke(multiplier);
-        Debug.Log($"Activated double damage with the multiplier of: {multiplier}");
     }
 }
