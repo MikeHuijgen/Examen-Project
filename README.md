@@ -15,6 +15,22 @@ Team 5 documents everything in the GitHub Wiki, Trello and our own Miro board.
 ## Who did what
 
 - Mike [Developer](https://github.com/MikeHuijgen)
+  - Grid system:
+     - Grid position
+     - Grid object
+     - Grid hit
+     - Level grid
+  - Match 3 system
+     - Match3 block profile
+     - Match 3 effects
+     - Rule flags
+     - Match detector
+  - Block visual manager
+  - Grid action system:
+     - Grid actions
+     - Grid action parameters
+     - Grid action processor
+     - Action debugger window
 - Gerben [Developer](https://github.com/Gerben-Prins)
 - Keith [Developer](https://github.com/keithko)
 - Jonas [Developer](https://github.com/JonasDriessen0)
@@ -25,4 +41,13 @@ Team 5 documents everything in the GitHub Wiki, Trello and our own Miro board.
    - styleguide and marketing documentation
    - artsheets template
 - Joshua [Artist](https://github.com/drunkjoshua)
+   - ui(textures)
+   - concepts(environment, lighting)
+   - environment(layout, lighting, set dressing, textures)
+   - Textures(trimsheet)
+   - VFX(hit effect, powerup effect)
 - Raphael [Artist](https://github.com/Raphbama)
+   - 3d models
+   - Shaders
+   - Vfx
+   - Sfx
