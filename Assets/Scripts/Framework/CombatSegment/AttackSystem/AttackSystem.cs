@@ -156,6 +156,7 @@ public class AttackSystem : MonoBehaviour
         {
             playerHealth.TakeDamage(_currentAttack.Damage);
             playerParticle.Play();
+            AudioManager.Instance.PlaySound("EnemyPunch");
             OnEnemyAttackFinished?.Invoke();
             return;
         }
@@ -165,6 +166,7 @@ public class AttackSystem : MonoBehaviour
         if (dodge.dodgeSide != requiredDodge)
         {
             playerHealth.TakeDamage(_currentAttack.Damage);
+            AudioManager.Instance.PlaySound("EnemyPunch");
             playerParticle.Play();
         }
 
@@ -191,6 +193,7 @@ public class AttackSystem : MonoBehaviour
                 var totalDamage = _currentAttack.Damage * _multiplier;
                 opponentHealth.TakeDamage(totalDamage);
                 opponentParticle.Play();
+                AudioManager.Instance.PlaySound("2xAttack");
                 _multiplier = 1f;
                 doubleDamageIndicator.SetActive(false);
             }
@@ -198,6 +201,7 @@ public class AttackSystem : MonoBehaviour
             {
                 opponentHealth.TakeDamage(_currentAttack.Damage);
                 opponentParticle.Play();
+                AudioManager.Instance.PlaySound("PlayerAttack");
             }
         }
 

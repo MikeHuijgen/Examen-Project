@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SoundData
   Identifier: Match3
   AudioClip: {fileID: 8300000, guid: 89db74160c99a624c89539efdcc4efe8, type: 3}
-  Volume: 1
+  Volume: 0.2
   Pitch: 1
   Loop: 0

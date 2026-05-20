@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SFX_EnemyPunchSound
   m_EditorClassIdentifier: Assembly-CSharp::SoundData
   Identifier: EnemyPunch
-  AudioClip: {fileID: 8300000, guid: 9b5a757a43549c5469bca32ce1180f0c, type: 3}
+  AudioClip: {fileID: 8300000, guid: e61c60c855c95d34ab9585e4b142f035, type: 3}
   Volume: 1
   Pitch: 1
   Loop: 0

@@ -3280,6 +3280,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6226588983716817444, guid: e7c3c0592067b714a980a0c6ecb429e6, type: 3}
+      propertyPath: playerPunch
+      value: 
+      objectReference: {fileID: 8300000, guid: e61c60c855c95d34ab9585e4b142f035, type: 3}
+    - target: {fileID: 6226588983716817444, guid: e7c3c0592067b714a980a0c6ecb429e6, type: 3}
       propertyPath: playerHealth
       value: 
       objectReference: {fileID: 912468357}
@@ -3287,6 +3291,10 @@ PrefabInstance:
       propertyPath: enemyAnimator
       value: 
       objectReference: {fileID: 2106582363}
+    - target: {fileID: 6226588983716817444, guid: e7c3c0592067b714a980a0c6ecb429e6, type: 3}
+      propertyPath: opponentPunch
+      value: 
+      objectReference: {fileID: 8300000, guid: 9b5a757a43549c5469bca32ce1180f0c, type: 3}
     - target: {fileID: 6226588983716817444, guid: e7c3c0592067b714a980a0c6ecb429e6, type: 3}
       propertyPath: opponentHealth
       value: 
@@ -3304,9 +3312,21 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 644293385}
     - target: {fileID: 6226588983716817444, guid: e7c3c0592067b714a980a0c6ecb429e6, type: 3}
+      propertyPath: playerPunchSound
+      value: 
+      objectReference: {fileID: 8300000, guid: e61c60c855c95d34ab9585e4b142f035, type: 3}
+    - target: {fileID: 6226588983716817444, guid: e7c3c0592067b714a980a0c6ecb429e6, type: 3}
+      propertyPath: DoubleDamageSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 7ee62b0083386df40a3d4a0e26a8a135, type: 3}
+    - target: {fileID: 6226588983716817444, guid: e7c3c0592067b714a980a0c6ecb429e6, type: 3}
       propertyPath: playerDodgeSystem
       value: 
       objectReference: {fileID: 912468352}
+    - target: {fileID: 6226588983716817444, guid: e7c3c0592067b714a980a0c6ecb429e6, type: 3}
+      propertyPath: opponentPunchSound
+      value: 
+      objectReference: {fileID: 8300000, guid: 9b5a757a43549c5469bca32ce1180f0c, type: 3}
     - target: {fileID: 6226588983716817444, guid: e7c3c0592067b714a980a0c6ecb429e6, type: 3}
       propertyPath: DoubleDamageIndicator
       value: 
