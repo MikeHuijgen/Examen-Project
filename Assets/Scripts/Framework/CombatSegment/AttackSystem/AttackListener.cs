@@ -10,6 +10,7 @@ public class AttackListener : MonoBehaviour
         if (attackEnergy != null)
         {
             attackEnergy.OnAttackTriggered += HandleAttackTriggered;
+            attackEnergy.OnDoubleDamageTriggered += HandleDoubleDamageTriggered;
         }
     }
 
@@ -18,7 +19,14 @@ public class AttackListener : MonoBehaviour
         if (attackEnergy != null)
         {
             attackEnergy.OnAttackTriggered -= HandleAttackTriggered;
+            attackEnergy.OnDoubleDamageTriggered -= HandleDoubleDamageTriggered;
         }
+    }
+
+    private void HandleDoubleDamageTriggered(float multiplier)
+    {
+        if (attackSystem == null) return;
+        attackSystem.HandleDoubleDamageEffect(multiplier);
     }
 
     private void HandleAttackTriggered(BaseAttack attack)
