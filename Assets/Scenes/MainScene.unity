@@ -953,6 +953,14 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 766133201}
     - target: {fileID: 185364845407594327, guid: 2e124d6be6e5c794398c1aee2575dbef, type: 3}
+      propertyPath: maxAttackDelayTime
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 185364845407594327, guid: 2e124d6be6e5c794398c1aee2575dbef, type: 3}
+      propertyPath: minAttackDelayTime
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 185364845407594327, guid: 2e124d6be6e5c794398c1aee2575dbef, type: 3}
       propertyPath: 'attackDirectionWarnings.Array.data[0]'
       value: 
       objectReference: {fileID: 1870911992}
@@ -3459,6 +3467,22 @@ PrefabInstance:
     - target: {fileID: 3955142222543750682, guid: 3973858e61159fa45a1508633c7604ef, type: 3}
       propertyPath: m_hasFontAssetChanged
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4287689750480430247, guid: 3973858e61159fa45a1508633c7604ef, type: 3}
+      propertyPath: m_fontColorGradient.topRight.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4287689750480430247, guid: 3973858e61159fa45a1508633c7604ef, type: 3}
+      propertyPath: m_fontColorGradient.topRight.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4287689750480430247, guid: 3973858e61159fa45a1508633c7604ef, type: 3}
+      propertyPath: m_fontColorGradient.bottomRight.b
+      value: 0.40000004
+      objectReference: {fileID: 0}
+    - target: {fileID: 4287689750480430247, guid: 3973858e61159fa45a1508633c7604ef, type: 3}
+      propertyPath: m_fontColorGradient.bottomRight.g
+      value: 0.7725491
       objectReference: {fileID: 0}
     - target: {fileID: 4370623444019520896, guid: 3973858e61159fa45a1508633c7604ef, type: 3}
       propertyPath: m_Pivot.x
