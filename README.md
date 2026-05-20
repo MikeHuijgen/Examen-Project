@@ -35,6 +35,9 @@ Team 5 documents everything in the GitHub Wiki, Trello and our own Miro board.
 - Keith [Developer](https://github.com/keithko)
 - Jonas [Developer](https://github.com/JonasDriessen0)
 - Lin [Artist](https://github.com/linmorren)
+  - Models (model, textures & rig of player & enemy)
+  - Animations (All player and enemy animations
+  - Concepts (player & enemy characters)
 - Nica [Artist](https://github.com/N1cachu)
    - UI (textures, buttons, in-between screens, Stones, tiles, grid)
    - sketches for assets
