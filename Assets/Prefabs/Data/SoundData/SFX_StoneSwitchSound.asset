@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SoundData
   Identifier: StoneSwitch
   AudioClip: {fileID: 8300000, guid: 387bbc36540e7db46a5f98ac6d5249c1, type: 3}
-  Volume: 0.3
+  Volume: 0.6
   Pitch: 1
   Loop: 0
