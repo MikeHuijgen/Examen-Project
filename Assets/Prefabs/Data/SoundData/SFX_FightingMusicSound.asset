@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SoundData
   Identifier: FightMusic
   AudioClip: {fileID: 8300000, guid: 3213c357337b6fb4c9cdaced987f207d, type: 3}
-  Volume: 1
+  Volume: 0.08
   Pitch: 1
   Loop: 1

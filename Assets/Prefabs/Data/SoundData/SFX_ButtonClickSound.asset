@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SFX_ButtonClickSound
   m_EditorClassIdentifier: Assembly-CSharp::SoundData
   Identifier: ButtonClick
-  AudioClip: {fileID: 8300000, guid: d8f02bd4d43c90444bb8ea185ca10d06, type: 3}
+  AudioClip: {fileID: 8300000, guid: 75172ccb7b9579b40b1a1a6c93401b79, type: 3}
   Volume: 1
   Pitch: 1
   Loop: 0
