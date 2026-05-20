@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::SoundData
   Identifier: 2xAttack
   AudioClip: {fileID: 8300000, guid: 7ee62b0083386df40a3d4a0e26a8a135, type: 3}
-  Volume: 1
+  Volume: 0.719
   Pitch: 1
   Loop: 0

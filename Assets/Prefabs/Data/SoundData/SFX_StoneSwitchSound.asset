@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SFX_StoneSwitchSound
   m_EditorClassIdentifier: Assembly-CSharp::SoundData
   Identifier: StoneSwitch
-  AudioClip: {fileID: 8300000, guid: da9d02ad832e1a344907bd35e3e489f6, type: 3}
-  Volume: 1
+  AudioClip: {fileID: 8300000, guid: 387bbc36540e7db46a5f98ac6d5249c1, type: 3}
+  Volume: 0.605
   Pitch: 1
   Loop: 0

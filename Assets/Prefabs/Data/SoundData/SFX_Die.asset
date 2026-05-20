@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 97b3ce8f47fa5c24baa7d522c82dde50, type: 3}
-  m_Name: SFX_PlayerAttackSound
+  m_Name: SFX_Die
   m_EditorClassIdentifier: Assembly-CSharp::SoundData
-  Identifier: PlayerAttack
-  AudioClip: {fileID: 8300000, guid: e61c60c855c95d34ab9585e4b142f035, type: 3}
-  Volume: 0.826
+  Identifier: Die
+  AudioClip: {fileID: 8300000, guid: feabb13343df4704ca5c1a72c69b6eef, type: 3}
+  Volume: 0.636
   Pitch: 1
   Loop: 0
