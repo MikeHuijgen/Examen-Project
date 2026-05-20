@@ -68,6 +68,8 @@ public class ReshuffleAction : BaseAction<ReshuffleActionParameters>
                 _sequence.Join(t);
             }
 
+            AudioManager.Instance.PlaySound("StoneSwitch");
+            
             _sequence.OnComplete(() =>
             {
                 CompleteAction();

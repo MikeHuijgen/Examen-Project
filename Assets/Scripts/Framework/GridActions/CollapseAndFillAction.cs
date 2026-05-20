@@ -57,7 +57,6 @@ public class CollapseAndFillAction : BaseAction<CollapseAndFillActionParameters>
         });
 
         _sequence.Play();
-
     }
 
     private void HandleCollapse(int x)
