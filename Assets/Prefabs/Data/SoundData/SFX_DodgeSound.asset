@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SFX_DodgeSound
   m_EditorClassIdentifier: Assembly-CSharp::SoundData
   Identifier: Dodge
-  AudioClip: {fileID: 8300000, guid: 3f5b89ea606bb0449a9b9a2ce694aca9, type: 3}
-  Volume: 1
+  AudioClip: {fileID: 8300000, guid: 4b517b0090e9cdd4ba06f80b51b3d993, type: 3}
+  Volume: 0.581
   Pitch: 1
   Loop: 0
