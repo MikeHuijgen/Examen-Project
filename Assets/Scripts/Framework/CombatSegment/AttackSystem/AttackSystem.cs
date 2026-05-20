@@ -12,10 +12,14 @@ public class AttackSystem : MonoBehaviour
     [SerializeField] private PlayerDodgeSystem playerDodgeSystem;
     [SerializeField] private HealthComponent playerHealth;
     [SerializeField] private HealthComponent opponentHealth;
+    [SerializeField] private AttackEnergy attackEnergy;
 
     [Header("Animators")]
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private Animator enemyAnimator;
+
+    [Header("UI")]
+    [SerializeField] private GameObject DoubleDamageIndicator;
 
     public enum AttackState
     {
@@ -58,6 +62,7 @@ public class AttackSystem : MonoBehaviour
         _enemyOverrideController = new AnimatorOverrideController(enemyAnimator.runtimeAnimatorController);
         playerAnimator.runtimeAnimatorController = _playerOverrideController;
         enemyAnimator.runtimeAnimatorController = _enemyOverrideController;
+        DoubleDamageIndicator.SetActive(false);
     }
 
     private void Update()
@@ -79,9 +84,6 @@ public class AttackSystem : MonoBehaviour
                 break;
         }
     }
-
-    private void OnEnable() => matchDoubleDamageEffectChannel.OnEventRaised += HandleDoubleDamageEffect;
-    private void OnDisable() => matchDoubleDamageEffectChannel.OnEventRaised -= HandleDoubleDamageEffect;
 
     public void QueueAttack(BaseAttack attack)
     {
@@ -181,9 +183,18 @@ public class AttackSystem : MonoBehaviour
         if (!_timer.RunTimer(ref _attackTimer, _currentAttack.AttackDurationTime)) return;
         if (_currentAttack is not OpponentAttack opponentAttack)
         {
-            var totalDamage = _currentAttack.Damage * _multiplier;
-            opponentHealth.TakeDamage(totalDamage);
-            _multiplier = 1f;
+            if (_multiplier > 1f)
+            {
+                var totalDamage = _currentAttack.Damage * _multiplier;
+                opponentHealth.TakeDamage(totalDamage);
+                Debug.Log(totalDamage);
+                _multiplier = 1f;
+                DoubleDamageIndicator.SetActive(false);
+            }
+            else
+            {
+                opponentHealth.TakeDamage(_currentAttack.Damage);
+            }
         }
 
         _state = AttackState.Idle;
@@ -212,8 +223,9 @@ public class AttackSystem : MonoBehaviour
         };
     }
 
-    private void HandleDoubleDamageEffect(float damageMultiplier)
+    public void HandleDoubleDamageEffect(float damageMultiplier)
     {
+        DoubleDamageIndicator.SetActive(true);
         _multiplier = damageMultiplier;
     }
 }
