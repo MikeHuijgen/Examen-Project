@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SFX_Match3Sound
   m_EditorClassIdentifier: Assembly-CSharp::SoundData
   Identifier: Match3
-  AudioClip: {fileID: 8300000, guid: 89db74160c99a624c89539efdcc4efe8, type: 3}
-  Volume: 1
+  AudioClip: {fileID: 8300000, guid: 3cc32077ac52ad64c9e8783b8409272f, type: 3}
+  Volume: 0.2
   Pitch: 1
   Loop: 0
