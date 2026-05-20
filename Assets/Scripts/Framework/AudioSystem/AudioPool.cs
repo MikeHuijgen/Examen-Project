@@ -23,7 +23,6 @@ public class AudioPool : MonoBehaviour
     {
         var source = Instantiate(AudioSourcePrefab, parent);
         source.gameObject.SetActive(false);
-        _pool.Enqueue(source);
         return source;
     }
 
