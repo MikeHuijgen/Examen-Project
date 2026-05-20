@@ -12,14 +12,15 @@ public class AttackSystem : MonoBehaviour
     [SerializeField] private PlayerDodgeSystem playerDodgeSystem;
     [SerializeField] private HealthComponent playerHealth;
     [SerializeField] private HealthComponent opponentHealth;
-    [SerializeField] private AttackEnergy attackEnergy;
 
     [Header("Animators")]
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private Animator enemyAnimator;
+    [SerializeField] private ParticleSystem playerParticle;
+    [SerializeField] private ParticleSystem opponentParticle;
 
     [Header("UI")]
-    [SerializeField] private GameObject DoubleDamageIndicator;
+    [SerializeField] private GameObject doubleDamageIndicator;
 
     public enum AttackState
     {
@@ -62,7 +63,7 @@ public class AttackSystem : MonoBehaviour
         _enemyOverrideController = new AnimatorOverrideController(enemyAnimator.runtimeAnimatorController);
         playerAnimator.runtimeAnimatorController = _playerOverrideController;
         enemyAnimator.runtimeAnimatorController = _enemyOverrideController;
-        DoubleDamageIndicator.SetActive(false);
+        doubleDamageIndicator.SetActive(false);
     }
 
     private void Update()
@@ -154,6 +155,7 @@ public class AttackSystem : MonoBehaviour
         if (!dodge.isDodging)
         {
             playerHealth.TakeDamage(_currentAttack.Damage);
+            playerParticle.Play();
             OnEnemyAttackFinished?.Invoke();
             return;
         }
@@ -163,6 +165,7 @@ public class AttackSystem : MonoBehaviour
         if (dodge.dodgeSide != requiredDodge)
         {
             playerHealth.TakeDamage(_currentAttack.Damage);
+            playerParticle.Play();
         }
 
         OnEnemyAttackFinished?.Invoke();
@@ -187,13 +190,14 @@ public class AttackSystem : MonoBehaviour
             {
                 var totalDamage = _currentAttack.Damage * _multiplier;
                 opponentHealth.TakeDamage(totalDamage);
-                Debug.Log(totalDamage);
+                opponentParticle.Play();
                 _multiplier = 1f;
-                DoubleDamageIndicator.SetActive(false);
+                doubleDamageIndicator.SetActive(false);
             }
             else
             {
                 opponentHealth.TakeDamage(_currentAttack.Damage);
+                opponentParticle.Play();
             }
         }
 
@@ -225,7 +229,7 @@ public class AttackSystem : MonoBehaviour
 
     public void HandleDoubleDamageEffect(float damageMultiplier)
     {
-        DoubleDamageIndicator.SetActive(true);
+        doubleDamageIndicator.SetActive(true);
         _multiplier = damageMultiplier;
     }
-}
+}   
