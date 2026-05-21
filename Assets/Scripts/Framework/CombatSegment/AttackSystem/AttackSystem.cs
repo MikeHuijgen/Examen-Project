@@ -5,9 +5,6 @@ using UnityEngine.Events;
 
 public class AttackSystem : MonoBehaviour
 {
-    [Header("Scriptable Objects")]
-    [SerializeField] private MatchDoubleDamageEffectChannel matchDoubleDamageEffectChannel;
-
     [Header("System Class References")]
     [SerializeField] private PlayerDodgeSystem playerDodgeSystem;
     [SerializeField] private HealthComponent playerHealth;
