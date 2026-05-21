@@ -13,7 +13,6 @@ public class LevelGrid : MonoBehaviour
     private MatchDetector _matchDetector;
     private GridHit _beginTouchGridPosition;
     private GridHit? _currentSelectedGridPosition;
-    public static event Action<BaseAttack> OnMatchDestroyed;
     private bool _allowInput = true;
     private ActionContext _actionContext;
 

@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
-    [SerializeField] GameObject pauzeMenu;
+    [SerializeField] GameObject pauseMenu;
 
     public UnityEvent OnPauseStart = new UnityEvent();
     public UnityEvent OnPauseFinished = new UnityEvent();
@@ -14,7 +14,7 @@ public class PauseMenu : MonoBehaviour
 
     private void Start()
     {
-        pauzeMenu.SetActive(false);
+        pauseMenu.SetActive(false);
     }
 
     public void IsPaused()
@@ -32,14 +32,14 @@ public class PauseMenu : MonoBehaviour
 
     private void PauseGame()
     {
-        pauzeMenu.SetActive(true);
+        pauseMenu.SetActive(true);
         OnPauseStart?.Invoke();
         isPaused = true;
     }
 
     private void ResumeGame()
     {
-        pauzeMenu.SetActive(false);
+        pauseMenu.SetActive(false);
         OnPauseFinished?.Invoke();
         isPaused = false;
     }
