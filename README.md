@@ -32,6 +32,10 @@ Team 5 documents everything in the GitHub Wiki, Trello and our own Miro board.
      - Grid action processor
      - Action debugger window
 - Gerben [Developer](https://github.com/Gerben-Prins)
+  - Attack System
+    - Base Attack (Scriptable Object)
+    - Opponent Attack (Scriptable Object)
+  - Opponent Behaviour
 - Keith [Developer](https://github.com/keithko)
 - Jonas [Developer](https://github.com/JonasDriessen0)
 - Lin [Artist](https://github.com/linmorren)
