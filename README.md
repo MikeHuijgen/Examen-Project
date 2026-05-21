@@ -35,7 +35,13 @@ Team 5 documents everything in the GitHub Wiki, Trello and our own Miro board.
   - Attack System
     - Base Attack (Scriptable Object)
     - Opponent Attack (Scriptable Object)
+    - [Code Documentation](https://github.com/MikeHuijgen/Examen-Project/wiki/Attack-System)
+    - [Technical Design](https://github.com/MikeHuijgen/Examen-Project/wiki/Technical-design#attack-system)
+    - [Functional Design](https://github.com/MikeHuijgen/Examen-Project/wiki/Functional-design#attack-system) 
   - Opponent Behaviour
+    - [Code Documentation](https://github.com/MikeHuijgen/Examen-Project/wiki/Opponent-System)
+    - [Technical Design](https://github.com/MikeHuijgen/Examen-Project/wiki/Technical-design#opponent-behaviour)
+    - [Functional Design](https://github.com/MikeHuijgen/Examen-Project/wiki/Functional-design#opponent-behaviour)
 - Keith [Developer](https://github.com/keithko)
 - Jonas [Developer](https://github.com/JonasDriessen0)
 - Lin [Artist](https://github.com/linmorren)
