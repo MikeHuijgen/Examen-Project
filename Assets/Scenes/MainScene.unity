@@ -3331,6 +3331,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 109.97998
       objectReference: {fileID: 0}
+    - target: {fileID: 5898007032486866347, guid: 71398b28d0a51364c972d73ab945c3e8, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 334
+      objectReference: {fileID: 0}
+    - target: {fileID: 5898007032486866347, guid: 71398b28d0a51364c972d73ab945c3e8, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -567
+      objectReference: {fileID: 0}
     - target: {fileID: 7130777879010707353, guid: 71398b28d0a51364c972d73ab945c3e8, type: 3}
       propertyPath: m_Name
       value: PF_Camera_Holder
@@ -3342,6 +3350,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 5843122858951619389, guid: 71398b28d0a51364c972d73ab945c3e8, type: 3}
+    - {fileID: 8458664823425196295, guid: 71398b28d0a51364c972d73ab945c3e8, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 71398b28d0a51364c972d73ab945c3e8, type: 3}
