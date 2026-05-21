@@ -179,6 +179,4 @@ public class MatchDetector
         }
         return false;
     }
-
-    public bool HasAMatch(HashSet<Match> matchList) => matchList.Count > 0;
 }
