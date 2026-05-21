@@ -7,7 +7,7 @@ public class OpponentBehaviour : MonoBehaviour
 
     [SerializeField] private List<OpponentAttack> opponentAttacks;
     [SerializeField] private List<GameObject> attackDirectionWarnings;
-    [SerializeField] private OnGameOverChanel channel;
+    [SerializeField] private OnGameOverChannel channel;
 
     [SerializeField] private float minAttackDelayTime;
     [SerializeField] private float maxAttackDelayTime;

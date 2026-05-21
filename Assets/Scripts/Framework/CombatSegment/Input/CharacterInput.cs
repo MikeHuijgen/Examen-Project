@@ -15,7 +15,7 @@ public class CharacterInput : MonoBehaviour
 
     private bool _allowInput = true;
 
-    [SerializeField] private OnGameOverChanel channel;
+    [SerializeField] private OnGameOverChannel channel;
     [SerializeField] private PlayerInput _playerInput;
 
     private readonly Dictionary<string, SideType> _dodgeBindings = new()

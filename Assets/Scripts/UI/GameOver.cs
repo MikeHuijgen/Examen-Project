@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 public class GameOver : MonoBehaviour
 {
-    [SerializeField] OnGameOverChanel gameOverChanel;
+    [SerializeField] OnGameOverChannel gameOverChannel;
     [SerializeField] GameObject _gameOverScreen;
     [SerializeField] GameObject _victoryScreen;
 
@@ -16,13 +16,15 @@ public class GameOver : MonoBehaviour
 
     public void PlayerDead()
     {
-        gameOverChanel.RaceEvent();
+        AudioManager.Instance.PlaySound("Die");
+        gameOverChannel.RaiseEvent();
         _gameOverScreen.SetActive(true);
     }
 
     public void EnemyDead()
     {
-        gameOverChanel.RaceEvent();
+        AudioManager.Instance.PlaySound("Win");
+        gameOverChannel.RaiseEvent();
         _victoryScreen?.SetActive(true);
     }
 

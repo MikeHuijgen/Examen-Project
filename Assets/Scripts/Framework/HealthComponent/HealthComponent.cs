@@ -29,7 +29,6 @@ public class HealthComponent : MonoBehaviour
         healthBar.UpdateHealthUI(_currentHealth);
 
         if (_currentHealth > 0) return;
-        AudioManager.Instance.PlaySound("Die");
         _currentHealth = 0;
         OnDeath?.Invoke();
     }
