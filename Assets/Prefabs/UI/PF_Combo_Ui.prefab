@@ -128,8 +128,12 @@ MonoBehaviour:
   comboText: {fileID: 2453316946762231277}
   comboDepleteTime: 4
   visuals: {fileID: 3655380188160361243}
+  shakeTweenDuration: 0.5
   baseShakeStrength: 1
   maxShakeStrength: 10
+  addComboTweenDuratin: 0.2
+  addComboScaleAmount: 0.3
+  resetTweenDuration: 0.5
 --- !u!1 &3655380188160361243
 GameObject:
   m_ObjectHideFlags: 0
@@ -540,7 +544,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 25.814629}
-  m_SizeDelta: {x: 199.9161, y: 138.4961}
+  m_SizeDelta: {x: 274.4845, y: 138.4961}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2378249350802547357
 CanvasRenderer:
