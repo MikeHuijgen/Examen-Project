@@ -204,7 +204,7 @@ Canvas:
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!114 &9030387745608081516
 MonoBehaviour:
@@ -361,7 +361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c21c8846279a60498d14eaff6023ac8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PauseMenu
-  pauzeMenu: {fileID: 8626246838438620310}
+  pauseMenu: {fileID: 2905787680552303321}
   OnPauseStart:
     m_PersistentCalls:
       m_Calls:
@@ -1025,9 +1025,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7486518746683318173}
-        m_TargetAssemblyTypeName: SceneLoader, Assembly-CSharp
-        m_MethodName: HomeScene
+      - m_Target: {fileID: 2038805660989324240}
+        m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
+        m_MethodName: IsPaused
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
