@@ -11,7 +11,7 @@ public class BlockVisualManager : MonoBehaviour
     [SerializeField] private int initialPoolSizePerMatch3Block = 15;
     private Dictionary<Match3BlockProfile, GameObject> _profileToVisualsDictionary;
     private Dictionary<Match3BlockProfile, List<GameObject>> _pool;
-    private Dictionary<GridObject, GameObject> _ActiveBlockVisuals;
+    private Dictionary<GridObject, GameObject> _activeBlockVisuals;
 
     void Awake()
     {
@@ -20,7 +20,7 @@ public class BlockVisualManager : MonoBehaviour
 
     private void InitializePool()
     {
-        _ActiveBlockVisuals = new Dictionary<GridObject, GameObject>();
+        _activeBlockVisuals = new Dictionary<GridObject, GameObject>();
         _profileToVisualsDictionary = new Dictionary<Match3BlockProfile, GameObject>();
         _pool = new Dictionary<Match3BlockProfile, List<GameObject>>();
 
@@ -47,7 +47,7 @@ public class BlockVisualManager : MonoBehaviour
         {
             if (visual.activeInHierarchy) continue;
 
-            _ActiveBlockVisuals.Add(gridObject, visual);
+            _activeBlockVisuals.Add(gridObject, visual);
             var visualPosition = GetWorldPos(gridObject.GetGridPosition);
             visualPosition.y = visualPosition.y + yOffset;
             visual.transform.position = visualPosition;
@@ -60,15 +60,15 @@ public class BlockVisualManager : MonoBehaviour
 
     public void TryDisableVisualOnGridObject(GridObject gridObject)
     {
-        if (!_ActiveBlockVisuals.TryGetValue(gridObject, out var visual)) return;
+        if (!_activeBlockVisuals.TryGetValue(gridObject, out var visual)) return;
         visual.SetActive(false);
         visual.transform.position = Vector3.zero;
-        _ActiveBlockVisuals.Remove(gridObject);
+        _activeBlockVisuals.Remove(gridObject);
     }
 
     public Tween[] SwapVisualTweens(GridObject gridObjectA, GridObject gridObjectB, Func<GridPosition, Vector3> GetWorldPosition , float tweenSpeed, Ease ease)
     {
-        if(!_ActiveBlockVisuals.TryGetValue(gridObjectA, out var targetVisualA) || !_ActiveBlockVisuals.TryGetValue(gridObjectB, out var targetVisualB)) 
+        if(!_activeBlockVisuals.TryGetValue(gridObjectA, out var targetVisualA) || !_activeBlockVisuals.TryGetValue(gridObjectB, out var targetVisualB)) 
         {
             Debug.LogWarning("One or both of the grid objects are not a active block visual");
             return null;
@@ -84,7 +84,7 @@ public class BlockVisualManager : MonoBehaviour
 
     public Tween CreateVisualMoveTween(GridObject gridObject, Vector3 newPosition, float tweenSpeed, Ease ease, float tweenStrength)
     {
-        if(!_ActiveBlockVisuals.TryGetValue(gridObject, out var targetVisual)) return null;
+        if(!_activeBlockVisuals.TryGetValue(gridObject, out var targetVisual)) return null;
 
         return targetVisual.transform.DOMove(newPosition, tweenSpeed).SetEase(ease, tweenStrength).Pause();        
     }
@@ -102,10 +102,10 @@ public class BlockVisualManager : MonoBehaviour
 
     public void MoveVisualBinding(GridObject from, GridObject to)
     {
-        if (!_ActiveBlockVisuals.TryGetValue(from, out var visual)) return;
+        if (!_activeBlockVisuals.TryGetValue(from, out var visual)) return;
 
-        _ActiveBlockVisuals.Remove(from);
-        _ActiveBlockVisuals[to] = visual;
+        _activeBlockVisuals.Remove(from);
+        _activeBlockVisuals[to] = visual;
     }
 }
 

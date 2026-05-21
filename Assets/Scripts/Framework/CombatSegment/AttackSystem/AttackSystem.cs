@@ -10,7 +10,7 @@ public class AttackSystem : MonoBehaviour
     [SerializeField] private HealthComponent playerHealth;
     [SerializeField] private HealthComponent opponentHealth;
 
-    [Header("Animators")]
+    [Header("Animation")]
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private Animator enemyAnimator;
     [SerializeField] private ParticleSystem playerParticle;
@@ -47,7 +47,7 @@ public class AttackSystem : MonoBehaviour
     private const string _enemyMainAttackKeyString = "MainAttack";
     private const string _enemyWindUpAttackKeyString = "WindUpAttack";
 
-    private bool IsIdle => _state == AttackState.Idle;
+    private bool _isIdle => _state == AttackState.Idle;
     private bool _hasExecutedAttack;
     private bool _hasExecutedCharge;
 
@@ -207,7 +207,7 @@ public class AttackSystem : MonoBehaviour
 
     public int CurrentAttackDirection()
     {
-        if (IsIdle) return -1;
+        if (_isIdle) return -1;
 
         if (_currentAttack is OpponentAttack opponentAttack)
         {

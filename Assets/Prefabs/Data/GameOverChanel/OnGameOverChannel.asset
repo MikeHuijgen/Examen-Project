@@ -10,5 +10,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 68aa018e18d789b49850386c4b875e25, type: 3}
-  m_Name: OnGameOverChanel
+  m_Name: OnGameOverChannel
   m_EditorClassIdentifier: Assembly-CSharp::OnGameOverChanel
