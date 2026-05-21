@@ -29,15 +29,9 @@ public class ComboCounter : MonoBehaviour
 
     public int CurrentComboCount => _currentComboCount;
 
-    private void Awake()
-    {
-        visuals.SetActive(false);
-    }
+    private void Awake() => visuals.SetActive(false);
 
-    private void Start()
-    {
-        _startTransform = visuals.transform;
-    }
+    private void Start() => _startTransform = visuals.transform;
 
     private void Update()
     {
@@ -91,10 +85,7 @@ public class ComboCounter : MonoBehaviour
             .SetLoops(-1, LoopType.Restart);
     }
 
-    public void OnLoseCombo()
-    {
-        ResetCombo();
-    }
+    public void OnLoseCombo() => ResetCombo();
 
     private void ResetCombo()
     {
