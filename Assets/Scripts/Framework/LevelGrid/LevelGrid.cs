@@ -45,7 +45,7 @@ public class LevelGrid : MonoBehaviour
             Match3BlockProfileContainer = match3BlockProfileContainer
         };
         
-        gridActionProcessor.ProcessAction(new ReshuffleAction(new ReshuffleActionParameters{actionContext = _actionContext}));
+        gridActionProcessor.ProcessAction(new ReshuffleAction(new ReshuffleActionParameters{Context = _actionContext}));
 
         CharacterInput.Instance.OnNewFingerDownInput += OnNewFingerDownInput;
         CharacterInput.Instance.OnNewFingerUpInput += OnNewFingerUpInput;
@@ -75,35 +75,35 @@ public class LevelGrid : MonoBehaviour
 
         var endTouchGridPosition = newGridHit;
 
-        if (endTouchGridPosition.hitGridPosition == _beginTouchGridPosition.hitGridPosition && !_currentSelectedGridPosition.HasValue)
+        if (endTouchGridPosition.HitGridPosition == _beginTouchGridPosition.HitGridPosition && !_currentSelectedGridPosition.HasValue)
         {
             _currentSelectedGridPosition = _beginTouchGridPosition;
-            _gridSystem.SelectTileByGridPosition(_currentSelectedGridPosition.Value.hitGridPosition);
+            _gridSystem.SelectTileByGridPosition(_currentSelectedGridPosition.Value.HitGridPosition);
             return;
         }
 
-        var isClickMove = _beginTouchGridPosition.hitGridPosition == endTouchGridPosition.hitGridPosition;
+        var isClickMove = _beginTouchGridPosition.HitGridPosition == endTouchGridPosition.HitGridPosition;
 
         if (isClickMove)
         {
-            var endGridPosition = _gridSystem.CalculateClickedEndGridPosition(_currentSelectedGridPosition.Value.hitGridPosition, endTouchGridPosition.rawX, endTouchGridPosition.rawY, levelGridData.ClickTolerance);
+            var endGridPosition = _gridSystem.CalculateClickedEndGridPosition(_currentSelectedGridPosition.Value.HitGridPosition, endTouchGridPosition.RawX, endTouchGridPosition.RawY, levelGridData.ClickTolerance);
 
             endGridPosition = _gridSystem.CheckGridBounds(endGridPosition);
 
-            if (endGridPosition == _currentSelectedGridPosition.Value.hitGridPosition)
+            if (endGridPosition == _currentSelectedGridPosition.Value.HitGridPosition)
             {
                 ResetCurrentGridPosition();
                 return;
             }
 
-            if (_gridSystem.IsDiagonalMove(_currentSelectedGridPosition.Value.hitGridPosition, endGridPosition))
+            if (_gridSystem.IsDiagonalMove(_currentSelectedGridPosition.Value.HitGridPosition, endGridPosition))
             {
                 ResetCurrentGridPosition();
                 return;
             }
 
 
-            HandleMove(_currentSelectedGridPosition.Value.hitGridPosition, endGridPosition);
+            HandleMove(_currentSelectedGridPosition.Value.HitGridPosition, endGridPosition);
         }
         else
         {
@@ -111,7 +111,7 @@ public class LevelGrid : MonoBehaviour
 
             endGridPosition = _gridSystem.CheckGridBounds(endGridPosition);
 
-            HandleMove(_beginTouchGridPosition.hitGridPosition, endGridPosition);
+            HandleMove(_beginTouchGridPosition.HitGridPosition, endGridPosition);
         }
 
         _currentSelectedGridPosition = null;
@@ -120,13 +120,13 @@ public class LevelGrid : MonoBehaviour
     private void ResetCurrentGridPosition()
     {
         if (_currentSelectedGridPosition == null) return;
-        _gridSystem.DeselectTileByGridPosition(_currentSelectedGridPosition.Value.hitGridPosition);
+        _gridSystem.DeselectTileByGridPosition(_currentSelectedGridPosition.Value.HitGridPosition);
         _currentSelectedGridPosition = null;
     }
 
     private void HandleMove(GridPosition beginGridPosition, GridPosition endGridPosition)
     {
-        if (_currentSelectedGridPosition != null) _gridSystem.DeselectTileByGridPosition(_currentSelectedGridPosition.Value.hitGridPosition);
+        if (_currentSelectedGridPosition != null) _gridSystem.DeselectTileByGridPosition(_currentSelectedGridPosition.Value.HitGridPosition);
 
         _allowInput = false;
 
@@ -147,9 +147,9 @@ public class LevelGrid : MonoBehaviour
 
         var swapParameters = new SwapActionParameters
         {  
-            actionContext = _actionContext,
-            from = beginGridObject, 
-            to = endGridObject, 
+            Context = _actionContext,
+            From = beginGridObject, 
+            To = endGridObject, 
         };
 
         gridActionProcessor.ProcessAction(new SwapAction(swapParameters));
@@ -171,6 +171,6 @@ public class LevelGrid : MonoBehaviour
             Match3BlockProfileContainer = match3BlockProfileContainer
         };
         
-        gridActionProcessor.ProcessAction(new ReshuffleAction(new ReshuffleActionParameters{actionContext = _actionContext}));        
+        gridActionProcessor.ProcessAction(new ReshuffleAction(new ReshuffleActionParameters{Context = _actionContext}));        
     }
 }

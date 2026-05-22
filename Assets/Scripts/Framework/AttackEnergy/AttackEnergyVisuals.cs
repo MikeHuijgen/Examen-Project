@@ -31,10 +31,7 @@ public class AttackEnergyVisuals : MonoBehaviour
     private Sequence _popupSequence;
     private Vector2 _popupStartAnchoredPos;
 
-    private void Awake()
-    {
-        if (popupText != null) popupText.alpha = 0f;
-    }
+    private void Awake() {if (popupText != null) popupText.alpha = 0f;}
 
     private void OnEnable()
     {

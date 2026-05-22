@@ -6,8 +6,5 @@ public class MatchDoubleDamageEffectChannel : ScriptableObject
 {
     public event Action<float> OnEventRaised;
 
-    public void Raise(float multiplier)
-    {
-        OnEventRaised?.Invoke(multiplier);
-    }
+    public void Raise(float multiplier) => OnEventRaised?.Invoke(multiplier);
 }

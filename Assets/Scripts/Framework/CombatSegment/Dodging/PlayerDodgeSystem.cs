@@ -8,7 +8,7 @@ public class PlayerDodgeSystem : MonoBehaviour
     [SerializeField] private float cooldownDuration;
     [SerializeField] private int startDodgeAmount;
     [SerializeField] private int maxDodgeAmount;
-    [SerializeField] private Animator _characterAnimator;
+    [SerializeField] private Animator characterAnimator;
 
     private bool _isDodging;
     private SideType _currentDodgeSide;
@@ -54,8 +54,8 @@ public class PlayerDodgeSystem : MonoBehaviour
 
     public void SetDodgeAnimation(bool isDodging, SideType dodgeSide)
     {
-        _characterAnimator.SetBool("IsDodging", isDodging);
-        _characterAnimator.SetInteger("SideTypeInt", (int)dodgeSide);
+        characterAnimator.SetBool("IsDodging", isDodging);
+        characterAnimator.SetInteger("SideTypeInt", (int)dodgeSide);
     }
     
     public (bool isDodging, SideType dodgeSide) GetCurrentDodgeInfo() => (_isDodging, _currentDodgeSide);

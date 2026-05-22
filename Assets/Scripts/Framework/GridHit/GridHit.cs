@@ -2,16 +2,16 @@ using UnityEngine;
 
 public struct GridHit
 {
-    public GridPosition hitGridPosition;
-    public float rawX;
-    public float rawY;
-    public Vector2 localPos; 
+    public GridPosition HitGridPosition;
+    public float RawX;
+    public float RawY;
+    public Vector2 LocalPos; 
 
     public GridHit (GridPosition gridPosition, float rawX, float rawY, Vector2 localPos)
     {
-        hitGridPosition = gridPosition;
-        this.rawX = rawX;
-        this.rawY = rawY;
-        this.localPos = localPos;
+        HitGridPosition = gridPosition;
+        RawX = rawX;
+        RawY = rawY;
+        LocalPos = localPos;
     }
 }

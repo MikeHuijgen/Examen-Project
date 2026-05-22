@@ -19,7 +19,7 @@ public class CollapseAndFillAction : BaseAction<CollapseAndFillActionParameters>
     public override void Execute(Action<BaseAction> onActionComplete)
     {
         on_action_complete = onActionComplete;
-        action_context = parameters.actionContext;
+        action_context = parameters.Context;
 
         _gridHeight = action_context.LevelGridData.GridHeight;
         _gridWidth = action_context.LevelGridData.GridWidth;
@@ -116,10 +116,10 @@ public class CollapseAndFillAction : BaseAction<CollapseAndFillActionParameters>
 
             var newTileAction = new CreateTileAction(new CreateTileActionParameters
             {
-                actionContext = action_context,
-                targetGridPosition = new GridPosition(x, y),
-                spawnYOffset = _spawnOffset,
-                targetGridObject = targetGrid
+                Context = action_context,
+                TargetGridPosition = new GridPosition(x, y),
+                SpawnYOffset = _spawnOffset,
+                TargetGridObject = targetGrid
             });
 
             action_context.GridActionProcessor.ProcessAction(newTileAction);
@@ -140,16 +140,13 @@ public class CollapseAndFillAction : BaseAction<CollapseAndFillActionParameters>
             return;
         }
 
-        action_context.GridActionProcessor.ProcessAction(new MatchAction(new MatchActionParameters { Matches = matches, actionContext = action_context }), _ => { CompleteAction(); });
+        action_context.GridActionProcessor.ProcessAction(new MatchAction(new MatchActionParameters { Matches = matches, Context = action_context }), _ => { CompleteAction(); });
     }
 
     public override void Cancel()
     {
         base.Cancel();
 
-        if (_sequence != null && _sequence.IsActive())
-        {
-            _sequence.Kill();
-        }
+        if (_sequence != null && _sequence.IsActive()) _sequence.Kill();
     }
 }

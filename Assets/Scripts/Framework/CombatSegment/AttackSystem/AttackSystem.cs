@@ -50,7 +50,6 @@ public class AttackSystem : MonoBehaviour
     private bool _isIdle => _state == AttackState.Idle;
     private bool _hasExecutedAttack;
     private bool _hasExecutedCharge;
-
     private float _multiplier = 1f;
 
     private void Start()
@@ -83,17 +82,12 @@ public class AttackSystem : MonoBehaviour
         }
     }
 
-    public void QueueAttack(BaseAttack attack)
-    {
-        _attackQueue.Enqueue(attack);
-    }
+    public void QueueAttack(BaseAttack attack) => _attackQueue.Enqueue(attack);
 
     public void CheckQueue()
     {
-        if (_attackQueue.Count > 0)
-        {
-            TriggerAttack(_attackQueue.Dequeue());
-        }
+        if (_attackQueue.Count <= 0) return;
+        TriggerAttack(_attackQueue.Dequeue());
     }
 
     private void TriggerAttack(BaseAttack attack)
@@ -120,8 +114,7 @@ public class AttackSystem : MonoBehaviour
 
     private void HandleChargeExecution()
     {
-        if (_hasExecutedCharge)
-            return;
+        if (_hasExecutedCharge) return;
 
         _hasExecutedCharge = true;
         if (_currentAttack is OpponentAttack opponentAttack && opponentAttack.ChargeDurationTime > 0f)
@@ -133,8 +126,7 @@ public class AttackSystem : MonoBehaviour
 
     private void HandleAttackExecution()
     {
-        if (_hasExecutedAttack)
-            return;
+        if (_hasExecutedAttack) return;
 
         _hasExecutedAttack = true;
 
@@ -209,10 +201,7 @@ public class AttackSystem : MonoBehaviour
     {
         if (_isIdle) return -1;
 
-        if (_currentAttack is OpponentAttack opponentAttack)
-        {
-            return opponentAttack.Direction;
-        }
+        if (_currentAttack is OpponentAttack opponentAttack) return opponentAttack.Direction;
 
         return -1;
     }
@@ -233,4 +222,4 @@ public class AttackSystem : MonoBehaviour
         doubleDamageIndicator.SetActive(true);
         _multiplier = damageMultiplier;
     }
-}   
+}

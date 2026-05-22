@@ -1,7 +1,7 @@
 public struct CreateTileActionParameters 
 {
-    public ActionContext actionContext;
-    public GridPosition targetGridPosition;
-    public float spawnYOffset;
-    public GridObject targetGridObject;
+    public ActionContext Context;
+    public GridPosition TargetGridPosition;
+    public float SpawnYOffset;
+    public GridObject TargetGridObject;
 }

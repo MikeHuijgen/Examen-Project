@@ -8,29 +8,37 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5687027047522733403}
     m_Modifications:
+    - target: {fileID: 2303624917169894076, guid: eb34cb95ab2620243944d43804989a25, type: 3}
+      propertyPath: stopAction
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2303624917169894076, guid: eb34cb95ab2620243944d43804989a25, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5764966202406933515, guid: eb34cb95ab2620243944d43804989a25, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.2
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 5764966202406933515, guid: eb34cb95ab2620243944d43804989a25, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.2
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 5764966202406933515, guid: eb34cb95ab2620243944d43804989a25, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.2
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 5764966202406933515, guid: eb34cb95ab2620243944d43804989a25, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.003
+      value: -0.001
       objectReference: {fileID: 0}
     - target: {fileID: 5764966202406933515, guid: eb34cb95ab2620243944d43804989a25, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.002
+      value: 0.001
       objectReference: {fileID: 0}
     - target: {fileID: 5764966202406933515, guid: eb34cb95ab2620243944d43804989a25, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.37
+      value: 0.112
       objectReference: {fileID: 0}
     - target: {fileID: 5764966202406933515, guid: eb34cb95ab2620243944d43804989a25, type: 3}
       propertyPath: m_LocalRotation.w
@@ -231,9 +239,9 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   channel: {fileID: 11400000, guid: f8715f1dadf61544299c98d16e538d11, type: 2}
-  minAttackDelayTime: 6
-  maxAttackDelayTime: 11
-  _allowAttack: 0
+  minAttackDelayTime: 5
+  maxAttackDelayTime: 9
+  allowAttack: 0
 --- !u!114 &7892315281008629901
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -682,8 +682,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameOver
   gameOverChannel: {fileID: 11400000, guid: f8715f1dadf61544299c98d16e538d11, type: 2}
-  _gameOverScreen: {fileID: 755264758468324240}
-  _victoryScreen: {fileID: 1015402790119991941}
+  gameOverScreen: {fileID: 755264758468324240}
+  victoryScreen: {fileID: 1015402790119991941}
 --- !u!1 &6229348456254158298
 GameObject:
   m_ObjectHideFlags: 0

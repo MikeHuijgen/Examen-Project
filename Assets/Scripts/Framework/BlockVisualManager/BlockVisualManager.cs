@@ -13,10 +13,7 @@ public class BlockVisualManager : MonoBehaviour
     private Dictionary<Match3BlockProfile, List<GameObject>> _pool;
     private Dictionary<GridObject, GameObject> _activeBlockVisuals;
 
-    void Awake()
-    {
-        InitializePool();
-    }
+    private void Awake() => InitializePool();
 
     private void InitializePool()
     {
@@ -26,14 +23,14 @@ public class BlockVisualManager : MonoBehaviour
 
         foreach (var profileToVisual in profileToVisuals)
         {
-            _profileToVisualsDictionary.Add(profileToVisual.match3BlockProfile, profileToVisual.visual);
-            _pool.Add(profileToVisual.match3BlockProfile, new List<GameObject>());
+            _profileToVisualsDictionary.Add(profileToVisual.Match3BlockProfile, profileToVisual.Visual);
+            _pool.Add(profileToVisual.Match3BlockProfile, new List<GameObject>());
 
             for (int i = 0; i < initialPoolSizePerMatch3Block; i++)
             {
-                var newBlock = Instantiate(profileToVisual.visual, transform);
+                var newBlock = Instantiate(profileToVisual.Visual, transform);
                 newBlock.SetActive(false);
-                _pool[profileToVisual.match3BlockProfile].Add(newBlock);
+                _pool[profileToVisual.Match3BlockProfile].Add(newBlock);
             }
 
         }
@@ -112,6 +109,6 @@ public class BlockVisualManager : MonoBehaviour
 [Serializable]
 public struct ProfileToVisual
 {
-    public Match3BlockProfile match3BlockProfile;
-    public GameObject visual;
+    public Match3BlockProfile Match3BlockProfile;
+    public GameObject Visual;
 }

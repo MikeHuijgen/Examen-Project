@@ -4,15 +4,15 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "Match3BlockProfile", menuName = "Scriptable Objects/Match3/Profile")]
 public class Match3BlockProfile : ScriptableObject
 {
-    public BaseMatchEffect matchEffect;
-    public RuleFlag[] ruleFlags;
+    public BaseMatchEffect MatchEffect;
+    public RuleFlag[] RuleFlags;
 
     private Dictionary<string, RuleFlag> _actionTypes;
 
     public void Init()
     {
         _actionTypes = new Dictionary<string, RuleFlag>();
-        foreach (var rule in ruleFlags)
+        foreach (var rule in RuleFlags)
         {
             if (_actionTypes.ContainsKey(rule.RuleId)) continue;
             _actionTypes.Add(rule.RuleId, rule);

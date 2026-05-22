@@ -12,7 +12,7 @@ public class SwapAction : BaseAction<SwapActionParameters>
     public override void Execute(Action<BaseAction> OnActionComplete)
     {
         on_action_complete = OnActionComplete;
-        action_context = parameters.actionContext;
+        action_context = parameters.Context;
 
         if (IsCanceled) return;
 
@@ -25,8 +25,8 @@ public class SwapAction : BaseAction<SwapActionParameters>
     {
         if (IsCanceled) return;
         AudioManager.Instance.PlaySound("StoneSwitch");
-        var from = parameters.from;
-        var to = parameters.to;
+        var from = parameters.From;
+        var to = parameters.To;
 
         action_context.GridSystem.SwapGridObjectsData(from, to);
 
@@ -57,29 +57,28 @@ public class SwapAction : BaseAction<SwapActionParameters>
             action_context.LevelGridData.GridHeight
         );
 
-        if (matches.Count > 0)
+        if (matches.Count <= 0) 
         {
-            action_context.GridActionProcessor.ProcessAction(
-                new MatchAction(new MatchActionParameters
-                {
-                    Matches = matches,
-                    actionContext = action_context
-                }),
-                _ => CompleteAction()
-            );
-
+            HandleReverseSwap();
             return;
         }
 
-        HandleReverseSwap();
+        action_context.GridActionProcessor.ProcessAction(
+            new MatchAction(new MatchActionParameters
+            {
+                Matches = matches,
+                Context = action_context
+            }),
+            _ => CompleteAction()
+        );
     }
 
     private void HandleReverseSwap()
     {
         if (IsCanceled) return;
         AudioManager.Instance.PlaySound("StoneSwitch");
-        var from = parameters.from;
-        var to = parameters.to;
+        var from = parameters.From;
+        var to = parameters.To;
 
         action_context.GridSystem.SwapGridObjectsData(from, to);
 

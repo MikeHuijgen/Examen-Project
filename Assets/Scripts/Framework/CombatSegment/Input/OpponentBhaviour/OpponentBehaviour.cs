@@ -16,7 +16,7 @@ public class OpponentBehaviour : MonoBehaviour
     private CountdownTimer _idleTimer;
     private TimerManager _timer;
 
-    [SerializeField] private bool _allowAttack;
+    [SerializeField] private bool allowAttack;
 
     private float _currentDelay;
 
@@ -29,7 +29,7 @@ public class OpponentBehaviour : MonoBehaviour
 
     private void Update()
     {
-        if (!_timer.RunTimer(ref _idleTimer, _currentDelay) || !_allowAttack) return;
+        if (!_timer.RunTimer(ref _idleTimer, _currentDelay) || !allowAttack) return;
         HandleAttackDelay();
     }
     private void OnEnable() => channel.OnGameOver += HandleGameOver ;
@@ -44,15 +44,9 @@ public class OpponentBehaviour : MonoBehaviour
         attackSystem.QueueAttack(attack);
     }
 
-    private void SetNewDelay()
-    {
-        _currentDelay = Random.Range(minAttackDelayTime, maxAttackDelayTime);
-    }
+    private void SetNewDelay() => _currentDelay = Random.Range(minAttackDelayTime, maxAttackDelayTime);
 
-    private OpponentAttack GetAttack()
-    {
-        return opponentAttacks[Random.Range(0, opponentAttacks.Count)];
-    }
+    private OpponentAttack GetAttack() => opponentAttacks[Random.Range(0, opponentAttacks.Count)];
 
     public void ResetAllAttackWarningDirections()
     {
@@ -66,5 +60,5 @@ public class OpponentBehaviour : MonoBehaviour
         SetNewDelay();
     }
 
-    public void SetAllowAttack(bool value) => _allowAttack = value;
+    public void SetAllowAttack(bool value) => allowAttack = value;
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MatchDetector
 {
-    private static readonly Vector2Int[] Directions =
+    private static readonly Vector2Int[] _directions =
     {
         Vector2Int.right,
         Vector2Int.up
@@ -23,10 +23,7 @@ public class MatchDetector
             var left = gridArray[x - 1, y].GetMatch3BlockProfile;
             var left2 = gridArray[x - 2, y].GetMatch3BlockProfile;
 
-            if (left == left2)
-            {
-                possibleProfiles.Remove(left);
-            }
+            if (left == left2) possibleProfiles.Remove(left);
         }
 
         if (y >= 2)
@@ -34,10 +31,7 @@ public class MatchDetector
             var down = gridArray[x, y - 1].GetMatch3BlockProfile;
             var down2 = gridArray[x, y - 2].GetMatch3BlockProfile;
 
-            if (down == down2)
-            {
-                possibleProfiles.Remove(down);
-            }
+            if (down == down2) possibleProfiles.Remove(down);
         }
 
         return possibleProfiles[UnityEngine.Random.Range(0, possibleProfiles.Count)];
@@ -47,7 +41,7 @@ public class MatchDetector
     {
         var matches = new HashSet<Match>();
 
-        for (int y = 0; y < gridHeight; y++)
+        for (var y = 0; y < gridHeight; y++)
         {
             var matchLength = 1;
             for (var x = 0; x < gridWidth; x++)
@@ -58,11 +52,11 @@ public class MatchDetector
                     if (matchLength >= 3)
                     {
                         var matchGridObjectGroup = new GridObject[matchLength];
-                        for (int k = 0; k < matchLength; k++)
+                        for (var k = 0; k < matchLength; k++)
                         {
                             matchGridObjectGroup[k] = grid[x - k, y];
                         }
-                        matches.Add(new Match(matchGridObjectGroup, matchGridObjectGroup[0].GetMatch3BlockProfile.matchEffect));
+                        matches.Add(new Match(matchGridObjectGroup, matchGridObjectGroup[0].GetMatch3BlockProfile.MatchEffect));
                     }
                     matchLength = 1;
                 }
@@ -73,10 +67,10 @@ public class MatchDetector
             }
         }
 
-        for (int x = 0; x < gridWidth; x++)
+        for (var x = 0; x < gridWidth; x++)
         {
-            int matchLength = 1;
-            for (int y = 0; y < gridHeight; y++)
+            var matchLength = 1;
+            for (var y = 0; y < gridHeight; y++)
             {
                 if (grid[x, y].GetMatch3BlockProfile == null || !grid[x, y].GetMatch3BlockProfile.HasRule("Match")) continue;
                 if (y == gridHeight - 1 || grid[x, y].GetMatch3BlockProfile != grid[x, y + 1].GetMatch3BlockProfile)
@@ -84,11 +78,11 @@ public class MatchDetector
                     if (matchLength >= 3)
                     {
                         var matchGridObjectGroup = new GridObject[matchLength];
-                        for (int k = 0; k < matchLength; k++)
+                        for (var k = 0; k < matchLength; k++)
                         {
                             matchGridObjectGroup[k] = grid[x, y - k];
                         }
-                        matches.Add(new Match(matchGridObjectGroup, matchGridObjectGroup[0].GetMatch3BlockProfile.matchEffect));
+                        matches.Add(new Match(matchGridObjectGroup, matchGridObjectGroup[0].GetMatch3BlockProfile.MatchEffect));
                     }
                     matchLength = 1;
                 }
@@ -107,10 +101,10 @@ public class MatchDetector
         var match3BlockProfile = grid[x, y].GetMatch3BlockProfile;
         if (match3BlockProfile == null || !match3BlockProfile.HasRule("Match")) return false;
 
-        int width = grid.GetLength(0);
-        int height = grid.GetLength(1);
+        var width = grid.GetLength(0);
+        var height = grid.GetLength(1);
 
-        int count = 1;
+        var count = 1;
 
         for (var i = x - 1; i >= 0; i--)
         {
@@ -137,7 +131,7 @@ public class MatchDetector
             else break;
         }
 
-        for (int i = y + 1; i < height; i++)
+        for (var i = y + 1; i < height; i++)
         {
             var upBlock = grid[x, i].GetMatch3BlockProfile;
             if (upBlock != null && upBlock == match3BlockProfile) count++;
@@ -158,7 +152,7 @@ public class MatchDetector
         {
             for (var y = 0; y < height; y++)
             {
-                foreach (var dir in Directions)
+                foreach (var dir in _directions)
                 {
                     var nx = x + dir.x;
                     var ny = y + dir.y;

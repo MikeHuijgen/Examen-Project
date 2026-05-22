@@ -7,7 +7,7 @@ public class DodgeSwipeInput : MonoBehaviour
     [SerializeField] private Camera dodgeCamera;
 
     private Vector2 _swipeStartPosition;
-    private bool canSwipe;
+    private bool _canSwipe;
 
     private void OnEnable()
     {
@@ -27,17 +27,17 @@ public class DodgeSwipeInput : MonoBehaviour
     {
         if (!IsOnValidScreen(screenPosition))
         {
-            canSwipe = false;
+            _canSwipe = false;
             return;
         }
 
-        canSwipe = true;
+        _canSwipe = true;
         _swipeStartPosition = screenPosition;
     }
 
     private void HandleFingerUp(Vector2 screenPosition)
     {
-        if(!canSwipe) return;
+        if(!_canSwipe) return;
         
         Vector2 swipeDelta = screenPosition - _swipeStartPosition;
         
