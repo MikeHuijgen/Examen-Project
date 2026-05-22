@@ -15,7 +15,7 @@ public class ReshuffleAction : BaseAction<ReshuffleActionParameters>
     public override void Execute(Action<BaseAction> OnActionComplete)
     {
         on_action_complete = OnActionComplete;
-        action_context = parameters.actionContext;
+        action_context = parameters.Context;
         _grid = action_context.GridSystem.GetGridObjectArray;
         _tweens = new List<Tween>();
         ReshuffleGrid();
@@ -41,10 +41,10 @@ public class ReshuffleAction : BaseAction<ReshuffleActionParameters>
                 if (IsCanceled) break;
                 var newTileAction = new CreateTileAction(new CreateTileActionParameters
                 {
-                    actionContext = action_context,
-                    targetGridPosition = new GridPosition(x, y),
-                    spawnYOffset = _spawnOffset,
-                    targetGridObject = _grid[x, y]
+                    Context = action_context,
+                    TargetGridPosition = new GridPosition(x, y),
+                    SpawnYOffset = _spawnOffset,
+                    TargetGridObject = _grid[x, y]
                 });
 
                 action_context.GridActionProcessor.ProcessAction(newTileAction);
@@ -60,33 +60,26 @@ public class ReshuffleAction : BaseAction<ReshuffleActionParameters>
 
     private void CheckForPossibleMoves()
     {
-        if (action_context.MatchDetector.PlayerHasPossibleMoves(_grid, action_context.GridSystem.SwapGridObjectsData))
-        {
-            foreach (var t in _tweens)
-            {
-                if (IsCanceled) break;
-                _sequence.Join(t);
-            }
+        if (!action_context.MatchDetector.PlayerHasPossibleMoves(_grid, action_context.GridSystem.SwapGridObjectsData)) ReshuffleGrid();
 
-            AudioManager.Instance.PlaySound("StoneSwitch");
-            
-            _sequence.OnComplete(() =>
-            {
-                CompleteAction();
-            });
-            return;
+        foreach (var t in _tweens)
+        {
+            if (IsCanceled) break;
+            _sequence.Join(t);
         }
 
-        ReshuffleGrid();
+        AudioManager.Instance.PlaySound("StoneSwitch");
+
+        _sequence.OnComplete(() =>
+        {
+            CompleteAction();
+        });
     }
 
     public override void Cancel()
     {
         base.Cancel();
 
-        if (_sequence != null && _sequence.IsActive())
-        {
-            _sequence.Kill();
-        }
+        if (_sequence != null && _sequence.IsActive()) _sequence.Kill();
     }
 }

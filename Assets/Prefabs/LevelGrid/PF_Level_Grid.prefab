@@ -172,14 +172,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BlockVisualManager
   profileToVisuals:
-  - match3BlockProfile: {fileID: 11400000, guid: 42d0848ce558f2c40a5bbdd5428bbbea, type: 2}
-    visual: {fileID: 8827714824386003747, guid: 3f87e07ba14233042bbb10e3440cd183, type: 3}
-  - match3BlockProfile: {fileID: 11400000, guid: 74cc3cfeaa113494f8a0bf7ac91b7f1c, type: 2}
-    visual: {fileID: 1628469159817635507, guid: 9cce1f4b783dcc443b37e06dcf11a479, type: 3}
-  - match3BlockProfile: {fileID: 11400000, guid: ade9b781860b26847868422fc9bae200, type: 2}
-    visual: {fileID: 4607427555636074916, guid: bb963d43da0ce654d9275b42c4838079, type: 3}
-  - match3BlockProfile: {fileID: 11400000, guid: 4c962fbd07afeaf4ba678a7dad590198, type: 2}
-    visual: {fileID: 8827714824386003747, guid: 124ee7686152962418124c2949098302, type: 3}
-  - match3BlockProfile: {fileID: 11400000, guid: 4d7f3c835e6e71f42ab70c3d324a718c, type: 2}
-    visual: {fileID: 8827714824386003747, guid: 5a9b702b216f6074eaf8d386d8e7cf41, type: 3}
+  - Match3BlockProfile: {fileID: 11400000, guid: 42d0848ce558f2c40a5bbdd5428bbbea, type: 2}
+    Visual: {fileID: 8827714824386003747, guid: 3f87e07ba14233042bbb10e3440cd183, type: 3}
+  - Match3BlockProfile: {fileID: 11400000, guid: 74cc3cfeaa113494f8a0bf7ac91b7f1c, type: 2}
+    Visual: {fileID: 1628469159817635507, guid: 9cce1f4b783dcc443b37e06dcf11a479, type: 3}
+  - Match3BlockProfile: {fileID: 11400000, guid: ade9b781860b26847868422fc9bae200, type: 2}
+    Visual: {fileID: 4607427555636074916, guid: bb963d43da0ce654d9275b42c4838079, type: 3}
+  - Match3BlockProfile: {fileID: 11400000, guid: 4c962fbd07afeaf4ba678a7dad590198, type: 2}
+    Visual: {fileID: 8827714824386003747, guid: 124ee7686152962418124c2949098302, type: 3}
+  - Match3BlockProfile: {fileID: 11400000, guid: 4d7f3c835e6e71f42ab70c3d324a718c, type: 2}
+    Visual: {fileID: 8827714824386003747, guid: 5a9b702b216f6074eaf8d386d8e7cf41, type: 3}
   initialPoolSizePerMatch3Block: 25

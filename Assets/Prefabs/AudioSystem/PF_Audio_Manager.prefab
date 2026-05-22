@@ -72,6 +72,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 959df10f19f66724182e757589eeed51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AudioPool
-  AudioSourcePrefab: {fileID: 2720682555581073108, guid: 7ae705852f7598f4284c876993542937, type: 3}
+  audioSourcePrefab: {fileID: 2720682555581073108, guid: 7ae705852f7598f4284c876993542937, type: 3}
   initialSize: 30
   parent: {fileID: 8030590276898165404}

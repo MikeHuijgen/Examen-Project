@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c40e332f895f904c88fc099ed3d6958, type: 3}
   m_Name: Match3BlockProfileYellow
   m_EditorClassIdentifier: Assembly-CSharp::Match3BlockProfile
-  matchEffect: {fileID: 11400000, guid: 43f442146be263c4fbc0ffbf62860490, type: 2}
-  ruleFlags:
+  MatchEffect: {fileID: 11400000, guid: 43f442146be263c4fbc0ffbf62860490, type: 2}
+  RuleFlags:
   - {fileID: 11400000, guid: e156632abacb22940843ca9171ed4623, type: 2}
   - {fileID: 11400000, guid: e61a984f565912d43a97eb063a570328, type: 2}
   - {fileID: 11400000, guid: ba07419fb4325ce478ef1dabac5209eb, type: 2}

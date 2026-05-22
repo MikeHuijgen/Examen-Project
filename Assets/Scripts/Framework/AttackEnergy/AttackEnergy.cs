@@ -80,11 +80,10 @@ public class AttackEnergy : MonoBehaviour
 
         foreach (var pair in _energyByEffect)
         {
-            if (pair.Key is MatchAttackEffect attackEffect && attackEffect.Attack == attack)
-            {
-                OnMatch(pair.Key);
-                break;
-            }
+            if (pair.Key is not MatchAttackEffect attackEffect || attackEffect.Attack != attack) continue;
+            
+            OnMatch(pair.Key);
+            break;
         }
     }
 
@@ -92,20 +91,16 @@ public class AttackEnergy : MonoBehaviour
     {
         foreach (var pair in _energyByEffect)
         {
-            if (pair.Key is MatchDoubleDamageEffect)
-            {
-                OnMatch(pair.Key);
-                break;
-            }
+            if (pair.Key is not MatchDoubleDamageEffect) continue;
+
+            OnMatch(pair.Key);
+            break;
         }
     }
 
     public void OnMatch(BaseMatchEffect effect)
     {
-        if (!_energyByEffect.TryGetValue(effect, out EnergyType energy) || energy == null)
-        {
-            return;
-        }
+        if (!_energyByEffect.TryGetValue(effect, out EnergyType energy) || energy == null) return;
 
         var previous = energy.CurrentEnergy;
         var gained = GetScaledGain(energy);

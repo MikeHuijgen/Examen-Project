@@ -120,6 +120,10 @@ PrefabInstance:
       propertyPath: stopAction
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2303624917169894076, guid: eb34cb95ab2620243944d43804989a25, type: 3}
+      propertyPath: playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5764966202406933515, guid: eb34cb95ab2620243944d43804989a25, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.3
@@ -333,7 +337,7 @@ MonoBehaviour:
   cooldownDuration: 1
   startDodgeAmount: 1000
   maxDodgeAmount: 1000
-  _characterAnimator: {fileID: 2586978394792057331}
+  characterAnimator: {fileID: 2586978394792057331}
 --- !u!114 &7438313104435127994
 MonoBehaviour:
   m_ObjectHideFlags: 0

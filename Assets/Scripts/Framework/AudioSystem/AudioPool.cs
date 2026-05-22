@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 
 public class AudioPool : MonoBehaviour
 {
-    [SerializeField] private AudioSource AudioSourcePrefab;
+    [SerializeField] private AudioSource audioSourcePrefab;
     [SerializeField] private int initialSize = 30;
     [SerializeField] private Transform parent;
 
@@ -21,7 +21,7 @@ public class AudioPool : MonoBehaviour
 
     private AudioSource CreateNewAudioSource()
     {
-        var source = Instantiate(AudioSourcePrefab, parent);
+        var source = Instantiate(audioSourcePrefab, parent);
         source.gameObject.SetActive(false);
         return source;
     }

@@ -7,20 +7,16 @@ public class AttackListener : MonoBehaviour
 
     private void OnEnable()
     {
-        if (attackEnergy != null)
-        {
-            attackEnergy.OnAttackTriggered += HandleAttackTriggered;
-            attackEnergy.OnDoubleDamageTriggered += HandleDoubleDamageTriggered;
-        }
+        if (attackEnergy == null) return;
+        attackEnergy.OnAttackTriggered += HandleAttackTriggered;
+        attackEnergy.OnDoubleDamageTriggered += HandleDoubleDamageTriggered;
     }
 
     private void OnDisable()
     {
-        if (attackEnergy != null)
-        {
-            attackEnergy.OnAttackTriggered -= HandleAttackTriggered;
-            attackEnergy.OnDoubleDamageTriggered -= HandleDoubleDamageTriggered;
-        }
+        if (attackEnergy == null) return;
+        attackEnergy.OnAttackTriggered -= HandleAttackTriggered;
+        attackEnergy.OnDoubleDamageTriggered -= HandleDoubleDamageTriggered;
     }
 
     private void HandleDoubleDamageTriggered(float multiplier)

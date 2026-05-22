@@ -6,8 +6,5 @@ public class EventOnStart : MonoBehaviour
 {
     public UnityEvent EventToInvoke;
 
-    private void Start()
-    {
-        EventToInvoke?.Invoke();
-    }
+    private void Start() => EventToInvoke?.Invoke();
 }

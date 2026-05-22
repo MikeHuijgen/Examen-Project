@@ -9,7 +9,7 @@ public class MatchAction : BaseAction<MatchActionParameters>
     public override void Execute(Action<BaseAction> onActionComplete)
     {
         on_action_complete = onActionComplete;
-        action_context = parameters.actionContext;
+        action_context = parameters.Context;
         var matches = parameters.Matches;
         AudioManager.Instance.PlaySound("Match3");
         ActivateMatchEffect(matches);
@@ -23,7 +23,7 @@ public class MatchAction : BaseAction<MatchActionParameters>
             (
                 new CollapseAndFillActionParameters
                 {
-                    actionContext = action_context,
+                    Context = action_context,
                 }
             ), _ => { CompleteAction(); }
         );

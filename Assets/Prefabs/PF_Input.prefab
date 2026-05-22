@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 9218554235208049379}
   - component: {fileID: 3685076801437546403}
   - component: {fileID: 2287925830614108618}
+  - component: {fileID: 5153167004794513536}
   m_Layer: 0
   m_Name: PF_Input
   m_TagString: Untagged
@@ -40,14 +41,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3779768140400638871}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 21a9a51523663e54698a4dcb59fc9e90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TemporaryCharacterInput
   channel: {fileID: 11400000, guid: f8715f1dadf61544299c98d16e538d11, type: 2}
-  _playerAttackTest: {fileID: 0}
-  _playerInput: {fileID: 2287925830614108618}
+  playerInput: {fileID: 2287925830614108618}
 --- !u!114 &2287925830614108618
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78,3 +78,15 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &5153167004794513536
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3779768140400638871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a46a02e2bb1e8247af0f83f8dfd3797, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DodgeButtonInput

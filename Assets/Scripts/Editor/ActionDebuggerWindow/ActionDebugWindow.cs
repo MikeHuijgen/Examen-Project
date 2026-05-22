@@ -63,7 +63,7 @@ public class ActionDebugWindow : EditorWindow
 
         GUILayout.Space(indent * 18);
 
-        GUI.backgroundColor = GetStateColor(action.actionState);
+        GUI.backgroundColor = GetStateColor(action.State);
 
         GUILayout.BeginVertical("box");
 
@@ -93,7 +93,7 @@ public class ActionDebugWindow : EditorWindow
 
         GUILayout.FlexibleSpace();
 
-        GUILayout.Label(action.actionState.ToString());
+        GUILayout.Label(action.State.ToString());
 
         GUILayout.EndHorizontal();
 

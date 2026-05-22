@@ -9,10 +9,7 @@ public class TutorialManager : MonoBehaviour
     private int _slideIndex;
     private GameObject _currentActiveSlide;
 
-    private void Start()
-    {
-        EnableNextSlide();
-    }
+    private void Start() => EnableNextSlide();
 
     public void EnableNextSlide()
     {

@@ -8,10 +8,10 @@ public abstract class BaseAction
     protected ActionContext action_context;
     protected Action<BaseAction> on_action_complete;
 
-    public ActionState actionState { get; private set; }
+    public ActionState State { get; private set; }
     public BaseAction Parent;
     public readonly List<BaseAction> ChainedActions = new List<BaseAction>();
-    public bool IsCanceled => actionState == ActionState.Canceled;
+    public bool IsCanceled => State == ActionState.Canceled;
 
     public BaseAction Root
     {
@@ -30,9 +30,9 @@ public abstract class BaseAction
 
     public virtual void Cancel()
     {
-        if (actionState == ActionState.Canceled || actionState == ActionState.Completed) return;
+        if (State == ActionState.Canceled || State == ActionState.Completed) return;
 
-        actionState = ActionState.Canceled;
+        State = ActionState.Canceled;
 
         foreach (var child in ChainedActions)
         {
@@ -43,11 +43,11 @@ public abstract class BaseAction
     protected void CompleteAction()
     {
         if (IsCanceled) return;
-        actionState = ActionState.Completed;
+        State = ActionState.Completed;
         on_action_complete?.Invoke(this);
     }
 
-    public void SetActionState(ActionState actionState) => this.actionState = actionState;
+    public void SetActionState(ActionState actionState) => this.State = actionState;
 
     public enum ActionState
     {
@@ -62,8 +62,5 @@ public abstract class BaseAction<Tparameters> : BaseAction
 {
     public Tparameters parameters { get; private set; }
 
-    public BaseAction(Tparameters parameters) : base()
-    {
-        this.parameters = parameters;
-    }
+    public BaseAction(Tparameters parameters) : base() => this.parameters = parameters;
 }

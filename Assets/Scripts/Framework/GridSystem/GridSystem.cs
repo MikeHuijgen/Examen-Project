@@ -54,11 +54,7 @@ public class GridSystem
         }
     }
 
-    public Vector3 ConvertGridPositionToWorldPosition(GridPosition gridPosition)
-    {
-        return new Vector3(gridPosition.X * _cellWidth + _cellWidth / 2, gridPosition.Y * _cellHeight + _cellHeight / 2, 0);
-    }
-
+    public Vector3 ConvertGridPositionToWorldPosition(GridPosition gridPosition) => new Vector3(gridPosition.X * _cellWidth + _cellWidth / 2, gridPosition.Y * _cellHeight + _cellHeight / 2, 0);
 
     public GridHit ConvertScreenPositionToGridHit(Vector2 worldPosition)
     {
@@ -161,7 +157,7 @@ public class GridSystem
 
     public GridPosition CalculateSwipeEndGridPosition(GridHit beginHit, GridHit endHit, float swipeDirectionTolerance, float swipeMaxDiagonalDeviation)
     {
-        var delta = endHit.localPos - beginHit.localPos;
+        var delta = endHit.LocalPos - beginHit.LocalPos;
 
         var absX = Mathf.Abs(delta.x);
         var absY = Mathf.Abs(delta.y);
@@ -172,22 +168,22 @@ public class GridSystem
         var ratio = absX > absY ? absY / absX : absX / absY;
 
         if (ratio > maxDiagonalTolerance)
-            return beginHit.hitGridPosition;
+            return beginHit.HitGridPosition;
 
         if (ratio > tolerance)
-            return beginHit.hitGridPosition;
+            return beginHit.HitGridPosition;
 
         var horizontal = absX > absY;
 
         if (horizontal)
         {
             var dir = delta.x > 0 ? 1 : -1;
-            return new GridPosition(beginHit.hitGridPosition.X + dir, beginHit.hitGridPosition.Y);
+            return new GridPosition(beginHit.HitGridPosition.X + dir, beginHit.HitGridPosition.Y);
         }
         else
         {
             var dir = delta.y > 0 ? 1 : -1;
-            return new GridPosition(beginHit.hitGridPosition.X, beginHit.hitGridPosition.Y + dir);
+            return new GridPosition(beginHit.HitGridPosition.X, beginHit.HitGridPosition.Y + dir);
         }
 
     }

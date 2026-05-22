@@ -13,8 +13,7 @@ public class TimerManager
 
         timer.Tick(Time.deltaTime);
 
-        if (!timer.IsTimerDone)
-            return false;
+        if (!timer.IsTimerDone) return false;
 
         timer.StopTimer();
         return true;

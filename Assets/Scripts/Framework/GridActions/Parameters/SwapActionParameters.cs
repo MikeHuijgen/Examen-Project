@@ -1,6 +1,6 @@
 public struct SwapActionParameters
 {
-    public ActionContext actionContext;
-    public GridObject from;
-    public GridObject to;
+    public ActionContext Context;
+    public GridObject From;
+    public GridObject To;
 }

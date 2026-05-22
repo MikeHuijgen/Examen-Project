@@ -16,7 +16,7 @@ public class CharacterInput : MonoBehaviour
     private bool _allowInput = true;
 
     [SerializeField] private OnGameOverChannel channel;
-    [SerializeField] private PlayerInput _playerInput;
+    [SerializeField] private PlayerInput playerInput;
 
     private readonly Dictionary<string, SideType> _dodgeBindings = new()
     {
@@ -63,13 +63,10 @@ public class CharacterInput : MonoBehaviour
         Touch.onFingerDown -= OnFingerDown;
         Touch.onFingerUp -= OnFingerUp;
     }
-    private void HandleGameOver()
-    {
-        _allowInput = false;
-    }
-    private void Bind(string actionName, Action<InputAction.CallbackContext> handler) => _playerInput.actions[actionName].performed += handler;
+    private void HandleGameOver() => _allowInput = false;
+    private void Bind(string actionName, Action<InputAction.CallbackContext> handler) => playerInput.actions[actionName].performed += handler;
 
-    private void Unbind(string actionName, Action<InputAction.CallbackContext> handler) => _playerInput.actions[actionName].performed -= handler;
+    private void Unbind(string actionName, Action<InputAction.CallbackContext> handler) => playerInput.actions[actionName].performed -= handler;
 
     public void OnDodgeInputDetected(SideType dodgeSide)
     { 

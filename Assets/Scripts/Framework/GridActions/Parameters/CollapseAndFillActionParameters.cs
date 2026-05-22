@@ -1,4 +1,4 @@
 public struct CollapseAndFillActionParameters
 {
-    public ActionContext actionContext;
+    public ActionContext Context;
 }
