@@ -48,12 +48,26 @@ Team 5 documents everything in the GitHub Wiki, Trello and our own Miro board.
     - Health Bar
   - Game Over System
     - Game Over
-    - On Game Over Chanel (Scriptable Object)
+    - On Game Over Channel (Scriptable Object)
   - Pause Menu system
     - Game Manager
     - Pause Menu
   - Scene Loader
 - Jonas [Developer](https://github.com/JonasDriessen0)
+  - Dodge system
+    - Player Dodge System
+    - Dodge Button Input
+    - Side Type design
+  - Audio System
+    - Audio Manager
+    - Audio Pool
+    - Sound Data (Scriptable object)
+  - Combo Counter
+    - Combo counter backend and visuals
+  - Attack Energy system
+    - Attack Energy
+    - Attack Energy Visuals
+    - Energy Type
 - Lin [Artist](https://github.com/linmorren)
   - Models (model, textures & rig of player & enemy)
   - Animations (All player and enemy animations
